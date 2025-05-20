@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Addresses | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+    <style>
+        /* Address Page Specific Styles */
+        .address-card {
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+        }
+        
+        .address-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #adb5bd;
+        }
+        
+        .address-card.default {
+            border-color: #212529;
+        }
+        
+        .address-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+        
+        .address-actions {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+        }
+        
+        .add-address-card {
+            height: 100%;
+            border: 2px dashed #dee2e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-address-card:hover {
+            border-color: #212529;
+            background-color: #f8f9fa;
+        }
+        
+        .add-address-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .user-sidebar .nav-link {
+            padding: 0.75rem 1rem;
+            color: #212529;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-sidebar .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .user-sidebar .nav-link.active {
+            background-color: #212529;
+            color: #fff;
+        }
+        
+        .user-sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 767.98px) {
+            .user-sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            
+            .user-sidebar .nav {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            
+            .user-sidebar .nav-link {
+                white-space: nowrap;
+                margin-right: 0.5rem;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <%- include('../partials/navbar') %>
+
+    <!-- Page Title -->
+    <!-- <section class="page-title py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="mb-0">My Addresses</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mt-2">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="user-dashboard.html">My Account</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">My Addresses</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- My Addresses Section -->
+    <section class="my-addresses-section py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="account-sidebar">
+                        <div class="user-profile text-center mb-4">
+                            <div class="user-avatar mb-3">
+                                <img src="/adminassets/imgs/people/ddd.png" alt="User Avatar" class="rounded-circle" width="80" height="80">
+                            </div>
+                            
+                            <h5 class="user-name mb-1"><%= user.name %></h5>
+                            <p class="user-email text-muted mb-0"><%= user.email %></p>
+                        </div>
+                        <div class="list-group">
+                            <a href="userDash" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> My Profile
+                            </a>
+                            <a href="myOrder" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i> My Orders
+                            </a>
+                            <a href="wishlist" class="list-group-item list-group-item-action">
+                                <i class="fas fa-heart me-2"></i> My Wishlist
+                            </a>
+                            <a href="address" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-map-marker-alt me-2"></i> My Addresses
+                            </a>
+                            <a href="mywallet" class="list-group-item list-group-item-action">
+                                <i class="fas fa-wallet me-2"></i> My Wallet
+                            </a>
+                            <a href="logout" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Addresses Content -->
+                <div class="col-lg-9">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Saved Addresses</h4>
+                                <a href="address/add"><button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                    <i class="fas fa-plus me-2"></i> Add New Address
+                                </button></a>
+                            </div>
+                            
+                            
+                              
+                                <div class="row">
+                                    <% if (address.length>=1) { %>
+                                        <% address.forEach(element => { %>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="address-card card position-relative p-4 h-100">
+                                            <!-- <div class="address-badge">
+                                                <span class="badge bg-dark">Default Shipping</span>
+                                            </div> -->
+                                            
+                                            <div class="card-body p-0">
+                                                
+                                                <h5 class="card-title mb-3">Type:<%= element.addressName %></h5>
+                                                <p class="card-text mb-1"><strong>Name:<%= element.firstName %> <%= element.lastName %></strong></p>
+                                                <p class="card-text mb-1">City:<%= element.city %></p>
+                                                <p class="card-text mb-1">State:<%= element.state %> <%= element.zipCode %></p>
+                                                <p class="card-text mb-1">Phone: <%= element.phoneNumber %></p>
+                                                <div class="address-actions">
+                                                    <div class="btn-group d-flex gap-2">
+                                                        <a href="address/edit/<%= element.id %>"><button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editAddressModal">Edit</button></a>
+                                                        <form action="/address/delete/<%= element.id %>" method="post">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                   
+                                                  
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <% }) %>
+                                     <% } %>
+                                     <div class="col-md-6 mb-4">
+                                        <a href="address/add"><div class="add-address-card card p-4 h-100" >
+                                            <div class="add-address-icon">
+                                                <i class="fas fa-plus fa-lg"></i>
+                                            </div>
+                                            <h5>Add New Address</h5>
+                                            <p class="text-muted text-center">Add a new shipping or billing address</p>
+                                        </div>
+                                    </a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Address Tips -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="mb-3">Address Tips</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Keep your addresses up to date for faster checkout.</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Set default addresses for shipping and billing.</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Add multiple addresses for different delivery locations.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Include apartment or suite numbers if applicable.</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Provide accurate contact information for delivery updates.</li>
+                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Add special delivery instructions if needed.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        
+        // Function to save new address
+        function saveNewAddress() {
+            // Get form values
+            const addressName = document.getElementById('addressName').value;
+            const fullName = document.getElementById('fullName').value;
+            const addressLine1 = document.getElementById('addressLine1').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zipCode = document.getElementById('zipCode').value;
+            const country = document.getElementById('country').value;
+            const phone = document.getElementById('phone').value;
+            
+            // Validate required fields
+            if (!addressName || !fullName || !addressLine1 || !city || !state || !zipCode || !country || !phone) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, you would make an API call here
+            alert('New address has been saved successfully.');
+            
+            // Close the modal
+            const addModal = bootstrap.Modal.getInstance(document.getElementById('addAddressModal'));
+            addModal.hide();
+            
+            // Reload the page or update the UI
+            // In a real application, you would update the UI without reloading
+            // For demo purposes, we'll just reload the page
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+        
+        // Function to update address
+        function updateAddress() {
+            // Get form values
+            const addressName = document.getElementById('editAddressName').value;
+            const fullName = document.getElementById('editFullName').value;
+            const addressLine1 = document.getElementById('editAddressLine1').value;
+            const city = document.getElementById('editCity').value;
+            const state = document.getElementById('editState').value;
+            const zipCode = document.getElementById('editZipCode').value;
+            const country = document.getElementById('editCountry').value;
+            const phone = document.getElementById('editPhone').value;
+            
+            // Validate required fields
+            if (!addressName || !fullName || !addressLine1 || !city || !state || !zipCode || !country || !phone) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, you would make an API call here
+            alert('Address has been updated successfully.');
+            
+            // Close the modal
+            const editModal = bootstrap.Modal.getInstance(document.getElementById('editAddressModal'));
+            editModal.hide();
+            
+            // Reload the page or update the UI
+            // In a real application, you would update the UI without reloading
+            // For demo purposes, we'll just reload the page
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+        
+        // Function to set default address
+        function setDefaultAddress(addressId, type) {
+            // In a real application, you would make an API call here
+            alert(`Address ID ${addressId} has been set as default ${type} address.`);
+            
+            // Reload the page or update the UI
+            // In a real application, you would update the UI without reloading
+            // For demo purposes, we'll just reload the page
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+    </script>
+</body>
+</html>

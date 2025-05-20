@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Select Address | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+    <link rel="stylesheet" href="css/checkoutaddress.css">
+    
+</head>
+<body>
+    <!-- Header -->
+    <%- include('../partials/navbar') %>
+
+    <!-- Checkout Section -->
+    <section class="checkout-section py-5 mt-5">
+        <div class="container">
+            <!-- Checkout Progress -->
+            <div class="checkout-progress mb-4">
+                <div class="checkout-step active">
+                    <div class="checkout-step-number">1</div>
+                    <div class="checkout-step-label">Delivery Address</div>
+                </div>
+                <div class="checkout-step">
+                    <div class="checkout-step-number">2</div>
+                    <div class="checkout-step-label">Payment Method</div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Left Column - Address Selection -->
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Select Delivery Address</h4>
+                                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                    ADD NEW ADDRESS
+                                </button>
+                            </div>
+                            
+                            <h6 class="text-uppercase text-muted mb-3">DEFAULT ADDRESS</h6>
+                            
+                            <!-- Default Address Card -->
+                             <% address.address.forEach((element,index) => { %>
+                                <div class="address-card selected mb-4">
+                                    <div class="form-check">
+                                       
+                                        <input class="form-check-input radio-btn" type="radio"  name="defaultAddress" id="defaultAddress"value="<%= element.id %>" data-is-default="<%= element.id %>" <%= index === 0 ? 'checked' :'' %> onclick="setDefaultAddress('<%= element.id%>')">
+                                        <label class="form-check-label fw-bold" for="address1">
+                                            <%= element.firstName %> <%= element.lastName %>
+                                            <span class="address-type"><%= element.addressName %></span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-2 ms-4">
+                                        <p class="mb-1"><%= element.addressLine %></p>
+                                        <p class="mb-1"><%= element.city %> - <%= element.state%> - <%= element.zipCode %></p>
+                                        <p class="mb-1">Mobile: <%= element.phoneNumber %></p>
+                                        <p class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Pay on Delivery available</p>
+                                        
+                                        <div class="address-actions d-flex">
+                                            <button class="btn btn-sm btn-outline-dark" onclick="deleteAddress('<%= element.id%>')">REMOVE</button>
+                                            <div class="edit-address-card" data-bs-toggle="modal" data-bs-target="#editAddressModal">
+                                                <button class="btn btn-sm btn-outline-dark" onclick="editAddress('<%= element.id%>')">EDIT</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                            
+                            <!-- Add New Address Card -->
+                            <div class="add-address-card" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                <div class="add-address-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <h6 class="mb-0 text-primary">+ Add New Address</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="mb-3">Delivery Estimate</h5>
+                            
+                            <!-- Delivery Item 1 -->
+                             <% cart.products.forEach(element => { %>
+                            <div class="delivery-item">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.productId.images[0] %> " alt="Product 1" class="delivery-item-image">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <p class="delivery-date mb-1">Name: <strong><%= element.productId.name%></strong></p>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="delivery-date mb-1">Quantity: <strong><%= element.quantity %></strong></p>
+                                    </div>
+                                    <div>
+                                        <p class="delivery-date mb-1">size: <strong><%= element.size %></strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                            <!-- Price Details -->
+                            <div class="price-details mt-4">
+                                <h5 class="mb-3">Price Details (<%= cart.products.length %>) Items</h5>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Total MRP</span>
+                                    <span class="price-value">₹ <%= totalMRP%>.00</span>
+                                </div>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Discount
+                                        <!-- <a href="#" class="know-more">Know More</a> -->
+                                    </span>
+                                    <span class="price-value text-success"> ₹ <%= discount %>.00</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="price-label">Coupon Applied
+                                        <!-- <a href="#" class="know-more">Know More</a> -->
+                                    </span>
+                                    <span class="price-value text-success"> ₹ <%= coupon %>.00</span>
+                                </div>
+                                
+                               <% if (appliedOffer>10) { %>
+                                 <!-- <div class="price-row">
+                                    <span class="price-label">Special Offer
+                                        <a href="#" class="know-more">Know More</a>
+                                    </span>
+                                    <span class="price-value text-success"> ₹ <%= appliedOffer %>.00</span>
+                                </div> -->
+                               <% } %>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Shipping Fee
+                                        <!-- <a href="#" class="know-more">Know More</a> -->
+                                    </span>
+                                    <span class="price-value text-success">FREE</span>
+                                </div>
+                                
+                                <div class="price-row">
+                                    <span class="price-label small text-success">Free shipping for you</span>
+                                </div>
+                                
+                                <div class="price-row total-row">
+                                    <span>Total Amount</span>
+                                    <span>₹ <%= totalPrice %>.00</span>
+                                </div>
+                                <a ><button class="btn continue-btn w-100 mt-3" onclick="placeOrder()">CONTINUE</button></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Security -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="payment-icons">
+                            <div class="secure-badge">
+                                <i class="fas fa-lock"></i>
+                                <span>256-bit SSL</span>
+                            </div>
+                            <img src="/adminassets/imgs/card-brands/1.png" alt="Visa">
+                            <img src="/adminassets/imgs/card-brands/2.png" alt="Mastercard">
+                            <img src="/adminassets/imgs/card-brands/3.png" alt="American Express">
+                            <img src="/adminassets/imgs/card-brands/4.png" alt="PayPal">
+                        </div>
+                        
+                        <div class="need-help">
+                            <a href="#">Need Help? Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Address Modal -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSubmit">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="eg:- Abhraham" required>
+                                <span id="error-firstName" style="color: red;"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="eg:- Kuraishi" required>
+                                <span id="error-lastName" style="color: red;"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addressName" class="form-label">Address Name</label>
+                                <input type="text" class="form-control" name="addressName" id="addressName" placeholder="Home, Office, etc." required>
+                                <span id="error-addressName" style="color: red;"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="+91 8080 808 808" required>
+                                <span id="error-phoneNumber" style="color: red;"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="addressLine1" class="form-label">Address Line 1</label>
+                            <input type="text" class="form-control" name="addressLine" id="addressLine" placeholder="Street address, P.O. box, company name" required>
+                            <span id="error-addressLine" style="color: red;"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" id="city" placeholder="eg:- Kochi" required>
+                                <span id="error-city" style="color: red;"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" name="state" id="state" placeholder="eg:- Ernankulam" required>
+                                <span id="error-state" style="color: red;"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="zipCode" class="form-label">ZIP/Postal Code</label>
+                                <input type="text" class="form-control" name="zipCode" id="zipCode" placeholder="676121" required>
+                                <span id="error-zipCode" style="color: red;"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="deliveryInstructions" class="form-label">Delivery Instructions (Optional)</label>
+                            <textarea class="form-control" name="deliveryInstructions" id="deliveryInstructions" rows="3" placeholder="Special instructions for delivery"></textarea>
+                        </div>
+                        
+                        <!-- <div class="mb-3">
+                            <label class="form-label">Address Type</label>
+                            <div class="d-flex">
+                                <div class="form-check me-4">
+                                    <input class="form-check-input" type="radio" name="addressType" id="addressTypeHome" value="home" checked>
+                                    <label class="form-check-label" for="addressTypeHome">
+                                        Home
+                                    </label>
+                                </div>
+                                <div class="form-check me-4">
+                                    <input class="form-check-input" type="radio" name="addressType" id="addressTypeWork" value="work">
+                                    <label class="form-check-label" for="addressTypeWork">
+                                        Work
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="addressType" id="addressTypeOther" value="other">
+                                    <label class="form-check-label" for="addressTypeOther">
+                                        Other
+                                    </label>
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                        
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-dark">SAVE ADDRESS</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Address Modal -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSubmit">
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="eg:- Abhraham" required>
+                                    <span id="error-firstName" style="color: red;"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="eg:- Kuraishi" required>
+                                    <span id="error-lastName" style="color: red;"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="addressName" class="form-label">Address Name</label>
+                                    <input type="text" class="form-control" name="addressName" id="addressName" placeholder="Home, Office, etc."  required>
+                                    <span id="error-addressName" style="color: red;"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="+91 8080 808 808"  required>
+                                    <span id="error-phoneNumber" style="color: red;"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="addressLine1" class="form-label">Address Line 1</label>
+                                <input type="text" class="form-control" name="addressLine" id="addressLine" placeholder="Street address, P.O. box, company name"  required>
+                                <span id="error-addressLine" style="color: red;"></span>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" name="city" id="city" placeholder="eg:- Kochi" required>
+                                    <span id="error-city" style="color: red;"></span>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="state" class="form-label">State</label>
+                                    <input type="text" class="form-control" name="state" id="state" placeholder="eg:- Ernankulam"  required>
+                                    <span id="error-state" style="color: red;"></span>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="zipCode" class="form-label">ZIP/Postal Code</label>
+                                    <input type="text" class="form-control" name="zipCode" id="zipCode" placeholder="676121"  required>
+                                    <span id="error-zipCode" style="color: red;"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="deliveryInstructions" class="form-label">Delivery Instructions (Optional)</label>
+                                <textarea class="form-control" name="deliveryInstructions" id="deliveryInstructions" rows="3" placeholder="Special instructions for delivery"></textarea>
+                            </div>
+                            
+                            <!-- <div class="mb-3">
+                                <label class="form-label">Address Type</label>
+                                <div class="d-flex">
+                                    <div class="form-check me-4">
+                                        <input class="form-check-input" type="radio" name="addressType" id="addressTypeHome" value="home" checked>
+                                        <label class="form-check-label" for="addressTypeHome">
+                                            Home
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input class="form-check-input" type="radio" name="addressType" id="addressTypeWork" value="work">
+                                        <label class="form-check-label" for="addressTypeWork">
+                                            Work
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addressType" id="addressTypeOther" value="other">
+                                        <label class="form-check-label" for="addressTypeOther">
+                                            Other
+                                        </label>
+                                    </div>
+                                </div>
+                            </div> -->
+                            
+                         
+                            
+                       
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="button" class="btn btn-dark" onclick="editAddress()">UPDATE ADDRESS</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        // Function to save new address
+        document.getElementById('formSubmit').addEventListener('submit',(e)=>{
+            e.preventDefault()
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const addressNameInput = document.getElementById('addressName');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const addressLineInput = document.getElementById('addressLine');
+            const cityInput = document.getElementById('city');
+            const stateInput = document.getElementById('state');
+            const zipCodeInput = document.getElementById('zipCode');
+
+
+
+            const errorFirstName = document.getElementById('error-firstName');
+            const errorLastName = document.getElementById('error-lastName');
+            const errorAddressName = document.getElementById('error-addressName');
+            const errorPhoneNumber = document.getElementById('error-phoneNumber');
+            const errorAddressLine = document.getElementById('error-addressLine');
+            const errorCity = document.getElementById('error-city');
+            const errorState = document.getElementById('error-state');
+            const errorZipCode = document.getElementById('error-zipCode');
+
+
+            const errorElements = [errorFirstName, errorLastName, errorAddressName, errorPhoneNumber, errorAddressLine, errorCity, errorState, errorZipCode];
+            errorElements.forEach(el => {
+                el.style.display = '感知';
+                el.textContent = '';
+            });
+
+
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const addressName = addressNameInput.value.trim();
+            let phoneNumber = phoneNumberInput.value.trim().replace(/[\s\-\+\(\)]/g, ''); 
+            const addressLine = addressLineInput.value.trim();
+            const city = cityInput.value.trim();
+            const state = stateInput.value.trim();
+            const zipCode = zipCodeInput.value.trim();
+
+            let isValid = true;
+
+ 
+            const nameRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!firstName) {
+                errorFirstName.style.display = 'block';
+                errorFirstName.textContent = 'First name is required';
+                isValid = false;
+            } else if (!nameRegex.test(firstName)) {
+                errorFirstName.style.display = 'block';
+                errorFirstName.textContent = 'First name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            if (!lastName) {
+                errorLastName.style.display = 'block';
+                errorLastName.textContent = 'Last name is required';
+                isValid = false;
+            } else if (!nameRegex.test(lastName)) {
+                errorLastName.style.display = 'block';
+                errorLastName.textContent = 'Last name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const addressNameRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!addressName ) {
+                errorAddressName.style.display = 'block';
+                errorAddressName.textContent = 'Address name is required';
+                isValid = false;
+            
+            }else if (!addressNameRegex.test(addressName)) {
+                errorAddressName.style.display = 'block';
+                errorAddressName.textContent = 'Address name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+
+            }
+            const addressVal = addressNameInput.value
+            if(addressVal == "Home" ||addressVal == "Office"||addressVal == "Work"){
+                errorAddressName.style.display = 'block';
+                errorAddressName.textContent = 'Address must be Home or Work or Office ';
+                isValid = false;
+            }
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneNumber) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number is required';
+                isValid = false;
+            } else if (!phoneRegex.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number must be exactly 10 digits';
+                isValid = false;
+            } else if (!/^[6-9]/.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number must start with 6, 7, 8, or 9';
+                isValid = false;
+            } else if (/^(\d)\1{9}$/.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number cannot consist of the same digit repeated';
+                isValid = false;
+            }
+
+            const addressLineRegex = /^[A-Za-z0-9\s,.\-/#]{5,100}$/;
+            if (!addressLine) {
+                errorAddressLine.style.display = 'block';
+                errorAddressLine.textContent = 'Address line is required';
+                isValid = false;
+            } else if (!addressLineRegex.test(addressLine)) {
+                errorAddressLine.style.display = 'block';
+                errorAddressLine.textContent = 'Address line must be 5-100 characters, including letters, numbers, spaces, and ,.-/#';
+                isValid = false;
+            }
+
+            const cityRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!city) {
+                errorCity.style.display = 'block';
+                errorCity.textContent = 'City is required';
+                isValid = false;
+            } else if (!cityRegex.test(city)) {
+                errorCity.style.display = 'block';
+                errorCity.textContent = 'City must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const stateRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!state) {
+                errorState.style.display = 'block';
+                errorState.textContent = 'State is required';
+                isValid = false;
+            } else if (!stateRegex.test(state)) {
+                errorState.style.display = 'block';
+                errorState.textContent = 'State must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const zipCodeRegex = /^\d{6}$/;
+            if (!zipCode) {
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code is required';
+                isValid = false;
+            } else if (!zipCodeRegex.test(zipCode)) {
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code must be exactly 6 digits';
+                isValid = false;
+            }else if(zipCode === '000000'){
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code must be valid';
+                isValid = false;
+            }
+
+            if (isValid) {
+                
+                const form = document.getElementById('formSubmit')
+                const formaData = new FormData(form);
+                const data = Object.fromEntries(formaData)
+                console.log(data,"this is the data")
+
+                fetch('/checkout/address/add',{
+                    method:'post',
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body:JSON.stringify({data})
+                })
+                .then(response=>response.json())
+                .then(data=>{
+                    if(data.success){
+                        showToast(data.message||'','success')
+                        
+                        const addModal = bootstrap.Modal.getInstance(document.getElementById('addAddressModal'));
+                        addModal.hide();
+                        setTimeout(() => {
+                        window.location.reload();
+                        }, 2000);
+                    
+                    }else{
+                        showToast('Something went wrong','error')
+                    }
+                })
+                }
+        })
+        
+
+        function deleteAddress(id){
+            fetch(`/checkout/delete/${id}`,{
+                method:'delete',
+                headers:{
+                    "Content-type":'application/json'
+                }
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.success){
+                    showToast(data.message||'','success')
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },3000)
+                }else{
+                    showToast("Something went wrong",'error')
+                }
+            })
+        }
+        async function editAddress(id) {
+           await fetch(`/checkout/edit/${id}`,{
+                method:'put',
+                headers:{
+                    "Content-type":"application/json"
+                },
+                body:JSON.stringify({editData})
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.success){
+                    showToast(data.message||'','success')
+                    
+                    const addModal = bootstrap.Modal.getInstance(document.getElementById('editAddressModal'));
+                    addModal.hide();
+                    setTimeout(() => {
+                    window.location.reload();
+                    }, 3000);
+                
+                }else{
+                    showToast('Something went wrong','error')
+                }
+            })
+            
+        }
+        function setDefaultAddress(id){
+            fetch(`/checkout/default-address/${id}`,{
+                method:'patch'
+            })
+        }
+        let radioBtn
+        function placeOrder(){
+            let radio = document.querySelectorAll(".radio-btn")
+
+            radio.forEach((val)=>{
+                if(val.checked){
+                    radioBtn = val.value
+                }
+            })
+            
+            if(radioBtn == undefined){
+                showToast("Address is required",'error')
+            }else{
+                fetch(`/checkout/paymentmethod/${radioBtn}`)
+                window.location.href = `/checkout/paymentmethod/${radioBtn}`
+            }
+            
+            
+
+        }
+        
+
+    </script>
+</body>
+</html>

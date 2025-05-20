@@ -1,0 +1,339 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <style>
+        #closebtn{
+            display: none;
+        }
+        #blockbtn{
+            display: block;
+        }
+    </style>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="dashboard" class="brand-wrap">
+                <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="productList">Product List</a>
+                        <a href="productoffer">Product Offer</a>
+                        <a href="categories">Categories</a>
+                        <a href="categoryoffer">Category Offer</a>
+                    </div>
+
+                </li>
+                <li class="menu-item has-submenu ">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="orderlist">Order list </a>
+                    </div>
+                </li>
+                
+                <li class="menu-item ">
+                    <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+
+                </li>
+               
+                <li class="menu-item ">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span> 
+                    </a>
+
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+                 <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li> 
+                <li class="menu-item">
+                    <a class="menu-link" href="brand"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                
+            </ul>
+            
+           
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <%- include('../partials/adminNav') %>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or delete a category</p>
+                </div>
+                
+            </div>
+           
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <form action="/admin/categories" method="get">
+                            <div class="row gx-3">
+                                <div class="col-lg-4 col-md-6 me-auto " style="position: relative;">
+                                    <input type="text" name="search" value="<%= search || ''  %>" placeholder="Search..." class="form-control">
+                                    
+                                    
+                                    <% if(search){ %>
+                                        <a href="/admin/categories" style="position: absolute; top: 11px;right: 20px;">
+                                        <i class="material-icons md-close"></i>
+                                        </a>
+                                        <% } else { %>
+                                            <a href="#" style="position: absolute; top: 11px;right: 20px;">
+                                                <i id="closebtn" class="material-icons md-close"></i>
+                                                </a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="col-md-3">
+                            
+                            <form method="post" id="catform" action="Categories">
+                                
+                               
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Name</label>
+                                        <input type="name" placeholder="Type here" name="name" id="catname" class="form-control" required="" />
+                                        <% if (error) { %>
+                                            <p style="color: red; font-size: 14px;"><%=error  %></p>
+                                        <% } %>
+                                        
+                                    </div>
+                                    <!-- <div class="mb-4">
+                                        <label for="product_slug" class="form-label">Slug</label>
+                                        <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
+                                    </div> -->
+                                    <div class="mb-4">
+                                        <!-- <label class="form-label">Parent</label>
+                                        <select class="form-select">
+                                            <option>Clothes</option>
+                                        
+                                        </select> -->
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea type="description" placeholder="Type here" id="catdes" name="description" class="form-control" required=""></textarea>
+                                        <p id="error2" style="display: none; color: red;"></p>
+                                    </div>
+                                
+                                    <%if(locals.message){%>
+                                        <p style="color: red;"><%=locals.message%></p>
+                                        <%}%>
+                                    <div class="d-grid">
+                                        <!-- <button class="btn btn-primary">Create category</button> -->
+                                        <button type="submit" class="btn btn-primary" >Create category</button>
+                                    </div>
+                                
+                            </form>
+                        </div>
+                        <div class="col-md-9 mt-50">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th class="text-end">Status</th>
+                                            <th class="text-end"></th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% if (filterCategory) { %>
+                                        <% filterCategory.forEach((cat,index)=>{%>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" />
+                                                    </div>
+                                                </td>
+                                                <td><b>
+                                                    <%= cat.name %>
+                                                </b></td>
+                                                <td>
+                                                    <%= cat.description%>
+                                                </td> 
+                                                <td >
+                                                    <% if (cat.isListed == true) { %>
+                                                        <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                                    <% } else { %>
+                                                        <td><span class="badge rounded-pill alert-success">Inactive</span></td>
+                                                    <% } %>
+                                                </td>
+                                                <td class="text-end">
+                                                    <a href="/admin/editCategory/<%= cat._id %>"><button id="toggleButton"  class="btn  btn-brand rounded font-sm mt-15">Edit</button></a>
+                                                    <a href="/admin/deleteCategory/<%= cat._id %>"><button id="toggleButton" onclick="alert('Are you sure')" class="btn  btn-brand rounded font-sm mt-15 mr-10">Delete</button></a>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div>
+            <div class="pagination-area mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <% for( let i = 1;  i<=totalPage; i++ ) { %>
+                            <li class="page-item <%= parseInt(page) === i ? "active":'' %>">
+                                <a class="page-link" href="/admin/categories?page=<%= i %>&search=<%= search %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+         <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminassets/js/vendors/select2.min.js"></script>
+    <script src="/adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/adminassets/js/main.js" type="text/javascript"></script>
+
+<script>
+    const catname = document.getElementById('catname')
+    const catdes = document.getElementById('catdes')
+    const error1 = document.getElementById('error1')
+    const error2 = document.getElementById('error2')
+    const catform = document.getElementById('catform')
+
+    function catnamevalidate(e){
+        const catval = catname.value.trim()
+        if (catval === "") {
+            error1.style.display = 'block'
+            error1.innerHTML = 'Category name is required'
+        }else if(!/^[A-Za-z-& ]+$/.test(catval)){
+            error1.style.display = 'block'
+            error1.innerHTML = 'Name can only contain letter'
+        }else if(catval.length<3){
+            error1.style.display = 'block'
+            error1.innerHTML = 'Should contain more than 3 letters'
+        } else {
+            error1.style.display = 'none'
+            error1.innerHTML = ''
+        }
+    }
+
+    function catdesvalidate(e){
+        const catdesval = catdes.value.trim()
+        if (catdesval === "") {
+            error2.style.display = 'block'
+            error2.innerHTML = 'description is required'
+        } else {
+            error2.style.display = 'none'
+            error2.innerHTML = ''
+        }
+    }
+
+    catname.addEventListener('blur',catnamevalidate)
+    catdes.addEventListener('blur',catdesvalidate)
+
+    catform.addEventListener('submit',function(e){
+        catnamevalidate()
+        catdesvalidate()
+
+        if(error1.innerHTML||error2.innerHTML){
+            e.preventDefault()
+        }
+    })
+
+    let closeBtn = document.getElementById('closebtn');
+    let search = document.getElementById('search')
+
+        search.addEventListener('click',(event)=>{
+            closeBtn.id = 'blockbtn';
+            
+        })
+        closeBtn.addEventListener('mouseover',()=>{
+            closeBtn.id = 'blockbtn'
+        })
+        search.addEventListener('mouseout',(event)=>{
+            closeBtn.id = 'closebtn';
+            
+        })
+
+
+</script>
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>

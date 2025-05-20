@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <% if (!user) { %>
+                                <a class="nav-link" href="/login">Shop</a>
+                                <% } else { %>
+                                    <a class="nav-link" href="/products">Shop</a>
+                            <% } %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <% if (!user) { %>
+                                <a class="nav-link" href="/login">New Arrivals</a>
+                                <% } else { %>
+                                    <a class="nav-link" href="/newarrival">New Arrivals</a>
+                            <% } %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <% if (user) { %>
+                            <a href="/userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                           <% } %>
+                        <% if (!user) { %>
+                            <a href="/login" class="nav-icon me-3 position-relative">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span class="cart-count">2</span>
+                            </a>
+                            <% } else { %>
+                                <a href="/cart" class="nav-icon me-3 position-relative">
+                                    <i class="fas fa-shopping-bag"></i>
+                                     <% if (cartCount) { %>
+                                  <span class="cart-count"><%= cartCount %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                                </a>
+                        <% } %>
+                        <% if (!user) { %>
+                            <a href="/login" style="padding: 5px;font-size: 12px;font-weight: bold;" class="btn btn-dark btn-lg me-2 mb-2">Login</a>
+                            <a href="/signup" style="padding: 5px;font-size: 12px;font-weight: bold;" class="btn btn-dark btn-lg me-2 mb-2">Signup</a>
+                        <% } %>
+                        <% if (user) { %>
+                            <a href="/logout" style="padding: 5px;font-size: 12px;font-weight: bold;margin-left: 25px;" class="btn btn-dark btn-lg me-2 mb-2">Logout</a>
+                           <% } %>
+    
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Title -->
+    <!-- <section class="page-title py-5 bg-light">
+        <div class="container">
+            <h1 class="mb-0">My Wallet</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mt-2">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="userDash">My Account</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Wallet</li>
+                </ol>
+            </nav>
+        </div>
+    </section> -->
+
+    <!-- Wallet Content -->
+    <section class="wallet-content py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="account-sidebar">
+                        <div class="user-profile text-center mb-4">
+                            <div class="user-avatar mb-3">
+                                <img src="/adminassets/imgs/people/ddd.png" alt="User Avatar" class="rounded-circle" width="80" height="80">
+                            </div>
+                            
+                            <h5 class="user-name mb-1"><%= user.name %></h5>
+                            <p class="user-email text-muted mb-0"><%= user.email %></p>
+                        </div>
+                        <div class="list-group">
+                            <a href="userDash" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> My Profile
+                            </a>
+                            <a href="myOrder" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i> My Orders
+                            </a>
+                            <a href="wishlist" class="list-group-item list-group-item-action">
+                                <i class="fas fa-heart me-2"></i> My Wishlist
+                            </a>
+                            <a href="address" class="list-group-item list-group-item-action">
+                                <i class="fas fa-map-marker-alt me-2"></i> My Addresses
+                            </a>
+                            <a href="mywallet" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-wallet me-2"></i> My Wallet
+                            </a>
+                            <a href="logout" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wallet Details -->
+                <div class="col-lg-9">
+                    <!-- Wallet Balance Card -->
+                    <div class="wallet-balance-card mb-4">
+                        <div class="card border-0 shadow-sm bg-dark text-white">
+                            <div class="card-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <h5 class="text-white-50 mb-1">Available Balance</h5>
+                                        <h2 class="display-5 mb-0">₹ <%= balance %>.00</h2>
+                                    </div>
+                                    <!-- <div class="col-md-6 text-md-end">
+                                        <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+                                            <i class="fas fa-plus-circle me-2"></i> Add Money
+                                        </button>
+                                        <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#withdrawMoneyModal">
+                                            <i class="fas fa-arrow-right me-2"></i> Withdraw
+                                        </button>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wallet Stats -->
+                    <!-- <div class="wallet-stats mb-4">
+                        <div class="row">
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4 text-center">
+                                        <div class="stat-icon mb-3">
+                                            <i class="fas fa-arrow-down fa-2x text-success"></i>
+                                        </div>
+                                        <h5 class="stat-value mb-1">$450.00</h5>
+                                        <p class="stat-label mb-0 text-muted">Total Added</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4 text-center">
+                                        <div class="stat-icon mb-3">
+                                            <i class="fas fa-arrow-up fa-2x text-danger"></i>
+                                        </div>
+                                        <h5 class="stat-value mb-1">$200.00</h5>
+                                        <p class="stat-label mb-0 text-muted">Total Spent</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4 text-center">
+                                        <div class="stat-icon mb-3">
+                                            <i class="fas fa-gift fa-2x text-primary"></i>
+                                        </div>
+                                        <h5 class="stat-value mb-1">$50.00</h5>
+                                        <p class="stat-label mb-0 text-muted">Rewards Earned</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+                    <!-- Transaction History -->
+                    <div class="transaction-history mb-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Transaction History</h5>
+                                <!-- <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="transactionFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        All Transactions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="transactionFilterDropdown">
+                                        <li><a class="dropdown-item" href="#">All Transactions</a></li>
+                                        <li><a class="dropdown-item" href="#">Money Added</a></li>
+                                        <li><a class="dropdown-item" href="#">Money Spent</a></li>
+                                        <li><a class="dropdown-item" href="#">Rewards</a></li>
+                                        <li><a class="dropdown-item" href="#">Refunds</a></li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Description</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Oct 25, 2023</td>
+                                                <td>Money added via Credit Card</td>
+                                                <td><span class="badge bg-success">Credit</span></td>
+                                                <td class="text-success">+$100.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 25, 2023</td>
+                                                <td>Payment for Order #ORD-2023-10512</td>
+                                                <td><span class="badge bg-danger">Debit</span></td>
+                                                <td class="text-danger">-$150.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 20, 2023</td>
+                                                <td>Cashback Reward</td>
+                                                <td><span class="badge bg-primary">Reward</span></td>
+                                                <td class="text-success">+$25.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 18, 2023</td>
+                                                <td>Money added via PayPal</td>
+                                                <td><span class="badge bg-success">Credit</span></td>
+                                                <td class="text-success">+$200.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 15, 2023</td>
+                                                <td>Referral Bonus</td>
+                                                <td><span class="badge bg-primary">Reward</span></td>
+                                                <td class="text-success">+$25.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 10, 2023</td>
+                                                <td>Payment for Order #ORD-2023-10498</td>
+                                                <td><span class="badge bg-danger">Debit</span></td>
+                                                <td class="text-danger">-$50.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 5, 2023</td>
+                                                <td>Money added via Bank Transfer</td>
+                                                <td><span class="badge bg-success">Credit</span></td>
+                                                <td class="text-success">+$150.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oct 1, 2023</td>
+                                                <td>Withdrawal to Bank Account</td>
+                                                <td><span class="badge bg-warning">Withdrawal</span></td>
+                                                <td class="text-danger">-$100.00</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white py-3">
+                                <nav aria-label="Transaction history pagination">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Methods -->
+                    <div class="payment-methods-section">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Saved Payment Methods</h5>
+                                <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#addPaymentMethodModal">
+                                    <i class="fas fa-plus me-2"></i> Add New
+                                </button>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <!-- Payment Method 1 -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card border h-100">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div class="payment-card-icon">
+                                                        <i class="fab fa-cc-visa fa-2x text-primary"></i>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-link text-muted" type="button" id="paymentMethod1Dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="paymentMethod1Dropdown">
+                                                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                            <li><a class="dropdown-item" href="#">Remove</a></li>
+                                                            <li><a class="dropdown-item" href="#">Set as Default</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h6 class="mb-1">Visa ending in 1234</h6>
+                                                <p class="text-muted mb-1 small">Expires: 05/2025</p>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-success me-2">Default</span>
+                                                    <span class="text-muted small">Added on Oct 1, 2023</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Payment Method 2 -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card border h-100">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div class="payment-card-icon">
+                                                        <i class="fab fa-cc-mastercard fa-2x text-warning"></i>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-link text-muted" type="button" id="paymentMethod2Dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="paymentMethod2Dropdown">
+                                                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                            <li><a class="dropdown-item" href="#">Remove</a></li>
+                                                            <li><a class="dropdown-item" href="#">Set as Default</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h6 class="mb-1">Mastercard ending in 5678</h6>
+                                                <p class="text-muted mb-1 small">Expires: 08/2024</p>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-muted small">Added on Sep 15, 2023</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Payment Method 3 -->
+                                    <div class="col-md-6">
+                                        <div class="card border h-100">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div class="payment-card-icon">
+                                                        <i class="fab fa-paypal fa-2x text-info"></i>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-link text-muted" type="button" id="paymentMethod3Dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="paymentMethod3Dropdown">
+                                                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                            <li><a class="dropdown-item" href="#">Remove</a></li>
+                                                            <li><a class="dropdown-item" href="#">Set as Default</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h6 class="mb-1">PayPal</h6>
+                                                <p class="text-muted mb-1 small">john.doe@example.com</p>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-muted small">Added on Aug 20, 2023</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Money Modal -->
+    <div class="modal fade" id="addMoneyModal" tabindex="-1" aria-labelledby="addMoneyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMoneyModalLabel">Add Money to Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMoneyForm">
+                        <div class="mb-3">
+                            <label for="addAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="addAmount" min="10" step="0.01" placeholder="Enter amount" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select class="form-select" id="paymentMethod" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="visa">Visa ending in 1234</option>
+                                <option value="mastercard">Mastercard ending in 5678</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="new">Add New Payment Method</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addNote" class="form-label">Note (Optional)</label>
+                            <textarea class="form-control" id="addNote" rows="2" placeholder="Add a note"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-dark" onclick="addMoney()">Add Money</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Money Modal -->
+    <div class="modal fade" id="withdrawMoneyModal" tabindex="-1" aria-labelledby="withdrawMoneyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawMoneyModalLabel">Withdraw Money</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawMoneyForm">
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="withdrawAmount" min="10" max="250" step="0.01" placeholder="Enter amount" required>
+                            </div>
+                            <div class="form-text">Available balance: $250.00</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawMethod" class="form-label">Withdraw To</label>
+                            <select class="form-select" id="withdrawMethod" required>
+                                <option value="">Select Withdrawal Method</option>
+                                <option value="bank">Bank Account</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="new">Add New Withdrawal Method</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawNote" class="form-label">Note (Optional)</label>
+                            <textarea class="form-control" id="withdrawNote" rows="2" placeholder="Add a note"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-dark" onclick="withdrawMoney()">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Method Modal -->
+    <div class="modal fade" id="addPaymentMethodModal" tabindex="-1" aria-labelledby="addPaymentMethodModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPaymentMethodModalLabel">Add Payment Method</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPaymentMethodForm">
+                        <div class="mb-3">
+                            <label for="paymentType" class="form-label">Payment Type</label>
+                            <select class="form-select" id="paymentType" required>
+                                <option value="">Select Payment Type</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="debit_card">Debit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="bank">Bank Account</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Credit/Debit Card Fields -->
+                        <div id="cardFields">
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiryDate" class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="XXX">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nameOnCard" class="form-label">Name on Card</label>
+                                <input type="text" class="form-control" id="nameOnCard" placeholder="Enter name as on card">
+                            </div>
+                        </div>
+                        
+                        <!-- PayPal Fields -->
+                        <div id="paypalFields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="paypalEmail" class="form-label">PayPal Email</label>
+                                <input type="email" class="form-control" id="paypalEmail" placeholder="Enter your PayPal email">
+                            </div>
+                        </div>
+                        
+                        <!-- Bank Account Fields -->
+                        <div id="bankFields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="accountName" class="form-label">Account Holder Name</label>
+                                <input type="text" class="form-control" id="accountName" placeholder="Enter account holder name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="accountNumber" class="form-label">Account Number</label>
+                                <input type="text" class="form-control" id="accountNumber" placeholder="Enter account number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="routingNumber" class="form-label">Routing Number</label>
+                                <input type="text" class="form-control" id="routingNumber" placeholder="Enter routing number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bankName" class="form-label">Bank Name</label>
+                                <input type="text" class="form-control" id="bankName" placeholder="Enter bank name">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="setAsDefault">
+                            <label class="form-check-label" for="setAsDefault">Set as default payment method</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-dark" onclick="addPaymentMethod()">Add Payment Method</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+   <%- include('../partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        // Toggle payment method fields based on selection
+        document.getElementById('paymentType').addEventListener('change', function() {
+            const cardFields = document.getElementById('cardFields');
+            const paypalFields = document.getElementById('paypalFields');
+            const bankFields = document.getElementById('bankFields');
+            
+            // Hide all fields first
+            cardFields.style.display = 'none';
+            paypalFields.style.display = 'none';
+            bankFields.style.display = 'none';
+            
+            // Show fields based on selection
+            if (this.value === 'credit_card' || this.value === 'debit_card') {
+                cardFields.style.display = 'block';
+            } else if (this.value === 'paypal') {
+                paypalFields.style.display = 'block';
+            } else if (this.value === 'bank') {
+                bankFields.style.display = 'block';
+            }
+        });
+        
+        // Add money function
+        function addMoney() {
+            const amount = document.getElementById('addAmount').value;
+            const method = document.getElementById('paymentMethod').value;
+            
+            if (!amount || !method) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Simulate adding money
+            alert(`$${amount} has been added to your wallet successfully!`);
+            
+            // Close modal and refresh page
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addMoneyModal'));
+            modal.hide();
+            
+            // In a real application, you would make an API call here
+            // and then refresh the page or update the UI
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+        
+        // Withdraw money function
+        function withdrawMoney() {
+            const amount = document.getElementById('withdrawAmount').value;
+            const method = document.getElementById('withdrawMethod').value;
+            
+            if (!amount || !method) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            if (parseFloat(amount) > 250) {
+                alert('Withdrawal amount cannot exceed your available balance.');
+                return;
+            }
+            
+            // Simulate withdrawal
+            alert(`$${amount} withdrawal has been initiated. It will be processed within 1-3 business days.`);
+            
+            // Close modal and refresh page
+            const modal = bootstrap.Modal.getInstance(document.getElementById('withdrawMoneyModal'));
+            modal.hide();
+            
+            // In a real application, you would make an API call here
+            // and then refresh the page or update the UI
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+        
+        // Add payment method function
+        function addPaymentMethod() {
+            const paymentType = document.getElementById('paymentType').value;
+            
+            if (!paymentType) {
+                alert('Please select a payment type.');
+                return;
+            }
+            
+            // Validate fields based on payment type
+            if (paymentType === 'credit_card' || paymentType === 'debit_card') {
+                const cardNumber = document.getElementById('cardNumber').value;
+                const expiryDate = document.getElementById('expiryDate').value;
+                const cvv = document.getElementById('cvv').value;
+                const nameOnCard = document.getElementById('nameOnCard').value;
+                
+                if (!cardNumber || !expiryDate || !cvv || !nameOnCard) {
+                    alert('Please fill in all card details.');
+                    return;
+                }
+            } else if (paymentType === 'paypal') {
+                const paypalEmail = document.getElementById('paypalEmail').value;
+                
+                if (!paypalEmail) {
+                    alert('Please enter your PayPal email.');
+                    return;
+                }
+            } else if (paymentType === 'bank') {
+                const accountName = document.getElementById('accountName').value;
+                const accountNumber = document.getElementById('accountNumber').value;
+                const routingNumber = document.getElementById('routingNumber').value;
+                const bankName = document.getElementById('bankName').value;
+                
+                if (!accountName || !accountNumber || !routingNumber || !bankName) {
+                    alert('Please fill in all bank account details.');
+                    return;
+                }
+            }
+            
+            // Simulate adding payment method
+            alert('Payment method added successfully!');
+            
+            // Close modal and refresh page
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addPaymentMethodModal'));
+            modal.hide();
+            
+            // In a real application, you would make an API call here
+            // and then refresh the page or update the UI
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+    </script>
+</body>
+</html>

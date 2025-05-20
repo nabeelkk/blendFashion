@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>STAG Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/public/adminassets/imgs/theme/logo.png">
+    <!-- Template CSS -->
+    <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="dashboard" class="brand-wrap">
+                <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="productList">Product List</a>
+                        <a href="productoffer">Product Offer</a>
+                        <a href="categories">Categories</a>
+                        <a href="categoryoffer">Category Offer</a>
+                    </div>
+
+                </li>
+                <li class="menu-item has-submenu ">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="orderlist">Order list </a>
+                    </div>
+                </li>
+                
+                <li class="menu-item ">
+                    <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+
+                </li>
+               
+                <li class="menu-item ">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span> 
+                    </a>
+
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+                 <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li> 
+                <li class="menu-item">
+                    <a class="menu-link" href="brand"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+       <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminassets/imgs/people/avtar.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="content-main">
+            
+            
+            
+            <div class="card mb-4">
+                <header class="card-header">
+                    <h4 class="card-title">Category Offers</h4>
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-6">
+                            <a class="btn btn-md rounded font-sm" href="getaddcategory">Add Offer</a>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+                            <table class="table align-middle table-nowrap mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        
+                                        <th class="align-middle" scope="col"> Category Name</th>
+                                        <th class="align-middle" scope="col">Start Date</th>
+                                        <th class="align-middle" scope="col">End date</th>
+                                        <th class="align-middle" scope="col">Discount</th>
+                                        <th class="align-middle" scope="col">Status</th>
+                                        
+                                        <th class="align-middle">Action</th>
+                                        
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% category.forEach(element => { %>                                 
+                                    <tr>                                      
+                                        <td><a href="" class=""><%= element.name %></a> </td>
+                                        <td><%= element.offer.startDate %></td>
+                                        <td>
+                                            <%= element.offer.endDate %>
+                                        </td>
+                                        <td>
+                                           <%= element.offer.discount %>
+                                        </td>
+                                        <td>
+                                          <% if (new Date(element.offer.startDate)>new Date()) { %>
+                                                <span class="badge bg-success">Upcoming</span>
+                                                <% } else if (new Date(element.offer.endDate)<new Date()) { %>
+                                                 <span class="badge bg-danger">expired</span>
+                                                 <% } else if (element.offer.isActive == false) { %>
+                                                  <span class="badge bg-warning">Blocked</span>
+                                                  <% } else { %>
+                                                   <span class="badge bg-success">Active</span>
+                                          <% } %>
+                                        </td>
+                                        <td>
+                                             <button onclick="deleteOffer('<%= element._id %>')" class="btn btn-md rounded font-sm">Delete</button>
+                                             <a href="editcategoryoffer/<%= element._id %>" class="btn btn-md rounded font-sm">edit</a>
+                                        </td>
+                                        <!-- <a href="/deleteoffer?id="
+                                          <a href="/editoffer?id=<%= element._id %>" -->
+                                    </tr>                                        
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <!-- <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> -->
+        </section>
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©,STAG MEN FASHION .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/public/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/adminassets/js/vendors/select2.min.js"></script>
+    <script src="/public/adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/adminassets/js/main.js" type="text/javascript"></script>
+    <script>
+      function deleteOffer(id){
+        fetch(`/admin/deletecategoryoffer/${id}`,{
+          method:'post',
+          headers:{"Content-type":"application/json"}
+        }).then((response)=>response.json())
+        .then((data)=>{
+          if(data.success){
+            showToast(data.message||'','success')
+            setTimeout(()=>{
+              window.location.href = '/admin/categoryOffer'
+            },2000)
+          }else{
+            showToast("something went wrong","error")
+          }
+        })
+      }
+    </script>
+</body>
+</html>

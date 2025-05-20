@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+    <style>
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            width: 320px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Title */
+        .modal-content h2 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Size Buttons Container */
+        .size-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Size Button */
+        .size-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: Arial, sans-serif;
+        }
+
+        .size-btn:hover {
+            background: #f5f5f5;
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .size-btn.selected {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .modal-content {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <% if (!user) { %>
+                                <a class="nav-link" href="/login">Shop</a>
+                                <% } else { %>
+                                    <a class="nav-link" href="/products">Shop</a>
+                            <% } %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <% if (!user) { %>
+                                <a class="nav-link" href="/login">New Arrivals</a>
+                                <% } else { %>
+                                    <a class="nav-link" href="/newarrival">New Arrivals</a>
+                            <% } %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <% if (user) { %>
+                            <a href="/userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                           <% } %>
+                        <% if (!user) { %>
+                            <a href="/login" class="nav-icon me-3 position-relative">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span class="cart-count">2</span>
+                            </a>
+                            <% } else { %>
+                                <a href="/cart" class="nav-icon me-3 position-relative">
+                                    <i class="fas fa-shopping-bag"></i>
+                                     <% if (cartCount) { %>
+                                  <span class="cart-count"><%= cartCount %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                                </a>
+                        <% } %>
+                        <% if (!user) { %>
+                            <a href="/login" style="padding: 5px;font-size: 12px;font-weight: bold;" class="btn btn-dark btn-lg me-2 mb-2">Login</a>
+                            <a href="/signup" style="padding: 5px;font-size: 12px;font-weight: bold;" class="btn btn-dark btn-lg me-2 mb-2">Signup</a>
+                        <% } %>
+                        <% if (user) { %>
+                            <a href="/logout" style="padding: 5px;font-size: 12px;font-weight: bold;margin-left: 25px;" class="btn btn-dark btn-lg me-2 mb-2">Logout</a>
+                           <% } %>
+    
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Wishlist Content -->
+    <section class="wishlist-content py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="account-sidebar">
+                        <div class="user-profile text-center mb-4">
+                            <div class="user-avatar mb-3">
+                                <img src="/adminassets/imgs/people/ddd.png" alt="User Avatar" class="rounded-circle" width="80" height="80">
+                            </div>
+                            
+                            <h5 class="user-name mb-1"><%= user.name %></h5>
+                            <p class="user-email text-muted mb-0"><%= user.email %></p>
+                        </div>
+                        <div class="list-group">
+                            <a href="userDash" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> My Profile
+                            </a>
+                            <a href="myOrder" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i> My Orders
+                            </a>
+                            <a href="wishlist" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-heart me-2"></i> My Wishlist
+                            </a>
+                            <a href="address" class="list-group-item list-group-item-action">
+                                <i class="fas fa-map-marker-alt me-2"></i> My Addresses
+                            </a>
+                            <a href="mywallet" class="list-group-item list-group-item-action">
+                                <i class="fas fa-wallet me-2"></i> My Wallet
+                            </a>
+                            <a href="logout" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wishlist Items -->
+                <div class="col-lg-9">
+                    <div class="wishlist-header d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="mb-0">My Wishlist </h4>
+                        <button class="btn btn-sm btn-outline-danger" onclick="clearWishlist()">
+                            <i class="fas fa-trash-alt me-2"></i> Clear Wishlist
+                        </button>
+                    </div>
+                    
+                    <div class="wishlist-items">
+                        <div class="row">
+                            <% wishlist?.products?.forEach(element => { %>
+                                <div class="col-md-4 mb-4">
+                                    <div class="wishlist-item card h-100">
+                                        <div class="position-relative">
+                                            <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.productId.images[0] %>" alt="Premium Cotton Shirt" class="card-img-top">
+                                            <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle" onclick="removeFromWishlist('<%= element.productId._id%>')" title="Remove from wishlist">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title"><%= element.productId.name%></h5>
+                                            <p class="card-text text-muted mb-2">Prada</p>
+                                            <p class="card-text fw-bold mb-3">₹ <%= element.productId.price.seller %>.00</p>
+                                            <input type="hidden" name="" value="<%= element.productId._id %>" id="productId">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.small.amount %>" id="smallPrice">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.medium.amount %>" id="mediumPrice">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.large.amount %>" id="largePrice">
+                                            <input type="hidden" name="size" value="" id="sizee">
+                                            <input type="hidden" name="pdtId" value="<%= element.productId._id  %> " id="pdtId"> 
+                                            <button class="btn btn-dark w-100" id="add-to-cart" onclick="openModal('<%=element.productId._id%>')">
+                                                <i class="fas fa-shopping-bag me-2"></i> Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal" id="sizeModal">
+                                    <div class="modal-content">
+                                        <button class="close-btn" onclick="closeModal()">×</button>
+                                        <h2>Select a Size</h2>
+                                        
+                                        <div class="product-size mb-4">
+                                            <h5 class="mb-2">Size</h5>
+                                            <h2 class="mb-2" style="color: red;" id="stock-display"></h2>
+                                            <div class="size-options d-flex">
+                                                <span class="current-price fs-3 fw-bold" style="display: none;" ><%= element.productId.sizes.small.amount %></span>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%= element.productId.sizes.small.amount%>">S</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%= element.productId.sizes.medium.amount %>">M</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%= element.productId.sizes.large.amount %>">L</button>
+                                            
+                                            </div>
+                                            <button type="submit" id="add-to-cart" onclick="addToCart(`<%= element.productId._id.toString()%>`)" class="btn btn-dark flex-grow-1 mt-2" >
+                                                Add to Cart
+                                           </button>
+                                            <!-- <a href="#" class="size-guide mt-2 d-inline-block">Size Guide</a> -->
+                                            <h5 id="itemLeft" class="mt-4 mb-4" style="color: brown;" ></h5>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                             <% }) %>
+                        </div>
+                        
+                        <!-- Pagination -->
+                         <% if (wishlist?.products.length>0) { %>
+                            <nav aria-label="Wishlist pagination" class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                         <% } %>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Footer -->
+    <footer class="footer py-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">THE STYLE</h5>
+                    <p>Premium fashion destination offering curated collections from top global brands.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">SHOP</h5>
+                    <ul class="footer-links">
+                        <li><a href="category.html">Men's Collection</a></li>
+                        <li><a href="category.html">Women's Collection</a></li>
+                        <li><a href="new-arrivals.html">New Arrivals</a></li>
+                        <li><a href="brands.html">Brands</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">INFORMATION</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">CONTACT</h5>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Fashion Street, New York, USA</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@thestyle.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-4 pt-4 border-top">
+                <div class="col-md-6">
+                    <p class="mb-md-0">© 2023 The Style. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="images/payment-methods.png" alt="Payment Methods" class="payment-methods">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        const modal = document.getElementById('sizeModal');
+
+        // Function to open the modal
+
+        function openModal(id) {
+            console.log(id)
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        let size = document.getElementById('sizee').value
+        function changePrice(button,id){
+            document.querySelectorAll('.size-options button').forEach(btn=>btn.classList.remove('active'));
+            button.classList.add('active')
+            const price = button.getAttribute('data-price');
+            console.log(price)
+            size = button.getAttribute('data-size')
+            document.querySelector('.current-price').textContent = `${price}`
+
+            fetch('/checkQuantity',{
+                method : 'post',
+                headers:{
+                    'Content-type':'application/json'
+                },
+                body:JSON.stringify({size,id})
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data){
+                    updateQuantity(size,data.quantity.quantity)
+                }
+                if(data.success){
+                    showToast(data.message || '','success')
+                }
+
+                
+            })
+        
+        }
+        function updateQuantity(size,quantity){
+           
+           let stockDisplay = document.getElementById('stock-display')
+           let cartBtn = document.getElementById('add-to-cart')
+           let itemLeft = document.getElementById('itemLeft')
+           if(quantity < 1){
+               cartBtn.disabled = true;  
+               cartBtn.classList.add('disabled')
+               stockDisplay.textContent = 'Out of Stock'
+           }else{
+               stockDisplay.textContent = ''
+               cartBtn.disabled = false; 
+               cartBtn.classList.remove('disabled');
+           }
+           if(quantity <5 && quantity>1){
+               itemLeft.textContent = ` Hurry up only ${quantity} items are left`
+           }else{
+               itemLeft.textContent = ''
+           }
+           
+       }
+       function addToCart(id) {
+            let priceValue = document.querySelector('.current-price').textContent
+            let price = parseInt(priceValue)
+            fetch(`/cart/add`,{
+                method: 'post',
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body:JSON.stringify({id,size,price})
+            })
+            .then(response => response.json())
+            .then(data=>{
+                if(data.success){
+                    showToast(data.message||'','success')
+                    let addToCart = document.getElementById('add-to-cart')
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 2000);
+   
+                }else{
+                    showToast(data.message||'','error')
+                }
+                if(data.sizemessage){
+                    showToast(data.sizemessage || '','warning')
+                }
+                
+            })
+        }
+        
+        
+        // Remove item from wishlist
+        function removeFromWishlist(productId) {
+            fetch(`/wishlist/remove/${productId}`,{
+                method:'delete',
+                headers:{
+                    "Content-type":"application/json"
+                }
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.success){
+                    showToast(data.message||'','success')
+                    setTimeout(()=>{window.location.reload()},2000)
+                }else{
+                    showToast(data.message||'','error')
+                }
+            })
+        }
+        
+        
+        // Clear wishlist
+        // function clearWishlist() {
+        //     if (confirm('Are you sure you want to clear your wishlist?')) {
+        //         const wishlistItems = document.querySelectorAll('.wishlist-item');
+        //         wishlistItems.forEach(item => {
+        //             item.parentElement.remove();
+        //         });
+                
+        //         // Update wishlist count
+        //         updateWishlistCount();
+        //     }
+        // }
+        
+        // Update wishlist count
+        // function updateWishlistCount() {
+        //     const wishlistItems = document.querySelectorAll('.wishlist-item');
+        //     const wishlistHeader = document.querySelector('.wishlist-header h4');
+        //     console.log(wishlistHeader,"sdsdds")
+        //     wishlistHeader.textContent = `My Wishlist (${wishlistItems.length} items)`;
+        // }
+    </script>
+</body>
+</html>

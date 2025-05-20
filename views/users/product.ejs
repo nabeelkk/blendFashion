@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+    <style>
+        /* Products Page Specific Styles */
+        .filter-card {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .filter-header {
+            cursor: pointer;
+        }
+        
+        .color-filter {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 5px;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+        }
+        
+        .color-filter.active {
+            border: 2px solid #212529;
+        }
+        
+        .size-filter {
+            display: inline-block;
+            min-width: 35px;
+            height: 35px;
+            border: 1px solid #dee2e6;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 33px;
+            font-size: 12px;
+        }
+        
+        .size-filter.active {
+            background-color: #212529;
+            color: #fff;
+            border-color: #212529;
+        }
+        
+        .price-range-slider {
+            height: 5px;
+            position: relative;
+            background-color: #dee2e6;
+            border-radius: 5px;
+        }
+        
+        .price-range-selected {
+            height: 100%;
+            left: 25%;
+            right: 25%;
+            position: absolute;
+            border-radius: 5px;
+            background-color: #212529;
+        }
+        
+        .price-range-handle {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            background-color: #212529;
+            border-radius: 50%;
+            top: -5px;
+            margin-left: -8px;
+            cursor: pointer;
+        }
+        
+        .price-range-handle.low {
+            left: 25%;
+        }
+        
+        .price-range-handle.high {
+            left: 75%;
+        }
+        
+        .price-range-values {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .product-grid-options {
+            display: flex;
+            align-items: center;
+        }
+        
+        .view-option {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            background-color: #fff;
+        }
+        
+        .view-option.active {
+            background-color: #212529;
+            color: #fff;
+            border-color: #212529;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .product-card:hover .product-overlay {
+            bottom: 0;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 3px;
+        }
+        
+        .product-wishlist {
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .product-wishlist:hover {
+            color: #dc3545;
+        }
+        
+        .product-wishlist.active i {
+            color: #dc3545;
+        }
+        
+        .list-view .product-card {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        .list-view .product-image {
+            width: 200px;
+            flex-shrink: 0;
+        }
+        
+        .list-view .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .list-view .product-description {
+            display: block;
+            margin-top: 10px;
+        }
+        
+        .grid-view .product-description {
+            display: none;
+        }
+        
+        .list-view .product-actions {
+            display: flex;
+            margin-top: auto;
+        }
+        
+        .grid-view .product-actions {
+            display: none;
+        }
+        
+        @media (max-width: 767.98px) {
+            .filter-card {
+                position: static;
+            }
+            
+            .list-view .product-card {
+                flex-direction: column;
+            }
+            
+            .list-view .product-image {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="products">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newarrival">New Arrivals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <!-- <a href="#" class="nav-icon me-3"><i class="fas fa-search"></i></a> -->
+                        <a href="userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                        <a href="cart" class="nav-icon position-relative">
+                            <i class="fas fa-shopping-bag"></i>
+                             <% if (cart) { %>
+                                  <span class="cart-count"><%= cart.products.length %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-section py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Filters Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="filter-card card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="mb-0">Filters</h5>
+                                <button class="btn btn-link text-dark p-0" onclick="clearAllFilters()">Clear All</button>
+                            </div>
+                            
+                            <!-- Categories Filter -->
+                            <div class="filter-group mb-4">
+                                <h6 class="filter-header d-flex justify-content-between align-items-center mb-3" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse">
+                                    Categories
+                                    <i class="fas fa-chevron-down small"></i>
+                                </h6>
+                                <form action="/products" method="get" id="filterForm">
+                                    <% category.forEach(element => { %>
+                                        <div class="collapse show" id="categoriesCollapse">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="category[]" id="<%=element.name %>" value="<%= element._id %>" 
+                                                <%= categoryFilter.includes(element._id.toString()) ? 'checked' : '' %> 
+                                                onchange="this.form.submit()" />
+                                                <label class="form-check-label" for="<%=element.name %>">
+                                                    <%= element.name %>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                            </div>
+                            <hr>
+                            <!-- Size Filter -->
+                            <!-- <div class="filter-group mb-4">
+                                <h6 class="filter-header d-flex justify-content-between align-items-center mb-3" data-bs-toggle="collapse" data-bs-target="#sizeCollapse">
+                                    Size
+                                    <i class="fas fa-chevron-down small"></i>
+                                </h6>
+                                <div class="collapse show" id="sizeCollapse">
+                                    <div class="size-filters">
+                                        <span class="size-filter" onclick="toggleSizeFilter(this)">XS</span>
+                                        <span class="size-filter" onclick="toggleSizeFilter(this)">S</span>
+                                        <span class="size-filter active" onclick="toggleSizeFilter(this)">M</span>
+                                        <span class="size-filter" onclick="toggleSizeFilter(this)">L</span>
+                                        <span class="size-filter" onclick="toggleSizeFilter(this)">XL</span>
+                                        <span class="size-filter" onclick="toggleSizeFilter(this)">XXL</span>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- <hr> -->
+                            
+                            <!-- Color Filter -->
+                            <!-- <div class="filter-group mb-4">
+                                <h6 class="filter-header d-flex justify-content-between align-items-center mb-3" data-bs-toggle="collapse" data-bs-target="#colorCollapse">
+                                    Color
+                                    <i class="fas fa-chevron-down small"></i>
+                                </h6>
+                                <div class="collapse show" id="colorCollapse">
+                                    <div class="color-filters">
+                                        <span class="color-filter active" style="background-color: #FFFFFF;" onclick="toggleColorFilter(this)" title="White"></span>
+                                        <span class="color-filter" style="background-color: #000000;" onclick="toggleColorFilter(this)" title="Black"></span>
+                                        <span class="color-filter" style="background-color: #FF0000;" onclick="toggleColorFilter(this)" title="Red"></span>
+                                        <span class="color-filter" style="background-color: #0000FF;" onclick="toggleColorFilter(this)" title="Blue"></span>
+                                        <span class="color-filter" style="background-color: #FFFF00;" onclick="toggleColorFilter(this)" title="Yellow"></span>
+                                        <span class="color-filter" style="background-color: #008000;" onclick="toggleColorFilter(this)" title="Green"></span>
+                                        <span class="color-filter" style="background-color: #FFC0CB;" onclick="toggleColorFilter(this)" title="Pink"></span>
+                                        <span class="color-filter" style="background-color: #A52A2A;" onclick="toggleColorFilter(this)" title="Brown"></span>
+                                        <span class="color-filter" style="background-color: #808080;" onclick="toggleColorFilter(this)" title="Gray"></span>
+                                    </div>
+                                </div>
+                            </div> -->
+                            
+                            <!-- Discount Filter -->
+                            <!-- <div class="filter-group">
+                                <h6 class="filter-header d-flex justify-content-between align-items-center mb-3" data-bs-toggle="collapse" data-bs-target="#discountCollapse">
+                                    Discount
+                                    <i class="fas fa-chevron-down small"></i>
+                                </h6>
+                                <div class="collapse show" id="discountCollapse">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="discount1">
+                                        <label class="form-check-label" for="discount1">
+                                            10% Off or more
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="discount2">
+                                        <label class="form-check-label" for="discount2">
+                                            20% Off or more
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="discount3">
+                                        <label class="form-check-label" for="discount3">
+                                            30% Off or more
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="discount4">
+                                        <label class="form-check-label" for="discount4">
+                                            40% Off or more
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="discount5">
+                                        <label class="form-check-label" for="discount5">
+                                            50% Off or more
+                                        </label>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="col-lg-9">
+                    <!-- Sort and View Options -->
+                    <div class="products-options mb-4 ">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center ">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <div class="d-flex align-items-center gap-4">
+                                            <label for="sortOptions" class="me-2 mb-0" >Sort </label>
+                                            
+                                                <select name="sort" class="form-select form-select-sm" style="padding: 7px; border: 1px solid #a09d9dbd;" onchange="document.getElementById('filterForm').submit()">
+                                                    <option value="">Featured</option>
+                                                    <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest Arrivals</option>
+                                                    <option value="lowToHigh" <%= sort === 'lowToHigh' ? 'selected' : '' %>>Price: Low to High</option>
+                                                    <option value="highToLow" <%= sort === 'highToLow' ? 'selected' : '' %>>Price: High to Low</option>
+                                                    <option value="az" <%= sort === 'az' ? 'selected' : '' %>>A-Z</option>
+                                                    <option value="za" <%= sort === 'za' ? 'selected' : '' %>>Z-A</option>
+                                                </select>
+                                            
+                                        </div>    
+                                    </div>
+                                </form>
+                                    
+                                    <div class="col-md-6 col-search " style="width: 260px; margin-left: 130px;">
+                                        
+                                        <form class="searchform" action="/products" method="get">
+                                            <div class="input-group" style="border: .5px solid #9b97978a; border-radius: 6px;">
+                                                <input  style="font-size: 14px;" value="<%= search || "" %>" type="text" name="search" class="form-control" placeholder="Search items">
+                                                <button class="btn btn-light bg" type="submit"><i class="fas fa-search"></i></button>
+                                                <% if (search) { %>
+                                                    <a href="/products"><button class="btn btn-light bg" type="button"><i class="fas fa-close"></i></button></a>
+                                                <% } %>
+                                            </div>
+                                        </form>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Products Grid -->
+                    <div class="row grid-view" id="productsContainer">
+                        <!-- Product 1 -->
+                        <% products.forEach(elements => { %>
+                        <div class="col-6 col-md-4 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= elements.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid" height="250">
+                                    <div class="product-overlay">
+
+                                        <a href="/productDetails/<%= elements._id %>" class="btn btn-sm btn-dark">View</a>
+                                    </div>
+                                    <% if (elements.offerPrice) { %>
+                                    <div class="product-badge bg-danger text-white"><%= element.offerPrice %></div>
+                                    <% } %>
+                                </div>
+                                <div class="product-info p-3">
+                                    <h5 class="product-title mb-1">
+                                        <a href="/productDetails/<%= elements._id %>" class="text-decoration-none text-dark"><%= elements.name %></a>
+                                    </h5>
+                                    <p class="product-brand text-muted mb-1">Prada</p>
+                                    <div class="rating-container mb-3">
+                                        <div class="star-rating" id="starRating">
+                                            <span class="star" data-value="1">&#9733;</span>
+                                            <span class="star" data-value="2">&#9733;</span>
+                                            <span class="star" data-value="3">&#9733;</span>
+                                            <span class="star" data-value="4">&#9733;</span>
+                                            <span class="star" data-value="5">&#9733;</span>
+                                        </div>
+                                        <input type="hidden" name="rating" id="ratingValue" value="0">
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p class="product-price mb-0">₹ <%= elements.price.seller %> <span class="text-decoration-line-through text-muted fs-6">₹ <%= elements.price.regular %></span></p>
+                                        <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
+                                    </div>
+                                    <p class="product-description mt-3">Crafted from premium Egyptian cotton, this luxurious shirt offers exceptional comfort and a sophisticated look.</p>
+                                    <div class="product-actions mt-3">
+                                        <button class="btn btn-sm btn-dark me-2">Add to Cart</button>
+                                        <button class="btn btn-sm btn-outline-dark">Quick View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                        
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination-area mb-50">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-start">
+                                <% for( let i = 1;  i<= totalPage; i++ ) { %>
+                                    <ul class="pagination justify-content-start">
+                                        
+                                            <li class="page-item <%= parseInt(page) === i ? 'active' : '' %>">
+                                                <a class="page-link"
+                                                   href="/products?page=<%= i %>&search=<%= search %>&sort=<%= sort %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %><% categoryFilter.forEach(c => { %>&category=<%= c %><% }) %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                    
+                                <% } %>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h3 class="mb-3">Subscribe to Our Newsletter</h3>
+                    <p class="mb-4">Get the latest updates on new products and upcoming sales</p>
+                    <form class="newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email Address" aria-label="Your Email Address">
+                            <button class="btn btn-dark" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        // Toggle wishlist heart icon
+        function toggleWishlist(element, event) {
+            event.preventDefault();
+            const icon = element.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                icon.style.color = '#dc3545';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                icon.style.color = '';
+            }
+        }
+        
+        // Toggle size filter
+        function toggleSizeFilter(element) {
+            element.classList.toggle('active');
+        }
+        
+        // Toggle color filter
+        function toggleColorFilter(element) {
+            element.classList.toggle('active');
+        }
+        
+        // Set grid view
+        function setGridView() {
+            document.getElementById('productsContainer').classList.remove('list-view');
+            document.getElementById('productsContainer').classList.add('grid-view');
+            document.getElementById('gridViewBtn').classList.add('active');
+            document.getElementById('listViewBtn').classList.remove('active');
+        }
+        
+        // Set list view
+        function setListView() {
+            document.getElementById('productsContainer').classList.remove('grid-view');
+            document.getElementById('productsContainer').classList.add('list-view');
+            document.getElementById('gridViewBtn').classList.remove('active');
+            document.getElementById('listViewBtn').classList.add('active');
+        }
+        
+        // Clear all filters
+        function clearAllFilters() {
+            // Reset checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Reset size filters
+            const sizeFilters = document.querySelectorAll('.size-filter');
+            sizeFilters.forEach(filter => {
+                filter.classList.remove('active');
+            });
+            
+            // Reset color filters
+            const colorFilters = document.querySelectorAll('.color-filter');
+            colorFilters.forEach(filter => {
+                filter.classList.remove('active');
+            });
+            
+            // Reset price range
+            // In a real application, you would reset the price range slider here
+            
+            // Refresh products
+            // In a real application, you would make an API call to fetch all products
+            alert('All filters have been cleared.');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brands | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="products">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="newarrival">New Arrivals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <!-- <a href="#" class="nav-icon me-3"><i class="fas fa-search"></i></a> -->
+                        <a href="userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                        <% if (user) { %>
+                            <a href="cart" class="nav-icon position-relative">
+                                <i class="fas fa-shopping-bag"></i>
+                                <% if (cart) { %>
+                                  <span class="cart-count"><%= cart.products.length %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                            </a>
+                            <% } else { %>
+                                <a href="cart" class="nav-icon position-relative">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <span class="cart-count"></span>
+                                </a>
+                        <% } %>
+                        
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Title -->
+    <section class="page-title py-5 bg-light">
+        <div class="container text-center">
+            <h1 class="mb-0">Our Brands</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mt-2">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Brands</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Brands Intro -->
+    <section class="brands-intro py-5">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Discover Premium Fashion Brands</h2>
+                    <p class="lead mb-0">We curate collections from the world's most prestigious fashion houses, bringing you the finest in luxury apparel and accessories. Explore our brand partners and find your perfect style statement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Brands -->
+    <section class="featured-brands py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Featured Brands</h2>
+            <div class="row">
+                <!-- Brand 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="brand-card position-relative">
+                        <img src="images/brand-prada.jpg" alt="Prada" class="img-fluid">
+                        <div class="brand-overlay d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <h3 class="brand-name mb-3">PRADA</h3>
+                                <a href="category.html" class="btn btn-outline-light">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Brand 2 -->
+                <div class="col-md-4 mb-4">
+                    <div class="brand-card position-relative">
+                        <img src="images/brand-burberry.jpg" alt="Burberry" class="img-fluid">
+                        <div class="brand-overlay d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <h3 class="brand-name mb-3">BURBERRY</h3>
+                                <a href="category.html" class="btn btn-outline-light">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Brand 3 -->
+                <div class="col-md-4 mb-4">
+                    <div class="brand-card position-relative">
+                        <img src="images/brand-gucci.jpg" alt="Gucci" class="img-fluid">
+                        <div class="brand-overlay d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <h3 class="brand-name mb-3">GUCCI</h3>
+                                <a href="category.html" class="btn btn-outline-light">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Brands -->
+    <section class="all-brands py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">All Brands</h2>
+            
+            <!-- Brand Filter -->
+            <div class="brand-filter mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search brands..." id="brandSearch">
+                            <button class="btn btn-dark" type="button">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-alphabet text-center mt-4">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Brand alphabet">
+                        <button type="button" class="btn btn-outline-dark active" onclick="filterBrands('all')">All</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('A')">A</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('B')">B</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('C')">C</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('D')">D</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('E')">E</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('F')">F</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('G')">G</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('H')">H</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('I')">I</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('J')">J</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('K')">K</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('L')">L</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('M')">M</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('N')">N</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('O')">O</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('P')">P</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('Q')">Q</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('R')">R</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('S')">S</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('T')">T</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('U')">U</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('V')">V</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('W')">W</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('X')">X</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('Y')">Y</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="filterBrands('Z')">Z</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Brand Grid -->
+            <div class="row" id="brandGrid">
+                <!-- Brand 1 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="A">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-armani.png" alt="Armani" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Armani</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 2 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="B">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-burberry.png" alt="Burberry" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Burberry</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 3 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="C">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-chanel.png" alt="Chanel" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Chanel</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 4 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="D">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-dior.png" alt="Dior" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Dior</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 5 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="F">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-fendi.png" alt="Fendi" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Fendi</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 6 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="G">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-gucci.png" alt="Gucci" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Gucci</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 7 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="H">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-hermes.png" alt="Hermes" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Hermes</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 8 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="L">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-lv.png" alt="Louis Vuitton" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Louis Vuitton</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 9 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="P">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-prada.png" alt="Prada" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Prada</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 10 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="R">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-ralph-lauren.png" alt="Ralph Lauren" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Ralph Lauren</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 11 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="V">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-versace.png" alt="Versace" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Versace</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+                <!-- Brand 12 -->
+                <div class="col-6 col-md-3 mb-4 brand-item" data-letter="Z">
+                    <div class="brand-box text-center p-4 border">
+                        <img src="images/brand-logo-zegna.png" alt="Zegna" class="img-fluid brand-logo mb-3">
+                        <h4 class="brand-title">Zegna</h4>
+                        <a href="category.html" class="btn btn-sm btn-outline-dark mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Spotlight -->
+    <section class="brand-spotlight py-5 bg-dark text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="section-title text-white mb-4">Brand Spotlight: Prada</h2>
+                    <p class="lead mb-4">Founded in 1913 by Mario Prada, the Italian luxury fashion house is known for its leather handbags, travel accessories, shoes, ready-to-wear, perfumes, and other fashion accessories.</p>
+                    <p class="mb-4">Prada's distinctive aesthetic combines minimalism with innovative materials and cutting-edge design. The brand's commitment to quality craftsmanship and forward-thinking style has made it a favorite among fashion enthusiasts worldwide.</p>
+                    <a href="category.html" class="btn btn-outline-light">Explore Prada Collection</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="images/brand-spotlight-prada.jpg" alt="Prada Spotlight" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Stories -->
+    <section class="brand-stories py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Brand Stories</h2>
+            <div class="row">
+                <!-- Story 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="images/brand-story-1.jpg" class="card-img-top" alt="Brand Story 1">
+                        <div class="card-body">
+                            <h5 class="card-title">The History of Burberry's Iconic Check</h5>
+                            <p class="card-text">Discover the fascinating story behind Burberry's signature check pattern and how it became a symbol of British luxury fashion.</p>
+                            <a href="#" class="btn btn-link p-0">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Story 2 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="images/brand-story-2.jpg" class="card-img-top" alt="Brand Story 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Gucci's Renaissance Under Alessandro Michele</h5>
+                            <p class="card-text">How Alessandro Michele transformed Gucci from a traditional luxury brand to a maximalist powerhouse that resonates with younger generations.</p>
+                            <a href="#" class="btn btn-link p-0">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Story 3 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="images/brand-story-3.jpg" class="card-img-top" alt="Brand Story 3">
+                        <div class="card-body">
+                            <h5 class="card-title">The Craftsmanship Behind Hermès Bags</h5>
+                            <p class="card-text">An inside look at the meticulous craftsmanship and attention to detail that goes into creating each Hermès bag.</p>
+                            <a href="#" class="btn btn-link p-0">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">THE STYLE</h5>
+                    <p>Premium fashion destination offering curated collections from top global brands.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">SHOP</h5>
+                    <ul class="footer-links">
+                        <li><a href="category.html">Men's Collection</a></li>
+                        <li><a href="category.html">Women's Collection</a></li>
+                        <li><a href="new-arrivals.html">New Arrivals</a></li>
+                        <li><a href="brands.html">Brands</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">INFORMATION</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">CONTACT</h5>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Fashion Street, New York, USA</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@thestyle.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-4 pt-4 border-top">
+                <div class="col-md-6">
+                    <p class="mb-md-0">© 2023 The Style. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="images/payment-methods.png" alt="Payment Methods" class="payment-methods">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        // Brand Filter
+        function filterBrands(letter) {
+            const brandItems = document.querySelectorAll('.brand-item');
+            const filterButtons = document.querySelectorAll('.brand-alphabet .btn');
+            
+            // Update active button
+            filterButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent === letter || (button.textContent === 'All' && letter === 'all')) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Filter brands
+            brandItems.forEach(item => {
+                if (letter === 'all' || item.getAttribute('data-letter') === letter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Brand Search
+        document.getElementById('brandSearch').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const brandItems = document.querySelectorAll('.brand-item');
+            
+            brandItems.forEach(item => {
+                const brandName = item.querySelector('.brand-title').textContent.toLowerCase();
+                if (brandName.includes(searchValue)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Reset active button
+            document.querySelectorAll('.brand-alphabet .btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector('.brand-alphabet .btn:first-child').classList.add('active');
+        });
+    </script>
+</body>
+</html>

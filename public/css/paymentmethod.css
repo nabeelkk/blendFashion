@@ -1,0 +1,459 @@
+
+.checkout-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.checkout-progress::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #e9ecef;
+    z-index: 0;
+}
+
+.checkout-step {
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.checkout-step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-weight: 500;
+}
+
+.checkout-step.active .checkout-step-number {
+    background-color: #212529;
+    color: #fff;
+}
+
+.checkout-step.completed .checkout-step-number {
+    background-color: #198754;
+    color: #fff;
+}
+
+.checkout-step-label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.checkout-step.active .checkout-step-label {
+    color: #212529;
+    font-weight: 500;
+}
+
+.checkout-step.completed .checkout-step-label {
+    color: #198754;
+}
+
+.payment-method-card {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.payment-method-card:hover {
+    border-color: #adb5bd;
+}
+
+.payment-method-card.selected {
+    border-color: #212529;
+}
+
+.payment-method-header {
+    padding: 15px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.payment-method-body {
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+    display: none;
+}
+
+.payment-method-card.selected .payment-method-body {
+    display: block;
+}
+
+.payment-method-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.payment-method-icon img {
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.payment-method-title {
+    font-weight: 500;
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+
+.payment-method-badge {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: #e9ecef;
+    margin-left: 10px;
+}
+
+.payment-method-badge.recommended {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.payment-method-badge.offer {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.card-icons {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.card-icon {
+    width: 40px;
+    height: 25px;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.saved-card {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.saved-card:hover {
+    background-color: #f8f9fa;
+}
+
+.saved-card.selected {
+    border-color: #212529;
+    background-color: #f8f9fa;
+}
+
+.card-logo {
+    width: 40px;
+    margin-right: 15px;
+}
+
+.card-details {
+    flex-grow: 1;
+}
+
+.card-number {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.card-expiry {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.upi-apps {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.upi-app {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upi-app:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+}
+
+.upi-app.selected {
+    border-color: #212529;
+    background-color: #f8f9fa;
+}
+
+.upi-app-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.upi-app-name {
+    font-size: 12px;
+    text-align: center;
+}
+
+.wallet-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wallet-option {
+    width: 100px;
+    height: 60px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-option:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+}
+
+.wallet-option.selected {
+    border-color: #212529;
+    background-color: #f8f9fa;
+}
+
+.wallet-icon {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.bank-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bank-option {
+    width: 120px;
+    height: 70px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px;
+}
+
+.bank-option:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+}
+
+.bank-option.selected {
+    border-color: #212529;
+    background-color: #f8f9fa;
+}
+
+.bank-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gift-card-input {
+    display: flex;
+}
+
+.gift-card-input input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.gift-card-input button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.price-details {
+    border-top: 1px solid #dee2e6;
+    padding-top: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.price-label {
+    color: #6c757d;
+}
+
+.price-value {
+    font-weight: 500;
+}
+
+.total-row {
+    font-weight: 600;
+    font-size: 18px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
+}
+
+.know-more {
+    color: #dc3545;
+    font-size: 12px;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.continue-btn {
+    background-color: #ff3f6c;
+    border-color: #ff3f6c;
+    color: white;
+    font-weight: 500;
+    padding: 12px;
+}
+
+.continue-btn:hover {
+    background-color: #ff2957;
+    border-color: #ff2957;
+    color: white;
+}
+
+.back-btn {
+    background-color: transparent;
+    border-color: #dee2e6;
+    color: #212529;
+    font-weight: 500;
+    padding: 12px;
+}
+
+.back-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.payment-icons {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.payment-icons img {
+    height: 24px;
+    margin-right: 10px;
+}
+
+.secure-badge {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #6c757d;
+    margin-right: 15px;
+}
+
+.secure-badge i {
+    margin-right: 5px;
+}
+
+.need-help {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.need-help a {
+    color: #212529;
+    text-decoration: none;
+}
+
+.need-help a:hover {
+    text-decoration: underline;
+}
+
+.delivery-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.delivery-item-image {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 4px;
+}
+
+.delivery-date {
+    font-size: 14px;
+}
+
+@media (max-width: 767.98px) {
+    .checkout-step-label {
+        font-size: 12px;
+    }
+    
+    .delivery-item-image {
+        width: 50px;
+        height: 70px;
+    }
+    
+    .upi-app {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .wallet-option {
+        width: 90px;
+        height: 55px;
+    }
+    
+    .bank-option {
+        width: 100px;
+        height: 60px;
+    }
+}

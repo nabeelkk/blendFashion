@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed | The Style</title>
+    <link rel="stylesheet" href="css/style1.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        a{
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <div class="container mb-5" style="text-align: center;">
+        <h1 style="margin-top: 50px;">Payment Failed</h1>
+        <p>Sorry, your payment could not be processed. Please try again.</p>
+        <img class="mt-5 mb-5" src="https://tse3.mm.bing.net/th?id=OIP.QaDO6hbBNDInHbKPMB_dzgHaEz&pid=Api&P=0&h=180" alt="Failure Illustration">
+        <div class="mt-4">
+            <a id="razorpay-checkout-button" class="btn btn-dark">Retry Payment</a>
+            <a href="/myOrder" class="btn btn-outline-dark">View Order Details</a>
+        </div>
+    </div>
+    <input type="hidden" name="default-address" id="default-address" value="<%=defaultAddressId %>">
+    <input type="hidden"  id="total-price" value="<%=totalPrice %>">
+     <input type="hidden" id="cart" value="<%= cart %>">
+    <%- include('../partials/footer') %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+         document.getElementById('razorpay-checkout-button').addEventListener('click', async () => {
+            const defaultAddress = document.getElementById('default-address').value;
+            console.log(defaultAddress)
+            const totalAmount = document.getElementById('total-price').value
+        
+            const cart =  JSON.stringify(document.getElementById('cart').value)
+
+            // Validate cart
+            if (!cart) {
+                showToast('Invalid product data in cart', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/create-razorpay-order', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        defaultAddress,
+                        totalAmount,
+                        cart
+                    }),
+                });
+                const data = await response.json();
+                if (data.error) {
+                    showToast(data.error, 'error');
+                    return;
+                }
+                const options = {
+                    key: data.key_id,
+                    amount: data.amount,
+                    currency: data.currency,
+                    order_id: data.order_id,
+                    name: 'Blend Fashion',
+                    description: `Order for ${cart.products} items`,
+                    image: '/images/logo.png', // Add your logo
+                    prefill: {
+                        name: data.user.name,
+                        email: data.user.email,
+                        contact: data.user.contact,
+                    },
+                    notes: {
+                        address: `${data.address.street}, ${data.address.city}, ${data.address.state}, ${data.address.postalCode}, ${data.address.country}`,
+                    },
+                    theme: {
+                        color: '#343a40',
+                    },
+                    handler: async function (response) {
+                        // Handle successful payment
+                        try {
+                            const verifyResponse = await fetch('/payment-success', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                }),
+                            });
+
+                            if (verifyResponse.ok) {
+                                showToast('Payment successful!', 'success');
+                                setTimeout(() => {
+                                    window.location.href = '/checkoutsuccess';
+                                }, 1000);
+                            } else {
+                                showToast('Payment verification failed', 'error');
+                                window.location.href = '/checkoutfailure';
+                            }
+                        } catch (error) {
+                            showToast('An error occurred. Please try again.', 'error');
+                            setTimeout(() => {
+                                    window.location.href = '/checkoutfailure';
+                                }, 1000);
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            showToast('Payment cancelled', 'warning');
+                            setTimeout(() => {
+                                    window.location.href = '/checkoutfailure';
+                                }, 1000);
+                        },
+                    },
+                };
+                console.log(options,"this is the inside razorpay")
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.log(error)
+                showToast('An error occurred. Please try again.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

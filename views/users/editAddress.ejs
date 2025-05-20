@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Address | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+
+    <%- include('../partials/navbar') %>
+    <!-- Page Title -->
+    <section class="page-title py-5 bg-light">
+        <div class="container">
+            <h1 class="mb-0">Add New Address</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mt-2">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="userDash">My Account</a></li>
+                    <li class="breadcrumb-item"><a href="myAddresses">My Addresses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add New Address</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Add Address Content -->
+    <section class="add-address-content py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="account-sidebar">
+                        <div class="user-profile text-center mb-4">
+                            <div class="user-avatar mb-3">
+                                <img src="/adminassets/imgs/people/ddd.png" alt="User Avatar" class="rounded-circle" width="80" height="80">
+                            </div>
+                            
+                            <h5 class="user-name mb-1"><%= user.name %></h5>
+                            <p class="user-email text-muted mb-0"><%= user.email %></p>
+                        </div>
+                        <div class="list-group">
+                            <a href="/userDash" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> My Profile
+                            </a>
+                            <a href="/myOrder" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i> My Orders
+                            </a>
+                            <a href="/wishlist" class="list-group-item list-group-item-action">
+                                <i class="fas fa-heart me-2"></i> My Wishlist
+                            </a>
+                            <a href="/address" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-map-marker-alt me-2"></i> My Addresses
+                            </a>
+                            <a href="/mywallet" class="list-group-item list-group-item-action">
+                                <i class="fas fa-wallet me-2"></i> My Wallet
+                            </a>
+                            <a href="/logout" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Address Form -->
+                <div class="col-lg-9">
+                    <div class="add-address-form-container">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white py-3">
+                                <h4 class="mb-0">Edit Address</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form method="post" action="/address/edit/<%= address.id %>" id="formSubmit" >
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" name="firstName" id="firstName" value="<%=address.firstName %>"  required>
+                                            <span id="error-firstName" style="color: red;"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" name="lastName" id="lastName" value="<%= address.lastName %>" required>
+                                            <span id="error-lastName" style="color: red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="addressName" class="form-label">Address Name</label>
+                                            <input type="text" class="form-control" name="addressName" id="addressName" value="<%= address.addressName %>" required>
+                                            <span id="error-addressName" style="color: red;"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                                            <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" value="<%= address.phoneNumber %>"  required>
+                                            <span id="error-phoneNumber" style="color: red;"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="addressLine1" class="form-label">Address Line 1</label>
+                                        <input type="text" class="form-control" name="addressLine" id="addressLine" value="<%= address.addressLine %>" required>
+                                        <span id="error-addressLine" style="color: red;"></span>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="city" class="form-label">City</label>
+                                            <input type="text" class="form-control" name="city" id="city" value="<%= address.city %>"  required>
+                                            <span id="error-city" style="color: red;"></span>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="state" class="form-label">State</label>
+                                            <input type="text" class="form-control" name="state" id="state" value="<%= address.state %>"  required>
+                                            <span id="error-state" style="color: red;"></span>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="zipCode" class="form-label">ZIP/Postal Code</label>
+                                            <input type="text" class="form-control" name="zipCode" id="zipCode" value="<%= address.zipCode %>"  required>
+                                            <span id="error-zipCode" style="color: red;"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="deliveryInstructions" class="form-label">Delivery Instructions (Optional)</label>
+                                        <textarea class="form-control" name="deliveryInstructions" id="deliveryInstructions" rows="3" ></textarea>
+                                    </div>
+                                    
+                                    <!-- <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="defaultAddress">
+                                            <label class="form-check-label" for="defaultAddress">
+                                                Set as default shipping address
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="billingAddress">
+                                            <label class="form-check-label" for="billingAddress">
+                                                Also set as default billing address
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                    
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <a href="/address" class="btn btn-outline-secondary me-2">Cancel</a>
+                                        <button type="submit" class="btn btn-dark">Save Address</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        document.getElementById('formSubmit').addEventListener('submit',(e)=>{
+          
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const addressNameInput = document.getElementById('addressName');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const addressLineInput = document.getElementById('addressLine');
+            const cityInput = document.getElementById('city');
+            const stateInput = document.getElementById('state');
+            const zipCodeInput = document.getElementById('zipCode');
+            const deliveryInstructionsInput = document.getElementById('deliveryInstructions');
+
+
+            const errorFirstName = document.getElementById('error-firstName');
+            const errorLastName = document.getElementById('error-lastName');
+            const errorAddressName = document.getElementById('error-addressName');
+            const errorPhoneNumber = document.getElementById('error-phoneNumber');
+            const errorAddressLine = document.getElementById('error-addressLine');
+            const errorCity = document.getElementById('error-city');
+            const errorState = document.getElementById('error-state');
+            const errorZipCode = document.getElementById('error-zipCode');
+            const errorDeliveryInstructions = document.getElementById('error-deliveryInstructions');
+
+            const errorElements = [errorFirstName, errorLastName, errorAddressName, errorPhoneNumber, errorAddressLine, errorCity, errorState, errorZipCode, errorDeliveryInstructions];
+            errorElements.forEach(el => {
+                el.style.display = '感知';
+                el.textContent = '';
+            });
+
+
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const addressName = addressNameInput.value.trim();
+            let phoneNumber = phoneNumberInput.value.trim().replace(/[\s\-\+\(\)]/g, ''); 
+            const addressLine = addressLineInput.value.trim();
+            const city = cityInput.value.trim();
+            const state = stateInput.value.trim();
+            const zipCode = zipCodeInput.value.trim();
+            const deliveryInstructions = deliveryInstructionsInput.value.trim();
+
+            let isValid = true;
+
+ 
+            const nameRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!firstName) {
+                errorFirstName.style.display = 'block';
+                errorFirstName.textContent = 'First name is required';
+                isValid = false;
+            } else if (!nameRegex.test(firstName)) {
+                errorFirstName.style.display = 'block';
+                errorFirstName.textContent = 'First name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            if (!lastName) {
+                errorLastName.style.display = 'block';
+                errorLastName.textContent = 'Last name is required';
+                isValid = false;
+            } else if (!nameRegex.test(lastName)) {
+                errorLastName.style.display = 'block';
+                errorLastName.textContent = 'Last name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const addressNameRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!addressName) {
+                errorAddressName.style.display = 'block';
+                errorAddressName.textContent = 'Address name is required';
+                isValid = false;
+            } else if (!addressNameRegex.test(addressName)) {
+                errorAddressName.style.display = 'block';
+                errorAddressName.textContent = 'Address name must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneNumber) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number is required';
+                isValid = false;
+            } else if (!phoneRegex.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number must be exactly 10 digits';
+                isValid = false;
+            } else if (!/^[6-9]/.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number must start with 6, 7, 8, or 9';
+                isValid = false;
+            } else if (/^(\d)\1{9}$/.test(phoneNumber)) {
+                errorPhoneNumber.style.display = 'block';
+                errorPhoneNumber.textContent = 'Phone number cannot consist of the same digit repeated';
+                isValid = false;
+            }
+
+            const addressLineRegex = /^[A-Za-z0-9\s,.\-/#]{5,100}$/;
+            if (!addressLine) {
+                errorAddressLine.style.display = 'block';
+                errorAddressLine.textContent = 'Address line is required';
+                isValid = false;
+            } else if (!addressLineRegex.test(addressLine)) {
+                errorAddressLine.style.display = 'block';
+                errorAddressLine.textContent = 'Address line must be 5-100 characters, including letters, numbers, spaces, and ,.-/#';
+                isValid = false;
+            }
+
+            const cityRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!city) {
+                errorCity.style.display = 'block';
+                errorCity.textContent = 'City is required';
+                isValid = false;
+            } else if (!cityRegex.test(city)) {
+                errorCity.style.display = 'block';
+                errorCity.textContent = 'City must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const stateRegex = /^[A-Za-z\s]{2,50}$/;
+            if (!state) {
+                errorState.style.display = 'block';
+                errorState.textContent = 'State is required';
+                isValid = false;
+            } else if (!stateRegex.test(state)) {
+                errorState.style.display = 'block';
+                errorState.textContent = 'State must be 2-50 characters, letters and spaces only';
+                isValid = false;
+            }
+
+            const zipCodeRegex = /^\d{6}$/;
+            if (!zipCode) {
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code is required';
+                isValid = false;
+            } else if (!zipCodeRegex.test(zipCode)) {
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code must be exactly 6 digits';
+                isValid = false;
+            }else if(zipCode === '000000'){
+                errorZipCode.style.display = 'block';
+                errorZipCode.textContent = 'ZIP/Postal code must be valid';
+                isValid = false;
+            }
+
+
+            if (deliveryInstructions && deliveryInstructions.length > 200) {
+                errorDeliveryInstructions.style.display = 'block';
+                errorDeliveryInstructions.textContent = 'Delivery instructions must be 200 characters or less';
+                isValid = false;
+            }
+
+            if (isValid) {
+                this.submit();
+            }
+        });
+    
+    </script>
+    
+</body>
+</html>
+            
+   

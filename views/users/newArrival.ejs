@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Arrivals | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="products">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="newarrival">New Arrivals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <!-- <a href="#" class="nav-icon me-3"><i class="fas fa-search"></i></a> -->
+                        <a href="userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                        <% if (user) { %>
+                            <a href="cart" class="nav-icon position-relative">
+                                <i class="fas fa-shopping-bag"></i>
+                                 <% if (cart) { %>
+                                  <span class="cart-count"><%= cart.products.length %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                            </a>
+                            <% } else { %>
+                                <a href="cart" class="nav-icon position-relative">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <span class="cart-count"></span>
+                                </a>
+                        <% } %>
+                        
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="new-arrivals-hero">
+        <div class="container-fluid p-0">
+            <div class="hero-banner position-relative">
+                <img src="/uploads/1744008623647-855692406.jpg" alt="New Arrivals" class="img-fluid w-100">
+                <div class="hero-content position-absolute top-50 start-50 translate-middle text-center text-white">
+                    <h1 class="display-4 fw-bold mb-3">NEW ARRIVALS</h1>
+                    <p class="lead mb-4">Discover the latest additions to our premium collection</p>
+                    <a href="#new-collection" class="btn btn-light btn-lg">Explore Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Collection -->
+    <section id="new-collection" class="new-collection py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">JUST LANDED</h2>
+            
+            <!-- Collection Tabs -->
+            <ul class="nav nav-tabs justify-content-center mb-5" id="collectionTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-  data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="men-tab" data-bs-toggle="tab" data-bs-target="#men" type="button" role="tab" aria-controls="men" aria-selected="false">Men</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="women-tab" data-bs-toggle="tab" data-bs-target="#women" type="button" role="tab" aria-controls="women" aria-selected="false">Women</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="accessories-tab" data-bs-toggle="tab" data-bs-target="#accessories" type="button" role="tab" aria-controls="accessories" aria-selected="false">Accessories</button>
+                </li>
+            </ul>
+            
+            <!-- Collection Content -->
+            <div class="tab-content" id="collectionTabsContent">
+                <!-- All Products -->
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <div class="row">
+                        <!-- Product 1 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008623886-30759333.jpg" alt="New Arrival 1" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Cashmere Blend Sweater</h5>
+                                    <p class="product-price">$149.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 2 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008623886-30759333.jpg" alt="New Arrival 2" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Crossbody Bag</h5>
+                                    <p class="product-price">$199.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 3 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008789447-887919650.jpg" alt="New Arrival 3" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Wool Blend Coat</h5>
+                                    <p class="product-price">$299.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 4 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008789448-325858081.jpg" alt="New Arrival 4" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Silk Printed Scarf</h5>
+                                    <p class="product-price">$89.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 5 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744009008287-868456191.jpg" alt="New Arrival 5" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Chelsea Boots</h5>
+                                    <p class="product-price">$249.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 6 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744009008287-868456191.jpg" alt="New Arrival 6" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Merino Wool Cardigan</h5>
+                                    <p class="product-price">$179.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 7 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008623886-30759333.jpg" alt="New Arrival 7" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Slim Fit Chino Pants</h5>
+                                    <p class="product-price">$119.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product 8 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744009008289-570182476.jpg" alt="New Arrival 8" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Tote Bag</h5>
+                                    <p class="product-price">$229.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Men's Products -->
+                <div class="tab-pane fade" id="men" role="tabpanel" aria-labelledby="men-tab">
+                    <div class="row">
+                        <!-- Men's Product 1 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008853153-911909079.jpg" alt="Men's New Arrival 1" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Wool Blend Blazer</h5>
+                                    <p class="product-price">$279.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Men's Product 2 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008789446-19753394.jpg" alt="Men's New Arrival 2" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Cashmere Sweater</h5>
+                                    <p class="product-price">$189.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Men's Product 3 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008623886-30759333.jpg" alt="Men's New Arrival 3" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Slim Fit Dress Shirt</h5>
+                                    <p class="product-price">$99.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Men's Product 4 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008623659-128482557.jpg" alt="Men's New Arrival 4" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Oxford Shoes</h5>
+                                    <p class="product-price">$219.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Women's Products -->
+                <div class="tab-pane fade" id="women" role="tabpanel" aria-labelledby="women-tab">
+                    <div class="row">
+                        <!-- Women's Product 1 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744029621858-803080314.jpg" alt="Women's New Arrival 1" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Silk Blouse</h5>
+                                    <p class="product-price">$149.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Women's Product 2 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744009008287-868456191.jpg" alt="Women's New Arrival 2" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Pleated Midi Skirt</h5>
+                                    <p class="product-price">$129.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Women's Product 3 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744008853154-970959823.jpg" alt="Women's New Arrival 3" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Cashmere Cardigan</h5>
+                                    <p class="product-price">$179.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Women's Product 4 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="/uploads/1744029621858-803080314.jpg" alt="Women's New Arrival 4" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Ankle Boots</h5>
+                                    <p class="product-price">$229.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accessories Products -->
+                <div class="tab-pane fade" id="accessories" role="tabpanel" aria-labelledby="accessories-tab">
+                    <div class="row">
+                        <!-- Accessory 1 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="images/new-arrival-acc-1.jpg" alt="Accessory New Arrival 1" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Belt</h5>
+                                    <p class="product-price">$79.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accessory 2 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="images/new-arrival-acc-2.jpg" alt="Accessory New Arrival 2" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Silk Scarf</h5>
+                                    <p class="product-price">$89.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accessory 3 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="images/new-arrival-acc-3.jpg" alt="Accessory New Arrival 3" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Leather Wallet</h5>
+                                    <p class="product-price">$99.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accessory 4 -->
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">NEW</span>
+                                    <img src="images/new-arrival-acc-4.jpg" alt="Accessory New Arrival 4" class="img-fluid">
+                                    <div class="product-overlay">
+                                        <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-info pt-3">
+                                    <h5 class="product-title">Designer Sunglasses</h5>
+                                    <p class="product-price">$159.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="category.html" class="btn btn-dark">View All New Arrivals</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seasonal Collection -->
+    <section class="seasonal-collection py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">FALL/WINTER COLLECTION 2023</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="collection-card position-relative">
+                        <img src="/uploads/1744008623647-855692406.jpg" alt="Men's Fall/Winter Collection" class="img-fluid">
+                        <div class="collection-overlay d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <h3 class="collection-title text-white mb-3">MEN'S COLLECTION</h3>
+                                <a href="category.html" class="btn btn-outline-light">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="collection-card position-relative">
+                        <img src="/uploads/1744008623647-855692406.jpg" alt="Women's Fall/Winter Collection" class="img-fluid">
+                        <div class="collection-overlay d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <h3 class="collection-title text-white mb-3">WOMEN'S COLLECTION</h3>
+                                <a href="category.html" class="btn btn-outline-light">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon -->
+    <section class="coming-soon py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">COMING SOON</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div class="coming-soon-content p-4">
+                        <h3 class="mb-3">Limited Edition Capsule Collection</h3>
+                        <p class="lead mb-4">Our exclusive collaboration with renowned designer Alessandro Rossi launches next month. Be the first to know when it drops.</p>
+                        <div class="countdown-timer mb-4">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="countdown-item text-center">
+                                        <div class="countdown-value display-6 fw-bold" id="countdown-days">15</div>
+                                        <div class="countdown-label">Days</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="countdown-item text-center">
+                                        <div class="countdown-value display-6 fw-bold" id="countdown-hours">08</div>
+                                        <div class="countdown-label">Hours</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="countdown-item text-center">
+                                        <div class="countdown-value display-6 fw-bold" id="countdown-minutes">45</div>
+                                        <div class="countdown-label">Minutes</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="countdown-item text-center">
+                                        <div class="countdown-value display-6 fw-bold" id="countdown-seconds">30</div>
+                                        <div class="countdown-label">Seconds</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="notify-form">
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Your Email Address" required>
+                                <button class="btn btn-dark" type="submit">Notify Me</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="images/coming-soon.jpg" alt="Coming Soon Collection" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">THE STYLE</h5>
+                    <p>Premium fashion destination offering curated collections from top global brands.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">SHOP</h5>
+                    <ul class="footer-links">
+                        <li><a href="category.html">Men's Collection</a></li>
+                        <li><a href="category.html">Women's Collection</a></li>
+                        <li><a href="new-arrivals.html">New Arrivals</a></li>
+                        <li><a href="brands.html">Brands</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">INFORMATION</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">CONTACT</h5>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Fashion Street, New York, USA</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@thestyle.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-4 pt-4 border-top">
+                <div class="col-md-6">
+                    <p class="mb-md-0">© 2023 The Style. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="images/payment-methods.png" alt="Payment Methods" class="payment-methods">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const launchDate = new Date();
+            launchDate.setDate(launchDate.getDate() + 15); // 15 days from now
+            
+            const now = new Date();
+            const diff = launchDate - now;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>

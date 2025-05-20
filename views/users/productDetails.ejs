@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+    <style>
+        a{
+            font-size: 16px;;
+            color: black;
+            text-decoration: none;
+            list-style: none;
+        }
+        li{
+            text-decoration: none;
+            list-style: none;
+        }
+        .product-image{
+            position: relative;
+        }
+        .pillHigh{
+            border: 1px solid transparent;
+            border-radius: 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            text-align: center;
+            width: fit-content;
+            padding-left: 10px;
+            padding-right: 10px;
+            position: absolute;
+            top: 3px;
+            left: 14px;
+        }
+        </style>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/products">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/brand">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/newarrival">New Arrivals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <!-- <a href="#" class="nav-icon me-3"><i class="fas fa-search"></i></a> -->
+                        <a href="/userDash" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                                <a href="/cart" class="nav-icon me-3 position-relative">
+                                    <i class="fas fa-shopping-bag"></i>
+                                     <% if (cart) { %>
+                                  <span class="cart-count"><%= cart.products.length %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                                </a>
+                            <a href="/logout" style="padding: 5px;font-size: 12px;font-weight: bold;margin-left: 25px;" class="btn btn-dark btn-lg me-2 mb-2">Logout</a>
+    
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Breadcrumb -->
+    <section class="page-title py-1 bg-light mt-5">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mt-5">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/products">Products</a></li>
+
+                    <li class="breadcrumb-item active" aria-current="page"><%= product.name %></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Product Details -->
+    <section class="product-details py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Product Images -->
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="product-images">
+                        <div class="main-image mb-3" style="cursor: pointer;" >
+                            <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= product.images[0] %>"  alt="Premium Cotton Shirt" class="img-fluid zoomable"  id="mainImage">
+                        </div>
+                        <div class="thumbnail-images d-flex"style="cursor: pointer;" >
+                            <div class="thumbnail-image me-2 active zoomable" onclick="changeImage('<%= product.images[1] %>')">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= product.images[1] %>" alt="" class="img-fluid">
+                            </div>
+                            <div class="thumbnail-image me-2 zoomable" onclick="changeImage('<%= product.images[2]%> ')">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= product.images[2]%> " alt="" class="img-fluid">
+                            </div>
+                            <div class="thumbnail-image me-2 zoomable" onclick="changeImage('<%= product.images[0] %>')">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= product.images[0] %>" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Info -->
+                <div class="col-lg-6">
+                    <div class="product-info">
+                        <h1 class="product-title mb-2"><%= product.name %></h1>
+                        <div class="product-brand mb-2">
+                            <span class="text-muted">Brand: </span>
+                            <a href="brands.html" class="text-dark">Brand</a>
+                        </div>
+                        <div class="product-rating mb-3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="ms-2">4.5 (24 reviews)</span>
+                        </div>
+                        <div class="product-price mb-4">
+                            <span class="fw-bold fs-3">₹</span><span class="current-price fs-3 fw-bold" ><%= product.sizes.small.amount %></span><span class="fw-bold fs-3">.00</span>
+                            <span class="original-price text-decoration-line-through text-muted ms-2">₹<%= product.price.seller %>.00</span>
+                            <% if (product.offerPrice) { %>
+                                <span class="discount-badge bg-danger text-white px-2 py-1 ms-2">-20%</span>
+                            <% } %>
+                        </div>
+                        <div class="product-description mb-4">
+                            <p><%= product.description %></p>
+                        </div>
+                        <div class="product-size mb-4">
+                            <h5 class="mb-2">Size</h5>
+                            <div class="size-options d-flex">
+                                <button class="btn btn-outline-dark  me-2 active" onclick="changePrice(this,'<%= product._id%>')" data-size="small" data-price="<%= product.sizes.small.amount%>">S</button>
+                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="medium" data-price="<%= product.sizes.medium.amount %>">M</button>
+                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="large" data-price="<%= product.sizes.large.amount %>">L</button>
+                            </div>
+                            <!-- <a href="#" class="size-guide mt-2 d-inline-block">Size Guide</a> -->
+                        </div>
+                        <!-- <div class="product-color mb-4">
+                            <h5 class="mb-2">Color</h5>
+                            <div class="color-options d-flex">
+                                <div class="color-option bg-white border me-2 active"></div>
+                                <div class="color-option bg-primary me-2"></div>
+                                <div class="color-option bg-dark me-2"></div>
+                                <div class="color-option bg-secondary me-2"></div>
+                            </div>
+                        </div> -->
+                        <h5 id="itemLeft" class="mt-4 mb-4" style="color: brown;" ></h5>
+                        <h5 id="errmsg" class="mt-4 mb-4" style="color: brown;" ></h5>
+                        <!-- <div class="product-quantity mb-4">
+                            <h5 class="mb-2">Quantity</h5>
+                            <div class="quantity-selector d-flex align-items-center">
+                                <button class="btn btn-outline-secondary quantity-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="quantity" class="form-control text-center mx-2" value="1" min="1">
+                                <button class="btn btn-outline-secondary quantity-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+                            
+                        </div> -->
+                        
+                        <h2 class="mb-2" style="color: red;" id="stock-display"></h2>
+                        <div class="product-actions d-flex mb-4">
+                            <input type="hidden" name="size" value="" id="sizee">
+                            <input type="hidden" name="pdtId" value="<%= product._id %> " id="pdtId">          
+                            <button type="submit" id="add-to-cart" onclick="addToCart(`<%= product._id.toString()%>`)" class="btn btn-dark flex-grow-1 me-2" >
+                                <i class="fas fa-shopping-bag me-2 bag"></i> Add to Cart
+                            </button>  
+                            <button id="addWishListBtn" class="btn btn-outline-dark flex-grow-1" onclick="addWishList('<%= product._id%>')">
+                                <i class="far fa-heart me-2 wishheart"></i> Add to Wishlist
+                            </button>
+                        </div>
+
+                        <!-- <div class="product-meta">
+                            <div class="meta-item mb-2">
+                                <span class="text-muted">SKU: </span>
+                                <span>PRD-12345</span>
+                            </div>
+                            <div class="meta-item mb-2">
+                                <span class="text-muted">Categories: </span>
+                                <a href="category.html" class="text-dark">Men's</a>,
+                                <a href="category.html" class="text-dark">Shirts</a>
+                            </div>
+                            <div class="meta-item mb-2">
+                                <span class="text-muted">Tags: </span>
+                                <a href="#" class="text-dark">Cotton</a>,
+                                <a href="#" class="text-dark">Premium</a>,
+                                <a href="#" class="text-dark">Formal</a>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs py-5 bg-light">
+        <div class="container">
+            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+    
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews (24)</button>
+                </li>
+            </ul>
+            <div class="tab-content p-4 bg-white" id="productTabsContent">
+                <!-- <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <h4>Product Description</h4>
+                    <p>This premium cotton shirt is crafted from the finest Egyptian cotton, offering exceptional comfort and a luxurious feel. The classic design features a modern slim fit, making it perfect for both casual and formal occasions.</p>
+                    <p>Key features:</p>
+                    <ul>
+                        <li>100% premium Egyptian cotton</li>
+                        <li>Modern slim fit design</li>
+                        <li>Mother-of-pearl buttons</li>
+                        <li>Single-needle stitching for a clean finish</li>
+                        <li>Reinforced seams for durability</li>
+                        <li>Available in multiple colors and sizes</li>
+                    </ul>
+                    <p>Care instructions: Machine wash cold with similar colors. Tumble dry low. Iron on medium heat if needed.</p>
+                </div> -->
+                <!-- <div class="tab-pane fade" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
+                    <h4>Product Specifications</h4>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Material</th>
+                                <td>100% Egyptian Cotton</td>
+                            </tr>
+                            <tr>
+                                <th>Fit</th>
+                                <td>Slim Fit</td>
+                            </tr>
+                            <tr>
+                                <th>Collar</th>
+                                <td>Button-Down</td>
+                            </tr>
+                            <tr>
+                                <th>Cuff</th>
+                                <td>Single Button</td>
+                            </tr>
+                            <tr>
+                                <th>Buttons</th>
+                                <td>Mother-of-Pearl</td>
+                            </tr>
+                            <tr>
+                                <th>Weight</th>
+                                <td>Medium (120 gsm)</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Origin</th>
+                                <td>Italy</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                    <div class="reviews-summary mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center">
+                                <div class="overall-rating mb-3">
+                                    <h1 class="display-4 fw-bold">4.5</h1>
+                                    <div class="stars mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <p>Based on 24 reviews</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="rating-breakdown">
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <div class="rating-label me-2">5 stars</div>
+                                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                                        </div>
+                                        <div class="rating-count">18</div>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <div class="rating-label me-2">4 stars</div>
+                                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 15%"></div>
+                                        </div>
+                                        <div class="rating-count">4</div>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <div class="rating-label me-2">3 stars</div>
+                                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 5%"></div>
+                                        </div>
+                                        <div class="rating-count">1</div>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <div class="rating-label me-2">2 stars</div>
+                                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 4%"></div>
+                                        </div>
+                                        <div class="rating-count">1</div>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center">
+                                        <div class="rating-label me-2">1 star</div>
+                                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <div class="rating-count">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="reviews-list mb-4">
+                        <h4 class="mb-3">Customer Reviews</h4>
+                        <!-- Review 1 -->
+                        <div class="review-item mb-4 pb-4 border-bottom">
+                            <div class="review-header d-flex justify-content-between mb-2">
+                                <div class="reviewer-info">
+                                    <h5 class="reviewer-name mb-0">John D.</h5>
+                                    <div class="review-date text-muted">Posted on October 15, 2023</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-title fw-bold mb-2">Excellent quality and perfect fit!</div>
+                            <div class="review-content">
+                                <p>I'm extremely impressed with the quality of this shirt. The fabric feels luxurious and the fit is perfect. I've received many compliments when wearing it. Definitely worth the price!</p>
+                            </div>
+                        </div>
+                        <!-- Review 2 -->
+                        <div class="review-item mb-4 pb-4 border-bottom">
+                            <div class="review-header d-flex justify-content-between mb-2">
+                                <div class="reviewer-info">
+                                    <h5 class="reviewer-name mb-0">Michael S.</h5>
+                                    <div class="review-date text-muted">Posted on October 10, 2023</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-title fw-bold mb-2">Great shirt, slightly tight in the shoulders</div>
+                            <div class="review-content">
+                                <p>The quality of the shirt is excellent and the material feels premium. My only issue is that it's a bit tight around the shoulders, even though I ordered my usual size. Otherwise, it's a great purchase.</p>
+                            </div>
+                        </div>
+                        <!-- Review 3 -->
+                        <div class="review-item">
+                            <div class="review-header d-flex justify-content-between mb-2">
+                                <div class="reviewer-info">
+                                    <h5 class="reviewer-name mb-0">Sarah L.</h5>
+                                    <div class="review-date text-muted">Posted on October 5, 2023</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <div class="review-title fw-bold mb-2">Beautiful shirt, bought it for my husband</div>
+                            <div class="review-content">
+                                <p>I purchased this shirt as a gift for my husband and he loves it! The quality is exceptional and the color is exactly as shown in the pictures. It washes well and doesn't wrinkle easily. Highly recommend!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-pagination text-center mb-4">
+                        <a href="#" class="btn btn-outline-dark">Load More Reviews</a>
+                    </div>
+                    
+                    <div class="write-review">
+                        <h4 class="mb-3">Write a Review</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="reviewRating" class="form-label">Your Rating</label>
+                                <div class="rating-select">
+                                    <i class="far fa-star rating-star" data-rating="1"></i>
+                                    <i class="far fa-star rating-star" data-rating="2"></i>
+                                    <i class="far fa-star rating-star" data-rating="3"></i>
+                                    <i class="far fa-star rating-star" data-rating="4"></i>
+                                    <i class="far fa-star rating-star" data-rating="5"></i>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reviewTitle" class="form-label">Review Title</label>
+                                <input type="text" class="form-control" id="reviewTitle" placeholder="Give your review a title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="reviewContent" class="form-label">Your Review</label>
+                                <textarea class="form-control" id="reviewContent" rows="4" placeholder="Write your review here"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="reviewerName" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="reviewerName" placeholder="Enter your name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reviewerEmail" class="form-label">Your Email</label>
+                                    <input type="email" class="form-control" id="reviewerEmail" placeholder="Enter your email">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Submit Review</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-products py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">You May Also Like</h2>
+            <div class="row">
+                <!-- Related Product 1 -->
+                <% products.slice(0,4).forEach(element => { %>
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Related Product 1" class="img-fluid">
+                        </div>
+                        <div class="product-info pt-3">
+                            <h5 class="product-title"><%= element.name %></h5>
+                            <p class="product-price">$<%= element.price.seller %>.00</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recently Viewed -->
+    <section class="recently-viewed py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Recently Viewed</h2>
+            <div class="row">
+                <!-- Recently Viewed Product 1 -->
+                <% products.slice(0,4).forEach(element => { %>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[1] %>" alt="Related Product 1" class="img-fluid">
+                            </div>
+                            <div class="product-info pt-3">
+                                <h5 class="product-title"><%= element.name %></h5>
+                                <p class="product-price">$<%= element.price.seller %>.00</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+    </section>
+
+    <%- include("../partials/footer") %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+    <script>
+        mediumZoom('.zoomable',{
+            margin:30,
+            background:'#fff',
+            scrollOffset:40
+        })
+    </script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <script>
+
+        function outOfStock(){
+            showToast("Out of stock",'warning')
+        }
+        // Product Image Gallery
+        const cloudName = '<%= cloudName %>';
+        function changeImage(publicId) {
+            
+            const imageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+            document.getElementById('mainImage').src = imageUrl;
+            
+            // Update active thumbnail
+            const thumbnails = document.querySelectorAll('.thumbnail-image');
+            thumbnails.forEach(thumbnail => {
+                thumbnail.classList.remove('active');
+                if (thumbnail.querySelector('img').src.includes(publicId)) {
+                    thumbnail.classList.add('active');
+                }
+            });
+        }
+        //change price
+        let size = document.getElementById('sizee').value
+        function changePrice(button,id){
+            document.querySelectorAll('.size-options button').forEach(btn=>btn.classList.remove('active'));
+            button.classList.add('active')
+            const price = button.getAttribute('data-price');
+            size = button.getAttribute('data-size')
+            document.querySelector('.current-price').textContent = `${price}`
+
+            fetch('/checkQuantity',{
+                method : 'post',
+                headers:{
+                    'Content-type':'application/json'
+                },
+                body:JSON.stringify({size,id})
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data){
+                    updateQuantity(size,data.quantity.quantity)
+                }
+                if(data.success){
+                    showToast(data.message || '','success')
+                }
+
+                
+            })
+        
+        }
+
+        function updateQuantity(size,quantity){
+           
+            let stockDisplay = document.getElementById('stock-display')
+            let cartBtn = document.getElementById('add-to-cart')
+            let itemLeft = document.getElementById('itemLeft')
+            if(quantity < 1){
+                cartBtn.disabled = true;  
+                cartBtn.classList.add('disabled')
+                stockDisplay.textContent = 'Out of Stock'
+            }else{
+                stockDisplay.textContent = ''
+                cartBtn.disabled = false; 
+                cartBtn.classList.remove('disabled');
+            }
+            if(quantity <5 && quantity>1){
+                itemLeft.textContent = ` Hurry up only ${quantity} items are left`
+            }else{
+                itemLeft.textContent = ''
+            }
+            
+        }
+        function addToCart(id) {
+            let priceValue = document.querySelector('.current-price').textContent
+            let price = parseInt(priceValue)
+            fetch(`/cart/add`,{
+                method: 'post',
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body:JSON.stringify({id,size,price})
+            })
+            .then(response => response.json())
+            .then(data=>{
+                if(data.success){
+                    showToast(data.message||'','success')
+                    let addToCart = document.getElementById('add-to-cart')
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },2000)
+                    console.log("herrerer")
+                    
+                }else{
+                    showToast(data.message||'','error')
+                }
+                if(data.sizemessage){
+                    showToast(data.sizemessage || '','warning')
+                }
+                
+            })
+        }
+        function addWishList(id){
+            fetch(`/wishlist/add/${id}`,{
+                method:'post',
+                headers:{
+                    'Content-type':'application/json'
+                }
+            })
+            .then(response=>response.json())
+            .then(data=>{
+                if(data.success){
+                    let addWishListBtn = document.getElementById('addWishListBtn')
+                    showToast(data.message||'','success')
+                    addWishListBtn.innerText = "Go to wishlsit"
+                    addWishListBtn.addEventListener('click',()=>{
+                        window.location.href = '/wishlist'
+                    })
+
+                }else{
+                    showToast(data.message||'','error')
+                }
+            })
+        }
+        
+        // Buy Now
+        function buyNow() {
+            window.location.href = 'checkout.html';
+        }
+        
+        // Review Rating Selection
+        const ratingStars = document.querySelectorAll('.rating-star');
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                ratingStars.forEach(s => {
+                    if (s.getAttribute('data-rating') <= rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

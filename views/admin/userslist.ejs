@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-sellers-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:23 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Blend Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    
+</head>
+
+<body>
+    <style>
+        #closebtn{
+            display: none;
+        }
+        #blockbtn{
+            display: block;
+        }
+    </style>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="dashboard" class="brand-wrap">
+                <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="productList">Product List</a>
+                        <a href="productoffer">Product Offer</a>
+                        <a href="categories">Categories</a>
+                        <a href="categoryoffer">Category Offer</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu ">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="orderlist">Order list </a>
+                    </div>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                   
+                </li>  
+                <li class="menu-item active">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
+                    </a>
+    
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li> 
+                <li class="menu-item">
+                    <a class="menu-link" href="barnd"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+             </ul>
+            <hr>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminassets/imgs/people/avtar.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="adminlogout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Users list</h2>
+                
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <form method="GET" action="/admin/users" class="search-form">
+                        <div class="row gx-3">
+                            
+                                <div class="col-lg-4 col-md-6 me-auto" style="position: relative;">
+                                    <input type="text" name="search" value="<%= searchQuery || ''  %>" placeholder="Search..." class="form-control" id="search">
+                                    
+                                    <% if(searchQuery){ %>
+                                        <a href="/admin/users" style="position: absolute; top: 11px;right: 20px;">
+                                        <i class="material-icons md-close"></i>
+                                        </a>
+                                        <% } else { %>
+                                            <a href="#" style="position: absolute; top: 11px;right: 20px;">
+                                                <i id="closebtn" class="material-icons md-close"></i>
+                                                </a>
+                                    <% } %>
+                                    
+                                </div>
+                    
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Status</option>
+                                    <option>Active</option>
+                                    <option>Inactive</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Show 20</option>
+                                    <option>Show 30</option>
+                                    <option>Show 40</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Users</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Status</th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(user => { %>
+                                    <tr>
+                                        <td width="40%">
+                                            <a href="#" class="itemside">
+                                                <div class="info pl-3">
+                                                    <h6 class="mb-0 title">
+                                                        <%= user.name %>
+                                                    </h6>
+                                                   
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <%= user.email %>
+                                        </td>
+
+                                        <td>
+                                            <%= user.mobile %>
+                                        </td>
+                                        <% if (user.isBlocked == false) { %>
+                                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                        <% } else { %>
+                                            <td><span class="badge rounded-pill alert-success">Inactive</span></td>
+                                        <% } %>
+                            
+                                        <td class="">
+                                            <button id="toggleButton<%= user._id %>" 
+                                                    class="btn btn-sm btn-brand rounded font-sm mt-15"
+                                                    onclick="toggleBlockUser('<%= user._id %>', '<%= user.isBlocked %>')">
+                                                <% if (user.isBlocked) { %>
+                                                    Unblock
+                                                <% } else { %>
+                                                    Block
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                        
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                            
+                        </table> <!-- table-responsive.// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <% for( let i = 0;  i< totalPage; i++ ) { %>
+                            <li class="page-item <%= parseInt(page) === i ? "active":'' %>">
+                                <a class="page-link" href="/admin/users?page=<%= i %>&search=<%= searchQuery %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script data-cfasync="false" src=""></script><script>
+                    
+                    </script> 
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminassets/js/vendors/select2.min.js"></script>
+    <script src="/adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/adminassets/js/main.js" type="text/javascript"></script>
+    <script>
+        async function toggleBlockUser(userId, isBlocked) {
+            try {
+                const response = await fetch(`/admin/block/${userId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                });
+                const data = await response.json();
+                console.log("errorr",data)
+                if (response.ok) {
+                    alert("Are you sure")
+                    location.reload(); 
+                } else {
+                    alert(`Error: ${data.message}`); 
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        }
+
+        let closeBtn = document.getElementById('closebtn');
+        let search = document.getElementById('search')
+
+        search.addEventListener('click',(event)=>{
+            closeBtn.id = 'blockbtn';
+            
+        })
+        closeBtn.addEventListener('mouseover',()=>{
+            closeBtn.id = 'blockbtn'
+        })
+        search.addEventListener('mouseout',(event)=>{
+            closeBtn.id = 'closebtn';
+            
+        })
+
+    </script>
+</body>
+
+
+  
+  
+  
+  
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-sellers-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:23 GMT -->
+</html>

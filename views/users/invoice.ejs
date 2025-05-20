@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice V2</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <section id="invoice">
+       
+        <div class="container my-5 py-5">
+
+            <div class="text-center pb-5">
+                <img src="/img/logo.png" alt="" style="width: 200px;margin-top: -80px;">
+            </div>
+
+            <div class="d-md-flex justify-content-between my-5">
+                <div>
+                    
+                        <p class="fw-bold text-primary">Invoice To</p>
+                        <h4><%= order.address.firstName%></h4>
+                        <ul class="list-unstyled m-0">
+                            <li><%= order.user.email %></li>
+                            <li><%= order.address.addressLine %></li>
+                        </ul>
+                   
+                  
+                </div>
+                <div class="mt-5 mt-md-0">
+                    <p class="fw-bold text-primary">Invoice From</p>
+                    <h4>BLEND MEN FASHION</h4>
+                    <ul class="list-unstyled m-0">
+                        
+                        <li>blendfashion@gmail.com</li>
+                        <li>Kochi/Kerala</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class=" d-md-flex justify-content-between align-items-center border-top border-bottom border-primary my-5 py-3">
+                <h4 class="display-6 fw-bold m-0">Invoice</h4>
+            </div>
+
+            <div class="py-1">
+                <table class="table table-striped border my-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Coupon</th>
+                            <th scope="col">Tax</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Product Price</th>                          
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Payment Method</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% order.products.forEach(element => { %>
+                        
+                            <tr>
+                                <td><%= element.productId.name %></td>
+                                 <td>0.00</td>
+                                <td>0.00</td>
+                                <td><%= element.size %></td>                              
+                                <td><%= element.price %>.00</td>                              
+                                <td><%= element.quantity %></td>
+                                <td><%= element.status%></td>
+                                <td><%= order.paymentMethod %></td>
+                                <% }) %>
+                                
+                                
+                            </tr>
+                     
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="d-md-flex justify-content-between my-5">
+                <div class="col-lg-6 col-md-12">
+                    <div class="border p-md-4 p-30 border-radius cart-totals">
+                        <div class="heading_s1 mb-3">
+                            <h4></h4>
+                        </div>
+                        <div class="table-responsive">
+                            
+                                
+                                <table class="table">
+
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <td class="cart_total_label"><strong> Sub Total</strong></td>
+                                            <td class="">
+                                                <span class="font-xl fw-900 text-brand">  
+                                                  <%= order.totalAmount %>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                       
+                                        <tr>
+                                            <td class="cart_total_label"> <strong>Total</strong></td>
+                                            <td class=""><strong><span class="font-xl fw-900 text-brand">
+                                                <%= order.totalAmount %>  
+                                                    </span></strong></td>
+                                        </tr>
+                                       
+                                    </tbody>
+
+                                </table>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <div>
+                    <h5 class="fw-bold my-4">Payment Info</h5>
+                    <ul class="list-unstyled">
+                        <li><span class="fw-semibold">Account No: </span> 102 3345 56938</li>
+                        <li><span class="fw-semibold">Account Name: </span> William Peter</li>
+                        <li><span class="fw-semibold">Branch Name: </span> XYZ </li>
+
+                    </ul>
+                </div> -->
+
+                <div>
+                    <h5 class="fw-bold my-4">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><iconify-icon class="social-icon text-primary fs-5 me-2" icon="mdi:location"
+                                style="vertical-align:text-bottom"></iconify-icon> Maradu Kochi, Kerela, IN</li>
+                        <li><iconify-icon class="social-icon text-primary fs-5 me-2" icon="solar:phone-bold"
+                                style="vertical-align:text-bottom"></iconify-icon> 8089222453</li>
+                        <li><iconify-icon class="social-icon text-primary fs-5 me-2" icon="ic:baseline-email"
+                                style="vertical-align:text-bottom"></iconify-icon> info@blendfashion.com</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="text-center my-5">
+                <p class="text-muted"><span class="fw-semibold">NOTICE: </span> A finance charge of 1.5% will be made on
+                    unpaid balances after 30 days.</p>
+            </div>
+
+            <div id="footer-bottom">
+                <div class="container border-top border-primary">
+                    <div class="row mt-3">
+                        <div class="col-md-6 copyright">
+                            <p>© 2025 Invoice. <a href="#" target="_blank"
+                                    class="text-decoration-none text-black-50"></a> </p>
+                        </div>
+                       
+                        <div class="col-md-6 text-md-end">
+                            <p> <a href="https://templatesjungle.com/" target="_blank"
+                                    class="text-decoration-none text-black-50">
+                                    </a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <div>
+        <button style="height: 40px;width: 100%;" onclick="pdf()">Download PDF</button>
+    </div>
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <script>
+        function pdf() {
+            const table = document.getElementById("invoice")
+            html2pdf().from(table).save();
+        }
+    </script>
+</body>
+
+</html>

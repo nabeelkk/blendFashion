@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Blend Fashion</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/maind134.css?v=3.4">
+</head>
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right">
+                            <ul>
+                                <li><i class="fi-rs-user text-white"></i><a class="text-white" href="/login">Log In </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="index.html"><img src="/adminassets/imgs/theme/logo.png" alt="logo"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">Create an Account</h3>
+                                        </div>
+                                         <form id="logform" method="post" action="/signup">
+                                            <div class="form-group">
+                                                <% if (error5) { %>
+                                                    <p><span  style="color: red;" ><%= error5 %></span></p>
+                                                   <% } %>
+                                                <input type="name" required="" id="typeNameX" name="name" placeholder="Username" >
+                                                <label class="form-label" for="typeNameX"></label>
+                                               
+                                                <p><span id="error5" style="display: none; color: red;" ></span></p>
+                                               
+                                                
+
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" required="" id="typeEmailX" name="email" placeholder="Email">
+                                                <label class="form-label" for="typeEmailX"></label>
+                                                <% if (error1) { %>
+                                                <p><span id="error1" style="display: none; color: red;" ></span></p>
+                                                <% } %>
+                                                <p><span id="error1" style="display: none; color: red;" ></span></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="mobile" required="" id="typeMobileX" name="mobile" placeholder="mobile" >
+                                                <label class="form-label" for="typeMobileX"></label>
+                                                <p><span id="error4" style="display: none; color: red;"></span></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input required="" type="password" id="typePasswordX" name="password" placeholder="Password">
+                                                <label class="form-label" for="typePasswordX"></label>
+                                                <p><span id="error2" style="display: none; color: red;"></span></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input required="" type="password" id="typePasswordX2" name="confirmPassword" placeholder="Confirm password" >
+                                                <label class="form-label" for="typePasswordX2"></label>
+                                                <p><span id="error3" style="display: none; color: red;" ></span></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" id="typePasswordX2" name="otherreferalcode" placeholder="Referal code" >
+                                                <label class="form-label" for="typePasswordX2"></label>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Submit &amp; Register</button>
+                                            </div>
+                                        </form>
+                                        <br>
+                                        <%if(locals.message){%>
+                                            <p style="color: red;"><%= locals.message %></p>
+                                        <%}%>
+                                        <br>
+                                        <div class="text-muted text-center">Already have an account? <a href="login">Log in now</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- <footer class="main">
+        <section class="newsletter p-30 text-white wow fadeIn animated">
+            
+        </section>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="/adminassets/imgs/theme/logo.png" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="/assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="/assets/imgs/theme/google-play.jpg" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="/assets/imgs/theme/payment-method.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer> -->
+
+    <script>
+        const emailid = document.getElementById('typeEmailX')
+        const nameid = document.getElementById('typeNameX')
+        const mobileid = document.getElementById('typeMobileX')
+        const passid = document.getElementById('typePasswordX') 
+        const cPassid = document.getElementById('typePasswordX2')
+        const error1 = document.getElementById('error1')
+        const error2 = document.getElementById('error2')
+        const error3 = document.getElementById('error3')
+        const error4 = document.getElementById('error4')
+        const error5 = document.getElementById('error5')
+        const regform = document.getElementById('logform')
+
+        function emailvalidate(e){
+            const emailval = emailid.value
+            const emailpattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z.-]+).([a-zA-z]{2,4})$/ 
+            if(!emailpattern.test(emailval))
+            {    
+                error1.style.display = "block"
+                error1.innerHTML = "Enter a valid Email!!"
+            }
+            else{
+                error1.style.display = "none"
+                error1.innerHTML = ""
+            }
+        }
+
+
+        function passvalidate(e){
+            const passval = passid.value
+            const alpha = /[a-zA-Z]/
+            const digit = /\d/
+            if(passval.length < 8)
+            {   
+                error2.style.display = "block"
+                error2.innerHTML = "Must have atleast 8 characters"
+            }
+            else if(!alpha.test(passval) || !digit.test(passval) )
+            {
+                error2.style.display = "block"
+                error2.innerHTML = "Should contain Numbers and Alphabets!!"
+            }
+            else{
+
+                error2.style.display = "none"
+                error2.innerHTML = ""
+            }
+        }
+
+        function pass2validate(e){
+            const cpassval = cPassid.value
+            const passval = passid.value;
+            
+            if(cpassval == passval){
+                error3.style.display = "none";
+                error3.innerHTML = ""
+            }else{
+                
+                error3.style.display = "block";
+                error3.innerHTML = "Password doesnot match"
+            }
+        }
+
+        function mobvalidate() {
+            const mobval = mobileid.value.trim();
+            const mobpattern =   /^\d{10}$/
+            if (mobval === "") {
+                error4.style.display = "block";
+                error4.innerHTML = "Please enter a valid Mobile Number.";
+            } else if (!mobpattern.test(mobval)||/^(.)\1{9}$/.test(mobval)) {
+                error4.style.display = "block";
+                error4.innerHTML = "Please enter a valid 10-digit Mobile Number.";
+            } else {
+                error4.style.display = "none";
+                error4.innerHTML = "";
+            }
+        }
+
+        function namevalidate(e) {
+            const nameval = nameid.value.trim();
+            const namePattern = /^[A-Z][a-zA-Z]*(\s[a-zA-Z]+)?$/
+            if (nameval === " ") {
+                error5.style.display = "block"
+                error5.innerHTML = "Please Enter a valid name."
+            } else if (!namePattern.test(nameval)) {
+                error5.style.display = "block"
+                error5.innerHTML = "Invalid format. First letter should be capital Space not allowed."
+            } else {
+                error5.style.display = "none"
+                error5.innerHTML = ""
+            }
+        }
+
+        emailid.addEventListener('blur', emailvalidate)
+        nameid.addEventListener('blur',namevalidate)
+        passid.addEventListener('blur',passvalidate)
+        mobileid.addEventListener('blur',mobvalidate)
+        cPassid.addEventListener('blur',pass2validate)
+
+        regform.addEventListener('submit',function(e){
+                emailvalidate()
+                namevalidate()
+                mobvalidate()
+                passvalidate()
+                pass2validate()
+                
+                if(error2.innerHTML || error4.innerHTML || error1.innerHTML || error3.innerHTML || error5.innerHTML )
+                {
+                    e.preventDefault()
+                }
+        })
+    </script>
+</body>
+</html>

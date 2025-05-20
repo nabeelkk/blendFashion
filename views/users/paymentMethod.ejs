@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Payment Method | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/paymentmethod.css">
+</head>
+<body>
+    <style>
+        a {
+            font-size: 16px;
+            color: black;
+            text-decoration: none;
+            list-style: none;
+        }
+        li {
+            text-decoration: none;
+            list-style: none;
+        }
+        /* Style for Stripe Elements */
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            transition: box-shadow 150ms ease;
+        }
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+        .StripeElement--invalid {
+            border-color: #dc3545;
+        }
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+    </style>
+    <!-- Header -->
+    <%- include('../partials/navbar') %>
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+    <% } %>
+    <!-- Checkout Section -->
+     
+    <section class="checkout-section py-5 mt-5">
+        <div class="container">
+            <!-- Checkout Progress -->
+            <div class="checkout-progress mb-4">
+                <div class="checkout-step completed">
+                    <div class="checkout-step-number">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="checkout-step-label">Delivery Address</div>
+                </div>
+                <div class="checkout-step active">
+                    <div class="checkout-step-number">2</div>
+                    <div class="checkout-step-label">Payment Method</div>
+                </div>
+            </div>            
+            <div class="row">
+                <!-- Left Column - Payment Methods -->
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4">Select Payment Method</h4>
+                            
+                            <!-- Credit/Debit Card Payment (Stripe Elements) -->
+                            <div class="payment-method-card" id="cardPayment">
+                                <div class="payment-method-header" onclick="togglePaymentMethod('cardPayment')">
+                                    <div class="d-flex align-items-center">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-credit-card fa-lg"></i>
+                                        </div>
+                                        <h5 class="payment-method-title">Credit/Debit Card</h5>
+                                    </div>
+                                    <span class="payment-method-badge recommended">Recommended</span>
+                                </div>
+                                <div class="payment-method-body">
+                                    <div class="card-icons mb-3">
+                                        <img src="/adminassets/imgs/card-brands/1.png" alt="American Express" class="card-icon">
+                                        <img src="/adminassets/imgs/card-brands/2.png" alt="Mastercard" class="card-icon">
+                                        <img src="/adminassets/imgs/card-brands/4.png" alt="Visa" class="card-icon">
+                                    </div>
+                                    <p>Pay securely using card, UPI, net banking, or wallets via Razorpay.</p>
+                                    <div class="mb-3">
+                                        <button id="razorpay-checkout-button" class="btn btn-dark">Pay Now</button>
+                                    </div>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        You will be redirected to a secure Razorpay payment page.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Cash on Delivery -->
+                            <div class="payment-method-card" id="codPayment">
+                                <div class="payment-method-header" onclick="togglePaymentMethod('codPayment')">
+                                    <div class="d-flex align-items-center">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-money-bill-wave fa-lg"></i>
+                                        </div>
+                                        <h5 class="payment-method-title">Cash on Delivery</h5>
+                                    </div>
+                                </div>
+                                <div class="payment-method-body">
+                                    <p>Pay with cash when your order is delivered.</p>
+                                    
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="codTerms">
+                                        <label class="form-check-label" for="codTerms">
+                                            I understand and agree to pay the full amount when the order is delivered.
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Navigation Buttons -->
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="/checkout" class="btn back-btn">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Delivery Address
+                                </a>
+                                <button onclick="placeOrder()" class="btn continue-btn">
+                                    Place Order <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-/posts/664b4e6cd3c1e0c95d3a11b9">
+                            <h5 class="mb-3">DELIVERY ESTIMATES</h5>
+                            
+                            <!-- Delivery Item 1 -->
+                            <% cart.products.forEach(element => { %>
+                                <div class="delivery-item">
+                                    <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.productId.images[0] %> " alt="Product 1" class="delivery-item-image">
+                                    <div class="d-flex flex-column">
+                                        <div>
+                                            <p class="delivery-date mb-1">Name: <strong><%= element.productId.name %></strong></p>
+                                        </div>
+                                        
+                                        <div>
+                                            <p class="delivery-date mb-1">Quantity: <strong><%= element.quantity %></strong></p>
+                                        </div>
+                                        <div>
+                                            <p class="delivery-date mb-1">Size: <strong><%= element.size %></strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+            
+                            <!-- Price Details -->
+                             <input type="hidden" id="cart" value="<%= cart %>">
+                            <div class="price-details mt-4">
+                                <h5 class="mb-3">Price Details (<%= cart.products.length %>) Items</h5>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Total MRP</span>
+                                    <span class="price-value">₹ <%= totalMRP %>.00</span>
+                                </div>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Discount on MRP</span>
+                                    <span class="price-value text-success">- ₹ <%= discount %>.00</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="price-label">Coupon Applied
+                                        <!-- <a href="#" class="know-more">Know More</a> -->
+                                    </span>
+                                    <span class="price-value text-success"> ₹ <%= coupon %>.00</span>
+                                </div>
+                                <% if (appliedOffer>10) { %>
+                                 <!-- <div class="price-row">
+                                    <span class="price-label">Special Offer</span>
+                                    <span class="price-value text-success">₹ <%= appliedOffer %>.00</span>
+                                </div> -->
+                                <% } %>
+                                
+                                <div class="price-row">
+                                    <span class="price-label">Shipping Fee</span>
+                                    <span class="price-value text-success">FREE</span>
+                                </div>
+                                
+                                <div class="price-row">
+                                    <span class="price-label small text-success">Free shipping for you</span>
+                                </div>
+                                
+                                <div class="price-row total-row">
+                                    <span>Total Amount</span>
+                                    <span>₹ <%= totalPrice %>.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="default-address" id="default-address" value="<%= defaultAddressId %>">
+                    <input type="hidden"  id="total-price" value="<%=totalPrice %>">
+                    
+                    <!-- Payment Security -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="payment-icons">
+                            <div class="secure-badge">
+                                <i class="fas fa-lock"></i>
+                                <span>256-bit SSL</span>
+                            </div>
+                            <img src="/adminassets/imgs/card-brands/1.png" alt="Visa">
+                            <img src="/adminassets/imgs/card-brands/2.png" alt="Mastercard">
+                            <img src="/adminassets/imgs/card-brands/3.png" alt="American Express">
+                            <img src="/adminassets/imgs/card-brands/4.png" alt="PayPal">
+                        </div>
+                        
+                        <div class="need-help">
+                            <a href="#">Need Help? Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/script.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+    function togglePaymentMethod(methodId) {
+            document.querySelectorAll('.payment-method-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById(methodId).classList.add('selected');
+        }
+
+        document.getElementById('razorpay-checkout-button').addEventListener('click', async () => {
+            const defaultAddress = document.getElementById('default-address').value;
+            console.log(defaultAddress)
+            const totalAmount = document.getElementById('total-price').value
+        
+            const cart =  JSON.stringify(document.getElementById('cart').value)
+
+            // Validate cart
+            if (!cart) {
+                showToast('Invalid product data in cart', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/create-razorpay-order', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        defaultAddress,
+                        totalAmount,
+                        cart
+                    }),
+                });
+                const data = await response.json();
+                if (data.error) {
+                    showToast(data.error, 'error');
+                    return;
+                }
+                const options = {
+                    key: data.key_id,
+                    amount: data.amount,
+                    currency: data.currency,
+                    order_id: data.order_id,
+                    name: 'Blend Fashion',
+                    description: `Order for ${cart.products} items`,
+                    image: '/images/logo.png', // Add your logo
+                    prefill: {
+                        name: data.user.name,
+                        email: data.user.email,
+                        contact: data.user.contact,
+                    },
+                    notes: {
+                        address: `${data.address.street}, ${data.address.city}, ${data.address.state}, ${data.address.postalCode}, ${data.address.country}`,
+                    },
+                    theme: {
+                        color: '#343a40',
+                    },
+                    handler: async function (response) {
+                        // Handle successful payment
+                        try {
+                            const verifyResponse = await fetch('/payment-success', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                }),
+                            });
+
+                            if (verifyResponse.ok) {
+                                showToast('Payment successful!', 'success');
+                                setTimeout(() => {
+                                    window.location.href = '/checkoutsuccess';
+                                }, 1000);
+                            } else {
+                                showToast('Payment verification failed', 'error');
+                                window.location.href = '/checkoutfailure';
+                            }
+                        } catch (error) {
+                            showToast('An error occurred. Please try again.', 'error');
+                            setTimeout(() => {
+                                    window.location.href = '/checkoutfailure';
+                                }, 1000);
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            showToast('Payment cancelled', 'warning');
+                            setTimeout(() => {
+                                    window.location.href = '/checkoutfailure';
+                                }, 1000);
+                        },
+                    },
+                };
+                console.log(options,"this is the inside razorpay")
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.log(error)
+                showToast('An error occurred. Please try again.', 'error');
+            }
+        });
+
+        function placeOrder() {
+            let paymentMethodBtn = document.getElementById('codTerms');
+            let defaultAddress = document.getElementById('default-address').value;
+            
+            if (!paymentMethodBtn.checked && !document.getElementById('cardPayment').classList.contains('selected')) {
+                showToast("Please select a payment method mode", 'warning');
+            } else if (paymentMethodBtn.checked) {
+                fetch(`/place-order`, {
+                    method: 'POST',
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ defaultAddress, paymentMethod: 'COD' })
+                }).then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || '', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/checkoutsuccess';
+                        }, 1000);
+                    } else {
+                        showToast(data.message || '', 'error');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

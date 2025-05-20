@@ -1,0 +1,692 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Blend Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      background-color: white;
+      height: 100vh;
+      position: fixed;
+      width: 250px;
+      border-right: 1px solid #e9ecef;
+      padding-top: 20px;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .sidebar-menu {
+      padding: 20px 0;
+    }
+    .sidebar-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: #495057;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background-color: #e9f5f2;
+      color: #0d6efd;
+    }
+    .sidebar-menu a i {
+      margin-right: 10px;
+    }
+    .sidebar-submenu {
+      padding-left: 30px;
+      list-style: none;
+    }
+    .sidebar-submenu li {
+      padding: 5px 0;
+    }
+    .sidebar-submenu li::before {
+      content: "•";
+      color: #0d6efd;
+      margin-right: 10px;
+    }
+    .main-content {
+      margin-left: 275px;
+
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: white;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .search-container {
+      display: flex;
+      background-color: #f1f3f5;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 400px;
+    }
+    .search-container input {
+      border: none;
+      background-color: transparent;
+      padding: 10px 15px;
+      width: 100%;
+    }
+    .search-container button {
+      background-color: transparent;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .user-profile {
+      display: flex;
+      align-items: center;
+    }
+    .user-profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .content-card {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .brand-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border: 1px solid #e9ecef;
+      border-radius: 5px;
+      padding: 5px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-active {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .status-inactive {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .form-error {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    .preview-image {
+      max-width: 100px;
+      max-height: 100px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+    }
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="screen-overlay"></div>
+  <aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="dashboard" class="brand-wrap">
+            <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item active">
+                <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+                <div class="submenu">
+                    <a href="productList">Product List</a>
+                    <a href="productoffer">Product Offer</a>
+                    <a href="categories">Categories</a>
+                    <a href="categoryoffer">Category Offer</a>
+                </div>
+
+            </li>
+            <li class="menu-item has-submenu ">
+                <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Orders</span>
+                </a>
+                <div class="submenu">
+                    <a href="orderlist">Order list </a>
+                </div>
+            </li>
+            
+            <li class="menu-item ">
+                <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Add product</span>
+                </a>
+
+            </li>
+           
+            <li class="menu-item ">
+                <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
+                    <span class="text">Users</span> 
+                </a>
+
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                    <span class="text">Coupon</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
+                    <span class="text">Sales Report</span>
+                </a>
+            </li>
+             <li class="menu-item">
+                <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <span class="text">Reviews</span>
+                </a>
+            </li> 
+            <li class="menu-item">
+                <a class="menu-link" href="brand"> <i class="icon material-icons md-stars"></i>
+                    <span class="text">Brands</span> </a>
+            </li>
+            
+        </ul>
+        <br>
+        <br>
+    </nav>
+</aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <header class="main-header navbar">
+      <div class="col-search">
+          <form class="searchform">
+              <div class="input-group">
+                  <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                  <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+              </div>
+          </form>
+      </div>
+      <div class="col-nav">
+          <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+          <ul class="nav">
+              <li class="dropdown nav-item">
+                  <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminassets/imgs/people/avtar.png" alt="User"></a>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                      <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                  </div>
+              </li>
+          </ul>
+      </div>
+  </header>
+
+    <!-- Content -->
+    <div class="container-fluid mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Brands</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+          <i class="fas fa-plus"></i> Add New Brand
+        </button>
+      </div>
+
+     
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          Success message
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+
+     
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          error message
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    
+
+      <div class="content-card">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th width="5%">#</th>
+                <th width="15%">Logo</th>
+                <th width="20%">Brand Name</th>
+                <th width="30%">Description</th>
+                <th width="10%">Status</th>
+                <th width="10%">Products</th>
+                <th width="10%">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+             
+                
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <img src="logo" alt="name" class="brand-logo">
+                    </td>
+                    <td>barnd name</td>
+                    <td>brand description</td>
+                    <td>
+                      
+                        <span class="status-badge status-active">Active</span>
+                      
+                        <span class="status-badge status-inactive">Inactive</span>
+                    
+                    </td>
+                    <td>barnd product count</td>
+                    <td>
+                      <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-primary edit-brand-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editBrandModal"
+                                data-id="barndId"
+                                data-name="brandname"
+                                data-description="brandDescription"
+                                data-logo="brandLogo"
+                                data-active="isActive">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-brand-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteBrandModal"
+                                data-id="barndId"
+                                data-name="brandname"
+                                data-product-count="barndCount">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <tr>
+                  <td colspan="7" class="text-center">No brands found</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Brand Modal -->
+  <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBrandModalLabel">Add New Brand</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addBrandForm" action="/admin/brands/add" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="brandName" class="form-label">Brand Name*</label>
+              <input type="text" class="form-control" id="brandName" name="name" required>
+              <div class="form-error" id="brandNameError"></div>
+            </div>
+            <div class="mb-3">
+              <label for="brandDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="brandDescription" name="description" rows="3"></textarea>
+              <div class="form-error" id="brandDescriptionError"></div>
+            </div>
+            <div class="mb-3">
+              <label for="brandLogo" class="form-label">Brand Logo*</label>
+              <input type="file" class="form-control" id="brandLogo" name="logo" accept="image/*" required>
+              <div class="form-error" id="brandLogoError"></div>
+              <div id="logoPreviewContainer" class="mt-2" style="display: none;">
+                <img id="logoPreview" class="preview-image" src="#" alt="Logo Preview">
+              </div>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="brandActive" name="isActive" checked>
+              <label class="form-check-label" for="brandActive">Active</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Brand</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Brand Modal -->
+  <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editBrandModalLabel">Edit Brand</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editBrandForm" action="/admin/brands/edit" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <input type="hidden" id="editBrandId" name="id">
+            <div class="mb-3">
+              <label for="editBrandName" class="form-label">Brand Name*</label>
+              <input type="text" class="form-control" id="editBrandName" name="name" required>
+              <div class="form-error" id="editBrandNameError"></div>
+            </div>
+            <div class="mb-3">
+              <label for="editBrandDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="editBrandDescription" name="description" rows="3"></textarea>
+              <div class="form-error" id="editBrandDescriptionError"></div>
+            </div>
+            <div class="mb-3">
+              <label for="editBrandLogo" class="form-label">Brand Logo</label>
+              <input type="file" class="form-control" id="editBrandLogo" name="logo" accept="image/*">
+              <small class="text-muted">Leave empty to keep the current logo</small>
+              <div class="form-error" id="editBrandLogoError"></div>
+              <div id="editLogoPreviewContainer" class="mt-2">
+                <img id="editLogoPreview" class="preview-image" src="#" alt="Current Logo">
+              </div>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="editBrandActive" name="isActive">
+              <label class="form-check-label" for="editBrandActive">Active</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update Brand</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Brand Modal -->
+  <div class="modal fade" id="deleteBrandModal" tabindex="-1" aria-labelledby="deleteBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteBrandModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the brand "<span id="deleteBrandName"></span>"?</p>
+          <div id="deleteWarning" class="alert alert-warning" style="display: none;">
+            This brand has <span id="deleteProductCount"></span> products associated with it. Deleting this brand will affect these products.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <form id="deleteBrandForm" action="/admin/brands/delete" method="POST">
+            <input type="hidden" id="deleteBrandId" name="id">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Form validation for Add Brand
+      const addBrandForm = document.getElementById('addBrandForm');
+      if (addBrandForm) {
+        addBrandForm.addEventListener('submit', function(event) {
+          let isValid = true;
+          
+          // Brand name validation
+          const brandName = document.getElementById('brandName');
+          const brandNameError = document.getElementById('brandNameError');
+          if (!brandName.value.trim()) {
+            brandNameError.textContent = 'Brand name is required';
+            brandName.classList.add('is-invalid');
+            isValid = false;
+          } else if (brandName.value.trim().length < 2) {
+            brandNameError.textContent = 'Brand name must be at least 2 characters';
+            brandName.classList.add('is-invalid');
+            isValid = false;
+          } else if (brandName.value.trim().length > 50) {
+            brandNameError.textContent = 'Brand name cannot exceed 50 characters';
+            brandName.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            brandNameError.textContent = '';
+            brandName.classList.remove('is-invalid');
+          }
+          
+          // Description validation
+          const brandDescription = document.getElementById('brandDescription');
+          const brandDescriptionError = document.getElementById('brandDescriptionError');
+          if (brandDescription.value.trim().length > 500) {
+            brandDescriptionError.textContent = 'Description cannot exceed 500 characters';
+            brandDescription.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            brandDescriptionError.textContent = '';
+            brandDescription.classList.remove('is-invalid');
+          }
+          
+          // Logo validation
+          const brandLogo = document.getElementById('brandLogo');
+          const brandLogoError = document.getElementById('brandLogoError');
+          if (!brandLogo.files || !brandLogo.files[0]) {
+            brandLogoError.textContent = 'Brand logo is required';
+            brandLogo.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            const file = brandLogo.files[0];
+            const fileType = file.type;
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+            
+            if (!validImageTypes.includes(fileType)) {
+              brandLogoError.textContent = 'Please upload a valid image file (JPEG, PNG, GIF, SVG)';
+              brandLogo.classList.add('is-invalid');
+              isValid = false;
+            } else if (file.size > 2 * 1024 * 1024) { // 2MB
+              brandLogoError.textContent = 'Image size should not exceed 2MB';
+              brandLogo.classList.add('is-invalid');
+              isValid = false;
+            } else {
+              brandLogoError.textContent = '';
+              brandLogo.classList.remove('is-invalid');
+            }
+          }
+          
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+      }
+      
+      // Form validation for Edit Brand
+      const editBrandForm = document.getElementById('editBrandForm');
+      if (editBrandForm) {
+        editBrandForm.addEventListener('submit', function(event) {
+          let isValid = true;
+          
+          // Brand name validation
+          const editBrandName = document.getElementById('editBrandName');
+          const editBrandNameError = document.getElementById('editBrandNameError');
+          if (!editBrandName.value.trim()) {
+            editBrandNameError.textContent = 'Brand name is required';
+            editBrandName.classList.add('is-invalid');
+            isValid = false;
+          } else if (editBrandName.value.trim().length < 2) {
+            editBrandNameError.textContent = 'Brand name must be at least 2 characters';
+            editBrandName.classList.add('is-invalid');
+            isValid = false;
+          } else if (editBrandName.value.trim().length > 50) {
+            editBrandNameError.textContent = 'Brand name cannot exceed 50 characters';
+            editBrandName.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            editBrandNameError.textContent = '';
+            editBrandName.classList.remove('is-invalid');
+          }
+          
+          // Description validation
+          const editBrandDescription = document.getElementById('editBrandDescription');
+          const editBrandDescriptionError = document.getElementById('editBrandDescriptionError');
+          if (editBrandDescription.value.trim().length > 500) {
+            editBrandDescriptionError.textContent = 'Description cannot exceed 500 characters';
+            editBrandDescription.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            editBrandDescriptionError.textContent = '';
+            editBrandDescription.classList.remove('is-invalid');
+          }
+          
+          // Logo validation (only if a new file is selected)
+          const editBrandLogo = document.getElementById('editBrandLogo');
+          const editBrandLogoError = document.getElementById('editBrandLogoError');
+          if (editBrandLogo.files && editBrandLogo.files[0]) {
+            const file = editBrandLogo.files[0];
+            const fileType = file.type;
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+            
+            if (!validImageTypes.includes(fileType)) {
+              editBrandLogoError.textContent = 'Please upload a valid image file (JPEG, PNG, GIF, SVG)';
+              editBrandLogo.classList.add('is-invalid');
+              isValid = false;
+            } else if (file.size > 2 * 1024 * 1024) { // 2MB
+              editBrandLogoError.textContent = 'Image size should not exceed 2MB';
+              editBrandLogo.classList.add('is-invalid');
+              isValid = false;
+            } else {
+              editBrandLogoError.textContent = '';
+              editBrandLogo.classList.remove('is-invalid');
+            }
+          }
+          
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+      }
+      
+      // Image preview for Add Brand
+      const brandLogo = document.getElementById('brandLogo');
+      const logoPreview = document.getElementById('logoPreview');
+      const logoPreviewContainer = document.getElementById('logoPreviewContainer');
+      
+      if (brandLogo) {
+        brandLogo.addEventListener('change', function() {
+          if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+              logoPreview.src = e.target.result;
+              logoPreviewContainer.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(this.files[0]);
+          } else {
+            logoPreviewContainer.style.display = 'none';
+          }
+        });
+      }
+      
+      // Image preview for Edit Brand
+      const editBrandLogo = document.getElementById('editBrandLogo');
+      const editLogoPreview = document.getElementById('editLogoPreview');
+      
+      if (editBrandLogo) {
+        editBrandLogo.addEventListener('change', function() {
+          if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+              editLogoPreview.src = e.target.result;
+            }
+            
+            reader.readAsDataURL(this.files[0]);
+          }
+        });
+      }
+      
+      // Populate Edit Brand Modal
+      const editBrandButtons = document.querySelectorAll('.edit-brand-btn');
+      editBrandButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const name = this.getAttribute('data-name');
+          const description = this.getAttribute('data-description');
+          const logo = this.getAttribute('data-logo');
+          const isActive = this.getAttribute('data-active') === 'true';
+          
+          document.getElementById('editBrandId').value = id;
+          document.getElementById('editBrandName').value = name;
+          document.getElementById('editBrandDescription').value = description;
+          document.getElementById('editLogoPreview').src = logo;
+          document.getElementById('editBrandActive').checked = isActive;
+        });
+      });
+      
+      // Populate Delete Brand Modal
+      const deleteBrandButtons = document.querySelectorAll('.delete-brand-btn');
+      deleteBrandButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const name = this.getAttribute('data-name');
+          const productCount = parseInt(this.getAttribute('data-product-count'));
+          
+          document.getElementById('deleteBrandId').value = id;
+          document.getElementById('deleteBrandName').textContent = name;
+          
+          const deleteWarning = document.getElementById('deleteWarning');
+          const deleteProductCount = document.getElementById('deleteProductCount');
+          
+          if (productCount > 0) {
+            deleteProductCount.textContent = productCount;
+            deleteWarning.style.display = 'block';
+          } else {
+            deleteWarning.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

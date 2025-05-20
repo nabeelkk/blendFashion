@@ -1,0 +1,363 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="dashboard" class="brand-wrap">
+                <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="productList">Product List</a>
+                        <a href="productoffer">Product Offer</a>
+                        <a href="categories">Categories</a>
+                        <a href="categoryoffer">Category Offer</a>
+                    </div>
+
+                </li>
+                <li class="menu-item has-submenu ">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="orderlist">Order list </a>
+                    </div>
+                </li>
+                
+                <li class="menu-item ">
+                    <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+
+                </li>
+               
+                <li class="menu-item ">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span> 
+                    </a>
+
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+                 <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li> 
+                <li class="menu-item">
+                    <a class="menu-link" href="brand"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminassets/imgs/people/avtar.png" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Sales Report</h2>
+                <div>
+                    <a class="btn btn-md rounded font-sm" onclick="pdf()">Download PDF</a>
+                    <a class="btn btn-md rounded font-sm" onclick="excel()">Download Excel</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <header class="border-bottom mb-4 pb-4">
+                                <div class="row">
+                                    <p id="error" class="text-danger"></p>
+                                    <div class="col-lg-2">
+                                        <input type="Date" id="date" placeholder="Search..." class="form-control">
+                                        <br>
+                                        <input type="Date" id="date2" placeholder="Search..." class="form-control">
+                                    </div>
+                                    <button style="width: 150px; height: 45px;background-color: #088178;border-radius: 0.2rem;border: 0cap;" onclick="date()">Submit</button>
+                                    <div class="col-lg-2 col-6" style="margin-left: 280px;">
+                                        <select id="sort" class="form-select">
+                                            <option value="All">All</option>
+                                            <option value="Day">Day</option>
+                                            <option value="Week">Weekly</option>
+                                            <option value="Month">Monthly</option>
+                                            <option value="Year">Year</option>
+                                        </select>
+                                    </div>
+                                    <button  style="width: 150px; height: 45px;background-color: #088178;border-radius: 0.2rem;border: 0cap;" onclick="sort()">Submit</button>
+                                </div>
+                            </header> <!-- card-header end// -->
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="pdf">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Date</th>
+                                            <th>Total Amount</th>
+                                            <th>Discount</th>
+                                            <th>Coupon</th>
+                                            <th>Paid</th>
+                                            <th class="text-end">Method</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% deliveredOrders.forEach(el=>{ %>
+                                            <tr>
+                                                <td><b>
+                                                        <%= el.orderId %>
+                                                    </b></td>
+                                                <td>
+                                                    <%= el.user.name %>
+                                                </td>
+                                                <td>
+                                                    <%= el.user.email %>
+                                                </td>
+                                               <td>
+                                                    <%= new Date(el.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                                </td>
+                                                <% el.products.every(element => { %>
+                                                        <td>
+                                                            <%= element.productId.price.seller * element.quantity%>.00
+                                                        </td>
+                                                <% }) %>
+                                                
+                                                <% if (el.totalDiscount) { %>
+                                                    <td><%=el.totalDiscount%>.00</td>
+                                                <% } else { %>
+                                                    <td>0.00</td>
+                                                <% } %>
+
+                                                <td>
+                                                    <%= el.totalAmount %>
+                                                </td>
+                                                    
+                                                        <td>
+                                                            <%= el.totalAmount %>
+                                                        </td>
+                                                    
+                                                        <td class="text-end">
+                                                            <%= el.paymentMethod %>
+                                                        </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive.// -->
+                        </div> <!-- col end// -->
+                        <!-- <aside class="col-lg-3">
+                            <div class="box bg-light" style="min-height:80%">
+                                <p class="text-center text-muted my-5">Please select transaction <br> to see details</p>
+                            </div>
+                        </aside>  -->
+                    </div> <!-- row end// -->
+                </div> <!-- card-body // -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <!-- <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i
+                                    class="material-icons md-chevron_right"></i></a></li>
+                    </ul> -->
+                </nav>
+            </div>
+        </section>
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©,STAG MEN FASHION .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>=
+        </footer>
+    </main>
+
+    <script>
+
+        function date() {
+            const date = document.getElementById('date').value
+            const date2 = document.getElementById('date2').value
+            const today = new Date();
+            if (!date&&!date2) {
+                document.getElementById('error').textContent = 'Select a Date'
+                setTimeout(() => {
+                    document.getElementById('error').textContent = ''
+                }, 2000)
+            } else {
+                const customdate = new Date(date);
+                const customdate2 = new Date(date2)
+                if (customdate >= today&&customdate2>=today) {
+                    document.getElementById('error').textContent = 'You can only view todays and previous days orders'
+                    setTimeout(() => {
+                        document.getElementById('error').textContent = ''
+                    }, 2000);
+                }else if(customdate > customdate2){
+                    document.getElementById('error').textContent = 'first date should be lesser than the second date'
+                    setTimeout(() => {
+                        document.getElementById('error').textContent = ''
+                    }, 2000);
+                } else {
+                    window.location.href = `/admin/salesDate?value=${date}&&value2=${date2}`
+                }
+            }
+        }
+
+        function sort() {
+    
+            const data = document.getElementById('sort').value
+            console.log(data);
+            if (data == "All") {
+                window.location.href = '/admin/salesReport'
+            } else {
+                window.location.href = `/admin/data?value=${data}`
+            }
+        }
+
+        function pdf() {
+            const table = document.getElementById("pdf")
+
+            console.log(table)
+            html2pdf().from(table).save();
+        }
+
+        function excel() {
+            /* Retrieve table data */
+
+            var table = document.getElementById('pdf');
+            var tableData = [];
+            var rows = table.rows;
+            for (var i = 0; i < rows.length; i++) {
+                var rowData = [];
+                var cells = rows[i].cells;
+                for (var j = 0; j < cells.length; j++) {
+                    rowData.push(cells[j].innerText);
+                }
+                tableData.push(rowData);
+            }
+
+            /* Convert table data to Excel file */
+            var worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            var workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+            var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+            /* Save the Excel file */
+            saveAsExcelFile(excelBuffer, 'table_data.xlsx');
+        }
+
+        function saveAsExcelFile(buffer, fileName) {
+            var data = new Blob([buffer], { type: 'application/octet-stream' });
+            var url = window.URL.createObjectURL(data);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+            setTimeout(function () {
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+    </script>
+
+    <script src="/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminassets/js/vendors/select2.min.js"></script>
+    <script src="/adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/adminassets/js/main.js" type="text/javascript"></script>
+</body>
+
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+
+</html

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>STAG MEN FASHION</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/maind134.css?v=3.4">
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4"></div>
+                    <div class="col-xl-6 col-lg-4 text-center">
+                        <div id="news-flash" class="d-inline-block"></div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="/"><img src="/adminassets/imgs/theme/logo.png" alt="logo"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-5">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">OTP Verification</h3>
+                                        </div>
+                                        <form method="post" action="/otp">
+                                            <div class="form-group">
+                                                
+                                                    <input type="hidden" name="email" id="otpExpr" value="<%= otpTime %>">
+                                                
+                                                <input required type="password" name="otp" placeholder="Enter OTP" >
+                                            </div>
+                                            <div class="login_footer form-group">
+                                                <p id="otpDisplay" style="font-weight: bold;">Resend Otp in </p>
+                                            </div>
+
+                                            <% if (error) { %>
+                                             <p style="font-size: 15px; color: red;"><%= error %></p>
+                                            <% } %>
+                                            <% if (message) { %>
+                                                <p style="font-size: 15px; color: rgb(43, 133, 43);"><%= message %></p>
+                                               <% } %>
+                                            
+                                            <div class="form-group d-flex justify-content-between">
+                                                <a href="/resendotp" class="resend btn">Resend</a>
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Verify</button>
+                                            </div>
+                                            
+                                               
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // Server-side data
+        const otpExpiration = parseInt(document.getElementById('otpExpr').value);
+        let timeLeft = Math.max(0, Math.floor((otpExpiration - Date.now()) / 1000));
+    
+        const resendBtn = document.querySelector('.resend');
+        const otpDisplay = document.getElementById('otpDisplay');
+        const otpForm = document.querySelector('form');
+        const otpInput = document.querySelector('input[name="otp"]');
+    
+        function updateTimer() {
+            if (timeLeft > 0) {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                otpDisplay.innerHTML = `Resend OTP in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+            } else {
+                otpDisplay.innerHTML = 'OTP has expired!';
+                otpInput.disabled = true;
+                resendBtn.style.display = 'inline-block';
+            }
+        }
+    
+        // Initial setup
+        if (timeLeft > 0) {
+            setInterval(updateTimer, 1000);
+            resendBtn.style.display = 'none';
+        } else {
+            otpDisplay.innerHTML = 'OTP has expired!';
+            otpInput.disabled = true;
+            resendBtn.style.display = 'inline-block';
+        }
+    
+        // Form submission handler
+        otpForm.addEventListener('submit', (e) => {
+            if (timeLeft <= 0) {
+                e.preventDefault();
+                alert('OTP has expired. Please request a new one.');
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

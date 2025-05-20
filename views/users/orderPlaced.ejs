@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Placed | The Style</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3">
+            <div class="container">
+                <a href=""><img style="width: 100px; height: 40px;" src="/adminassets/imgs/theme/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="category.html">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="brands.html">Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="new-arrivals.html">New Arrivals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <!-- <a href="#" class="nav-icon me-3"><i class="fas fa-search"></i></a> -->
+                        <a href="user-dashboard.html" class="nav-icon me-3"><i class="fas fa-user"></i></a>
+                        <a href="cart.html" class="nav-icon position-relative">
+                            <i class="fas fa-shopping-bag"></i>
+                             <% if (cart) { %>
+                                  <span class="cart-count"><%= cart.products.length %></span>
+                                  <% } else { %>
+                                    <span class="cart-count">0</span>
+                                <% } %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Order Placed Content -->
+    <section class="order-placed py-5 my-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="order-success text-center mb-5">
+                        <div class="success-icon mb-4">
+                            <i class="fas fa-check-circle text-success fa-5x"></i>
+                        </div>
+                        <h1 class="mb-3">Your Order Has Been Placed!</h1>
+                        <p class="lead mb-4">Thank you for your purchase. Your order has been placed and is being processed.</p>
+                        <div class="order-number mb-4">
+                            <h5>Order Number: <span class="fw-bold">#ORD-2023-10512</span></h5>
+                            <p>You will receive an order confirmation email with details of your order.</p>
+                        </div>
+                        <div class="estimated-delivery p-3 bg-light rounded mb-4">
+                            <h5 class="mb-2">Estimated Delivery Date</h5>
+                            <p class="mb-0 fw-bold">November 2 - November 5, 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-details mb-5">
+                        <h3 class="mb-4">Order Details</h3>
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">Items in Your Order</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="order-items">
+                                    <!-- Order Item 1 -->
+                                    <div class="order-item d-flex mb-3 pb-3 border-bottom">
+                                        <div class="order-item-image me-3">
+                                            <img src="images/product-1.jpg" alt="Premium Cotton Shirt" width="80" class="img-fluid">
+                                        </div>
+                                        <div class="order-item-details flex-grow-1">
+                                            <h5 class="mb-1">Premium Cotton Shirt</h5>
+                                            <p class="text-muted mb-1">Size: M | Color: White</p>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Qty: 1</span>
+                                                <span class="fw-bold">$89.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Order Item 2 -->
+                                    <div class="order-item d-flex mb-3 pb-3 border-bottom">
+                                        <div class="order-item-image me-3">
+                                            <img src="images/product-3.jpg" alt="Wool Blend Sweater" width="80" class="img-fluid">
+                                        </div>
+                                        <div class="order-item-details flex-grow-1">
+                                            <h5 class="mb-1">Wool Blend Sweater</h5>
+                                            <p class="text-muted mb-1">Size: L | Color: Gray</p>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Qty: 1</span>
+                                                <span class="fw-bold">$102.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Order Item 3 -->
+                                    <div class="order-item d-flex">
+                                        <div class="order-item-image me-3">
+                                            <img src="images/product-5.jpg" alt="Leather Bomber Jacket" width="80" class="img-fluid">
+                                        </div>
+                                        <div class="order-item-details flex-grow-1">
+                                            <h5 class="mb-1">Leather Bomber Jacket</h5>
+                                            <p class="text-muted mb-1">Size: M | Color: Brown</p>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Qty: 1</span>
+                                                <span class="fw-bold">$199.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Shipping Address</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">John Doe</p>
+                                        <p class="mb-1">123 Main Street</p>
+                                        <p class="mb-1">Apt 4B</p>
+                                        <p class="mb-1">New York, NY 10001</p>
+                                        <p class="mb-1">United States</p>
+                                        <p class="mb-0">+1 (555) 123-4567</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Payment Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1"><strong>Payment Method:</strong> Credit Card</p>
+                                        <p class="mb-1"><strong>Card Type:</strong> Visa</p>
+                                        <p class="mb-3"><strong>Card Number:</strong> **** **** **** 1234</p>
+                                        <p class="mb-1"><strong>Subtotal:</strong> $390.00</p>
+                                        <p class="mb-1"><strong>Shipping:</strong> $10.00</p>
+                                        <p class="mb-1"><strong>Discount:</strong> -$0.00</p>
+                                        <p class="mb-0"><strong>Total:</strong> <span class="fw-bold">$400.00</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-actions text-center">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <a href="view-order.html" class="btn btn-outline-dark w-100">
+                                    <i class="fas fa-eye me-2"></i> View Order
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="invoice.html" class="btn btn-outline-dark w-100">
+                                    <i class="fas fa-file-invoice me-2"></i> View Invoice
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="index.html" class="btn btn-dark w-100">
+                                    <i class="fas fa-shopping-bag me-2"></i> Continue Shopping
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- You May Also Like -->
+    <section class="you-may-like py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">You May Also Like</h2>
+            <div class="row">
+                <!-- Product 1 -->
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="images/product-2.jpg" alt="Navy Blue T-Shirt" class="img-fluid">
+                            <div class="product-overlay">
+                                <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                            </div>
+                        </div>
+                        <div class="product-info pt-3">
+                            <h5 class="product-title">Navy Blue T-Shirt</h5>
+                            <p class="product-price">$59.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="images/product-4.jpg" alt="Slim Fit Chino Pants" class="img-fluid">
+                            <div class="product-overlay">
+                                <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                            </div>
+                        </div>
+                        <div class="product-info pt-3">
+                            <h5 class="product-title">Slim Fit Chino Pants</h5>
+                            <p class="product-price">$79.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="images/product-6.jpg" alt="Wool Blend Coat" class="img-fluid">
+                            <div class="product-overlay">
+                                <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                            </div>
+                        </div>
+                        <div class="product-info pt-3">
+                            <h5 class="product-title">Wool Blend Coat</h5>
+                            <p class="product-price">$249.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="images/product-8.jpg" alt="Slim Fit Denim Jeans" class="img-fluid">
+                            <div class="product-overlay">
+                                <a href="product-details.html" class="btn btn-sm btn-dark">Quick View</a>
+                            </div>
+                        </div>
+                        <div class="product-info pt-3">
+                            <h5 class="product-title">Slim Fit Denim Jeans</h5>
+                            <p class="product-price">$89.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">THE STYLE</h5>
+                    <p>Premium fashion destination offering curated collections from top global brands.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">SHOP</h5>
+                    <ul class="footer-links">
+                        <li><a href="category.html">Men's Collection</a></li>
+                        <li><a href="category.html">Women's Collection</a></li>
+                        <li><a href="new-arrivals.html">New Arrivals</a></li>
+                        <li><a href="brands.html">Brands</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">INFORMATION</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="footer-title mb-4">CONTACT</h5>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Fashion Street, New York, USA</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@thestyle.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-4 pt-4 border-top">
+                <div class="col-md-6">
+                    <p class="mb-md-0">© 2023 The Style. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <img src="images/payment-methods.png" alt="Payment Methods" class="payment-methods">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>

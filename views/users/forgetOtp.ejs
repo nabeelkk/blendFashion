@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-login-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>STAG MEN FASHION</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/maind134.css?v=3.4">
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info">
+                           
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-4">
+                        <div class="text-center">
+                            <div id="news-flash" class="d-inline-block">
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="index.html"><img src="/adminassets/imgs/theme/logo.png" alt="logo"></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    
+    <main class="main">
+        
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                           
+                            
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-5">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">OTP Verification</h3>
+                                        </div>
+                                        <form method="post">
+                                           
+                                            
+                                            <div class="form-group">
+                                                <%if(locals.email){%>
+                                                    <input type="hidden" name="email" id="email" value="<%= locals.email %>">
+                                                <%}%>
+                                               
+                                                <input required="" type="password" name="otp" placeholder="otp">
+                                            </div>
+                                            <div class="login_footer form-group">
+                                                <div class="chek-form">
+                                                    
+                                                </div>
+                                                <p id="otpDisplay"> </p>
+                                            </div>
+                                           
+                                           
+                                              
+                                            <% if(locals.otpExpiration) {%>
+                                                <input id="otp" name="exp" type="hidden" class="text text-danger" value=" <%= otpExpiration %> " >
+                                            <% } %>
+                                            
+                                            <div class="form-group">
+
+                                                <a  href="/resendotp"  class="resend btn" >Resend</a>
+                                            
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Verify</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Preloader Start -->
+    
+    <script>
+        const otpexpr = document.getElementById('otp').value
+        const otpDid = document.getElementById('otpDisplay')
+        
+        // const email = document.getElementById('email').value
+        const otpExpiration = otpexpr
+        const resendOtp = document.querySelector('.resend')
+        
+        resendOtp.addEventListener('click',function(e){
+            e.preventDefault();
+            fetch('/resendotp',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({otpExpiration:otpExpiration}),
+            })
+            .then(response=>{
+                window.location.reload();
+            })
+            .then(data=>{
+                otpTimer()
+                console.log(data.message);         
+            })
+            .catch(error=>{
+                console.log(error.message);
+            })
+        })
+
+        function otpTimer(){
+            const currentTime = Date.now();
+            console.log(currentTime);
+            const remainingTime = Math.max(0,otpexpr - currentTime);
+            console.log(remainingTime);
+            if (remainingTime <= 0) {
+                otpDid.innerHTML = 'OTP has timedout ,please resend for newone'
+                otpDid.style.display = 'block'
+                // document.querySelector('.resend').style.display="block"
+            } else {
+                console.log('getts here');
+                const remainingSeconds = Math.ceil(remainingTime / 1000);
+                otpDid.innerHTML = `Time remaining : ${remainingSeconds} seconds`;
+                setTimeout(otpTimer,1000);
+            }
+        }
+        otpTimer();
+    </script>
+    
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-login-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
+</html>

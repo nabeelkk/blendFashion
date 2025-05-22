@@ -13,13 +13,6 @@ const offerSchema = new mongoose.Schema({
       return this.type === 'product';
     },
   },
-  categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: function () {
-      return this.type === 'category';
-    },
-  },
   discount: {
     type: Number,
     required: true,

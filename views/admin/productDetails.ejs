@@ -306,7 +306,7 @@
             
             <div class="product-info-row">
               <div class="product-info-label">Price</div>
-              <div class="product-info-value">₹<%= product.price.seller %></div>
+              <div class="product-info-value">₹<%= product.sizes?.small.amount||"NA" %></div>
             </div>
             
             <!-- <div class="product-info-row">
@@ -363,7 +363,8 @@
               <thead>
                 <tr>
                   <th>Size</th>
-                  <th>Price</th>
+                  <th>MRP</th>
+                  <th>Sales Price</th>
                   <th>Quantity</th>
                   <th>Status</th>
                 </tr>
@@ -372,10 +373,11 @@
                 
                 <tr>
                   <td>Small</td>
-                  <td><%= product.sizes.small.amount %></td>
-                  <td><%= product.sizes.small.quantity %></td>
+                  <td><%= product.sizes.small.Mrp || 0.00%></td>
+                  <td><%= product.sizes.small.amount || 0.00 %></td>
+                  <td><%= product.sizes.small.quantity || 0.00 %></td>
                   <td>
-                   <% if (product.sizes.small.quantity>1) { %>
+                   <% if (product.sizes.small.quantity>=1) { %>
                     <span class="badge bg-success">In Stock</span>
                     <% } else { %>
                         <span class="badge bg-danger">Out of Stock</span>
@@ -384,10 +386,11 @@
                 </tr>
                 <tr>
                     <td>Medium</td>
-                    <td><%= product.sizes.medium.amount %></td>
-                    <td><%= product.sizes.medium.quantity %></td>
+                    <td><%= product.sizes.medium.Mrp || 0.00 %></td>
+                    <td><%= product.sizes.medium.amount || 0.00 %></td>
+                    <td><%= product.sizes.medium.quantity || 0.00 %></td>
                     <td>
-                     <% if (product.sizes.medium.quantity>1) { %>
+                     <% if (product.sizes.medium.quantity>=1) { %>
                       <span class="badge bg-success">In Stock</span>
                       <% } else { %>
                           <span class="badge bg-danger">Out of Stock</span>
@@ -396,10 +399,24 @@
                   </tr>
                   <tr>
                     <td>Large</td>
-                    <td><%= product.sizes.large.amount %></td>
-                    <td><%= product.sizes.large.quantity %></td>
+                    <td><%= product.sizes.large.Mrp || 0.00 %></td>
+                    <td><%= product.sizes.large.amount || 0.00 %></td>
+                    <td><%= product.sizes.large.quantity || 0.00 %></td>
                     <td>
-                     <% if (product.sizes.large.quantity>1) { %>
+                     <% if (product.sizes.large.quantity>=1) { %>
+                      <span class="badge bg-success">In Stock</span>
+                      <% } else { %>
+                          <span class="badge bg-danger">Out of Stock</span>
+                     <% } %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>XL</td>
+                    <td><%= product.sizes.XL.Mrp || 0 %></td>
+                    <td><%= product.sizes.XL.amount || 0 %></td>
+                    <td><%= product.sizes.XL.quantity || 0 %></td>
+                    <td>
+                     <% if (product.sizes.XL.quantity>=1) { %>
                       <span class="badge bg-success">In Stock</span>
                       <% } else { %>
                           <span class="badge bg-danger">Out of Stock</span>

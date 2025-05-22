@@ -10,6 +10,9 @@ const Order = require('../modal/orderModal')
 const Wallet = require('../modal/walletModal')
 const moment = require('moment');
 const Cart = require('../modal/cartModal')
+const Brand = require('../modal/brandModal')
+const fs = require('fs').promises;
+const path = require('path');
 
 
 
@@ -153,49 +156,126 @@ const productDetails = async(req,res)=>{
     }
 }
 
-const getAddProduct =async (req,res)=>{
+const getAddProduct = async (req, res) => {
     try {
-        const category = await Category.find({isListed:true});
-        const sizeError  = req.query.errorsize;
-        const imageError = req.query.errorimage
-        let brand = []
-        res.render('admin/addProduct',{category,sizeError,imageError,brand})
+        const categories = await Category.find({ isListed: true });
+        const brands = await Brand.find({ isListed: true });
+        const sizeError = req.query.errorsize;
+        const imageError = req.query.errorimage;
+        res.render('admin/addProduct', { category: categories, sizeError, imageError, brand: brands });
     } catch (error) {
-        console.log(error)
-        res.status(500).send("Internal error")
+        console.error('Error in getAddProduct:', error);
+        res.status(500).send('Internal server error');
     }
-}
-const addProducts= async(req,res)=>{
+};
+const addProducts = async (req, res) => {
     try {
-        let {name,description,category,brand,regularPrice,salesPrice,small,medium,large,largeQuantity,mediumQuantity,smallQuantity} = req.body;
+        const {
+            name,
+            description,
+            category,
+            brand,
+            MaxPriceSmall, SalesPriceSmall, StockSmall,
+            MRPMedium, SalesPriceMedium, StockMedium,
+            MRPLarge, SalesPriceLarge, StockLarge,
+            MRPXL,SalesPriceXL,StockXL
+            
+        } = req.body;
+        console.log(req.body)
 
-        if (!small || !medium || !large){
-        return res.redirect('/admin/addProducts/?errorsize=All%20sizes%20are%20required');
-        }
-        const files = req.files?.images
-        
-        if(!files){
-            return res.status(400).send("No files were uploaded.");
+        if (!name || !description || !category) {
+            return res.redirect('/admin/addProducts?errorsize=Please%20fill%20all%20required%20fields%20(name,%20description,%20category,%20brand)');
         }
 
-        
-        const fileArray = Array.isArray(files)?files:[files];
+        const sizes = {
+            small: MaxPriceSmall && SalesPriceSmall && StockSmall !== undefined ? {
+                Mrp: parseFloat(MaxPriceSmall),
+                amount: parseFloat(SalesPriceSmall),
+                quantity: parseInt(StockSmall) || 0
+            } : null,
+            medium: MRPMedium && SalesPriceMedium && StockMedium !== undefined ? {
+                Mrp: parseFloat(MRPMedium),
+                amount: parseFloat(SalesPriceMedium),
+                quantity: parseInt(StockMedium) || 0
+            } : null,
+            large: MRPLarge && SalesPriceLarge && StockLarge !== undefined ? {
+                Mrp: parseFloat(MRPLarge),
+                amount: parseFloat(SalesPriceLarge),
+                quantity: parseInt(StockLarge) || 0
+            } : null,
+            XL: MRPXL && SalesPriceXL && StockXL !== undefined ? {
+                Mrp: parseFloat(MRPXL),
+                amount: parseFloat(SalesPriceXL),
+                quantity: parseInt(StockXL) || 0
+            } : null
+        };
 
-        if(files.length == 1||files.length<3){
-            return res.redirect('/admin/addProducts?errorimage=At%20least%203%20images%20are%20required')
+
+        const hasValidSize = Object.values(sizes).some(size => size !== null);
+        if (!hasValidSize) {
+            return res.redirect('/admin/addProducts?errorsize=At%20least%20one%20size%20(small,%20medium,%20or%20large%20Xl)%20must%20be%20provided%20with%20valid%20MRP,%20Sales%20Price,%20and%20Stock');
         }
+
+        for (const size of ['small', 'medium', 'large']) {
+            if (sizes[size]) {
+                if (isNaN(sizes[size].Mrp) || sizes[size].Mrp <= 0) {
+                    return res.redirect(`/admin/addProducts?errorsize=MRP%20for%20${size}%20must%20be%20a%20positive%20number`);
+                }
+                if (isNaN(sizes[size].amount) || sizes[size].amount <= 0) {
+                    return res.redirect(`/admin/addProducts?errorsize=Sales%20Price%20for%20${size}%20must%20be%20a%20positive%20number`);
+                }
+                if (sizes[size].amount > sizes[size].Mrp) {
+                    return res.redirect(`/admin/addProducts?errorsize=Sales%20Price%20for%20${size}%20cannot%20be%20greater%20than%20MRP`);
+                }
+                if (sizes[size].quantity < 0 || !Number.isInteger(sizes[size].quantity)) {
+                    return res.redirect(`/admin/addProducts?errorsize=Stock%20for%20${size}%20must%20be%20a%20non-negative%20integer`);
+                }
+            }
+        }
+
+        for (const size of ['small', 'medium', 'large']) {
+            if (sizes[size]) {
+                sizes[size] = {
+                    Mrp: sizes[size].Mrp,
+                    amount: sizes[size].amount,
+                    quantity: sizes[size].quantity
+                };
+            } else {
+                sizes[size] = {
+                    Mrp: 0,
+                    amount: 0,
+                    quantity: 0
+                };
+            }
+        }
+
+        const files = req.files?.images;
+        if (!files || (Array.isArray(files) ? files.length : 1) < 3) {
+            return res.redirect('/admin/addProducts?errorimage=At%20least%203%20images%20are%20required');
+        }
+        if (Array.isArray(files) && files.length > 3) {
+            return res.redirect('/admin/addProducts?errorimage=Maximum%20of%203%20images%20allowed');
+        }
+
+        const fileArray = Array.isArray(files) ? files : [files];
         const images = [];
-        for(let file of fileArray){
-        const result = await cloudinary.uploader.upload(file.tempFilePath,{
-            folder:'blend_products',
-            width:600,
-            height:600,
-            crop: 'fill',
-            gravity: 'auto',
-            format: 'jpeg',
-            quality: 'auto'
-        })
+        for (let file of fileArray) {
+            if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
+                return res.redirect('/admin/addProducts?errorimage=Only%20JPEG,%20PNG,%20or%20WebP%20images%20are%20allowed');
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                return res.redirect('/admin/addProducts?errorimage=Each%20image%20must%20be%20less%20than%205MB');
+            }
 
+            const result = await cloudinary.uploader.upload(file.tempFilePath, {
+                folder: 'blend_products',
+                width: 600,
+                height: 600,
+                crop: 'fill',
+                gravity: 'auto',
+                format: 'jpeg',
+                quality: 'auto'
+            });
             images.push(result.public_id);
         }
 
@@ -204,43 +284,33 @@ const addProducts= async(req,res)=>{
             description,
             category,
             brand,
-            price: {
-            regular:regularPrice,
-            seller:salesPrice
-            },
-            sizes: {
-            small:{
-                amount:small,
-                quantity:smallQuantity
-            },
-            medium:{
-                amount:medium,
-                quantity:mediumQuantity
-            },
-            large:{
-                amount:large,
-                quantity:largeQuantity
-            }
-            },
+            sizes,
             images
         });
-       
 
         await newProduct.save();
-        res.redirect('/admin/productList')
+        res.redirect('/admin/productList');
     } catch (error) {
-        console.log("Add product error",error)
+        console.error('Error in addProducts:', error);
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map(err => err.message).join(', ');
+            return res.redirect(`/admin/addProducts?errorsize=${encodeURIComponent(errors)}`);
+        }
+        if (error.code === 11000) {
+            return res.redirect('/admin/addProducts?errorsize=Product%20name%20already%20exists');
+        }
+        res.redirect('/admin/addProducts?errorsize=Internal%20server%20error');
     }
-    
-}
+};
 
 const loadProduct = async(req,res)=>{
    try {
     const product = await Product.findOne({_id:req.params.id,isdeleted:false})
     const category = await Category.find({isListed:true})
+    const brand = await Brand.find({isListed:true})
     const cloudName = process.env.CLOUDINARY_NAME;
 
-    res.render('admin/editProduct',{product,category,cloudName})
+    res.render('admin/editProduct',{product,category,cloudName,brand})
    } catch (error) {
     console.error(error);
     res.redirect('/admin/productList');
@@ -249,133 +319,207 @@ const loadProduct = async(req,res)=>{
 
 const editProduct = async (req, res) => {
     try {
-      const {
-        name,
-        description,
-        category,
-        brand,
-        regularPrice,
-        salesPrice,
-        small,
-        medium,
-        large,
-        largeQuantity,
-        mediumQuantity,
-        smallQuantity,
-        removeImages = [],
-      } = req.body;
+        const {
+            name,
+            description,
+            category,
+            brand,
+            MaxPriceSmall, SalesPriceSmall, StockSmall,
+            MRPMedium, SalesPriceMedium, StockMedium,
+            MRPLarge, SalesPriceLarge, StockLarge,
+            MRPXL, SalesPriceXL, StockXL
+        } = req.body;
 
-      const product = await Product.findById(req.params.id);
-  
-      if (!product) {
-        return res.status(404).send("Product not found");
-      }
-  
-      let images = [...(product.images || [])];
-  
-      const imagesToRemove = Array.isArray(removeImages) ? removeImages : (typeof removeImages === 'string' ? removeImages.split(',').filter(Boolean) : []);
-      if (imagesToRemove.length > 0) {
-        images = images.filter((publicId) => !imagesToRemove.includes(publicId));
-        for (const publicId of imagesToRemove) {
-          try {
-            await cloudinary.uploader.destroy(publicId);
-          } catch (err) {
-            console.error(`Failed to delete Cloudinary image ${publicId}:`, err);
-          }
+        // Fetch the product
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product not found')}`);
         }
-      }
-  
-      if (req.files && req.files['replaceImage[0]']) {
-        const replaceImage = req.files['replaceImage[0]'];
-        try {
-          const result = await cloudinary.uploader.upload(replaceImage.tempFilePath, {
-            folder: 'blend_products',
-            width: 600,
-            height: 600,
-            crop: 'fill',
-            gravity: 'auto',
-            format: 'jpeg',
-            quality: 'auto',
-          });
-          if (0 < images.length) {
-            images[0] = result.public_id;
-          } else {
-            images.push(result.public_id);
-          }
-        } catch (err) {
-          console.error('Failed to upload replacement image at index 0:', err);
-        }
-      }
-  
-      if (req.files && req.files.image) {
-        const uploadedFiles = Array.isArray(req.files.image) ? req.files.image : [req.files.image];
-        for (const file of uploadedFiles) {
-          try {
-            const result = await cloudinary.uploader.upload(file.tempFilePath, {
-              folder: 'blend_products',
-              width: 600,
-              height: 600,
-              crop: 'fill',
-              gravity: 'auto',
-              format: 'jpeg',
-              quality: 'auto',
-            });
 
-            images.push(result.public_id);
-          } catch (err) {
-            console.error('Failed to upload additional image:', err);
-          }
+        // Validate basic fields
+        if (!name || !name.match(/^[a-zA-Z0-9\s]{3,50}$/)) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product name must be 3-50 characters (letters, numbers, spaces only)')}`);
         }
-      }
-  
-      product.name = name;
-      product.description = description;
-      product.category = category;
-      product.brand = brand;
-      product.price = {
-        regular: regularPrice || product.price.regular, 
-        seller: salesPrice || null,
-      };
-      product.sizes = {
-        small: {
-          amount: small || 0,
-          quantity: smallQuantity || 0,
-        },
-        medium: {
-          amount: medium || 0,
-          quantity: mediumQuantity || 0,
-        },
-        large: {
-          amount: large || 0,
-          quantity: largeQuantity || 0,
-        },
-      };
-      product.images = images;
-  
-      await product.save();
-      res.redirect('/admin/productList');
+
+        if (!description || description.length < 10 || description.length > 500) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Description must be 10-500 characters')}`);
+        }
+
+        if (!category) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Please select a category')}`);
+        }
+
+        // Process sizes
+        const sizes = {};
+        const sizeFieldNames = {
+            small: { mrp: MaxPriceSmall, sales: SalesPriceSmall, stock: StockSmall },
+            medium: { mrp: MRPMedium, sales: SalesPriceMedium, stock: StockMedium },
+            large: { mrp: MRPLarge, sales: SalesPriceLarge, stock: StockLarge },
+            xl: { mrp: MRPXL, sales: SalesPriceXL, stock: StockXL }
+        };
+        const sizesToUpdate = ['small', 'medium', 'large', 'xl'];
+        let atLeastOneSizeProvided = false;
+
+        for (const size of sizesToUpdate) {
+            const { mrp, sales, stock } = sizeFieldNames[size];
+
+            if (mrp || sales || stock) {
+                if (!mrp || !sales || stock === undefined || stock === '') {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`All fields (MRP, Sales Price, Stock) for size ${size} must be provided if any are specified`)}`);
+                }
+
+                const mrpNum = parseFloat(mrp);
+                const salesNum = parseFloat(sales);
+                const stockNum = parseInt(stock);
+
+                if (isNaN(mrpNum) || mrpNum <= 0) {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`MRP for ${size} must be a positive number`)}`);
+                }
+                if (isNaN(salesNum) || salesNum <= 0) {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Sales Price for ${size} must be a positive number`)}`);
+                }
+                if (salesNum > mrpNum) {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Sales Price for ${size} cannot be greater than MRP`)}`);
+                }
+                if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Stock for ${size} must be a non-negative integer`)}`);
+                }
+
+                sizes[size] = { Mrp: mrpNum, amount: salesNum, quantity: stockNum };
+                atLeastOneSizeProvided = true;
+            } else if (product.sizes[size]) {
+                sizes[size] = product.sizes[size]; // Retain existing size data
+            }
+        }
+
+        if (!atLeastOneSizeProvided) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('At least one size must have valid MRP, Sales Price, and Stock')}`);
+        }
+
+        // Handle images
+        let images = [...(product.images || [])];
+
+        // Process image replacements
+        if (req.files) {
+            // Handle replaceImage fields
+            for (let i = 0; i < images.length; i++) {
+                const replaceField = `replaceImage[${i}]`;
+                if (req.files[replaceField]) {
+                    const file = req.files[replaceField];
+                    const tempPath = file.tempFilePath;
+
+                    // Validate file type and size
+                    if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
+                        await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                        return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Only JPEG, PNG, or WebP images are allowed')}`);
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                        return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Each image must be less than 5MB')}`);
+                    }
+
+                    // Upload new image to Cloudinary
+                    const result = await cloudinary.uploader.upload(tempPath, {
+                        folder: 'blend_products',
+                        width: 600,
+                        height: 600,
+                        crop: 'fill',
+                        gravity: 'auto',
+                        format: 'jpeg',
+                        quality: 'auto'
+                    });
+
+                    // Delete old image from Cloudinary
+                    if (images[i]) {
+                        await cloudinary.uploader.destroy(images[i]);
+                    }
+
+                    // Update image array
+                    images[i] = result.public_id;
+
+                    // Clean up temporary file
+                    await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                }
+            }
+
+            // Process new images
+            if (req.files.newImages) {
+                const newFiles = Array.isArray(req.files.newImages) ? req.files.newImages : [req.files.newImages];
+                if (images.length + newFiles.length > 3) {
+                    for (const file of newFiles) {
+                        await fs.unlink(file.tempFilePath).catch(err => console.error('Error deleting temp file:', err));
+                    }
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Total images cannot exceed 3')}`);
+                }
+
+                for (const file of newFiles) {
+                    const tempPath = file.tempFilePath;
+
+                    // Validate file type and size
+                    if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
+                        await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                        return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Only JPEG, PNG, or WebP images are allowed')}`);
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                        return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Each image must be less than 5MB')}`);
+                    }
+
+                    // Upload new image to Cloudinary
+                    const result = await cloudinary.uploader.upload(tempPath, {
+                        folder: 'blend_products',
+                        width: 600,
+                        height: 600,
+                        crop: 'fill',
+                        gravity: 'auto',
+                        format: 'jpeg',
+                        quality: 'auto'
+                    });
+
+                    images.push(result.public_id);
+
+                    // Clean up temporary file
+                    await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
+                }
+            }
+        }
+
+        // Validate image count
+        if (images.length < 1 || images.length > 3) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product must have 1 to 3 images')}`);
+        }
+
+        // Update product
+        product.name = name;
+        product.description = description;
+        product.category = category;
+        product.brand = brand;
+        product.sizes = sizes;
+        product.images = images;
+
+        await product.save();
+
+        res.redirect('/admin/productList');
     } catch (error) {
-      console.error('Error updating product:', error);
-      res.render('admin/product-edit', {
-        product: {
-          _id: req.params.id,
-          name,
-          description,
-          category,
-          brand,
-          price: { regular: regularPrice, seller: salesPrice },
-          sizes: {
-            small: { amount: small, quantity: smallQuantity },
-            medium: { amount: medium, quantity: mediumQuantity },
-            large: { amount: large, quantity: largeQuantity },
-          },
-          images: product?.images || [],
-        },
-        imageError: `Error updating product: ${error.message}`,
-      });
+        console.error('Error updating product:', error);
+        // Clean up any remaining temporary files
+        if (req.files) {
+            for (let i = 0; i < (product?.images?.length || 0); i++) {
+                const replaceField = `replaceImage[${i}]`;
+                if (req.files[replaceField]) {
+                    await fs.unlink(req.files[replaceField].tempFilePath).catch(err => console.error('Error deleting temp file:', err));
+                }
+            }
+            if (req.files.newImages) {
+                const newFiles = Array.isArray(req.files.newImages) ? req.files.newImages : [req.files.newImages];
+                for (const file of newFiles) {
+                    await fs.unlink(file.tempFilePath).catch(err => console.error('Error deleting temp file:', err));
+                }
+            }
+        }
+        res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Error updating product: ${error.message}`)}`);
     }
 };
-  
 const getdeleteProduct = async(req,res)=>{
     try {
         const prodId = req.query.id;

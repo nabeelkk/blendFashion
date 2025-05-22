@@ -22,27 +22,29 @@ const productSchema = new mongoose.Schema({
         
 
     },
-    price:{
-        seller:{
-            type:Number,
-            required:true
-        }
-    },
     sizes:{
         
         small:{
+            Mrp:{
+                type:Number,
+
+            },
             amount:{
                 type: Number,
-                required: true
+  
             },
             quantity:{
                 type: Number,
             }
         },
         medium:{
+            Mrp:{
+                type:Number,
+
+            },
             amount:{
                 type: Number,
-                required: true
+
             },
             quantity:{
                 type: Number,
@@ -50,14 +52,47 @@ const productSchema = new mongoose.Schema({
             
         },
         large:{
+            Mrp:{
+                type:Number,
+
+            },
             amount:{
                 type: Number,
-                required: true
+  
             },
             quantity:{
                 type: Number,
             }
             
+        },
+        XL:{
+            Mrp:{
+                type:Number,
+
+            },
+            amount:{
+                type: Number,
+
+            },
+            quantity:{
+                type: Number,
+            }
+            
+        }
+    },
+    offer:{
+        discount:{
+            type:Number
+        },
+        startDate:{
+            type:String
+        },
+        endDate:{
+            type:String
+        },
+        isActive:{
+            type:Boolean,
+            default:true
         }
     },
     
@@ -70,7 +105,6 @@ const productSchema = new mongoose.Schema({
         ref: 'Category',
         required: true
       },
-    stock: Number,
     rating: Number,
 
     isdeleted:{
@@ -89,25 +123,6 @@ const productSchema = new mongoose.Schema({
         }
     ],
     appliedCoupon: String,
-    offer:{
-        discount:{
-            type:Number
-        },
-        startDate:{
-            type:String
-        },
-        endDate:{
-            type:String
-        },
-        isActive:{
-            type:Boolean,
-            default:true
-        }
-    },
-    offerExpiry: {
-        type: Date,
-        default: null
-    }
 
 },{timestamps:true})
 

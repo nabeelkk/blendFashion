@@ -2,107 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>STAG Dashboard</title>
+    <title>STAG Dashboard - Edit Product</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/adminassets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/adminassets/css/main.css" rel="stylesheet" type="text/css" />
     <!-- Cropper.js CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
-</head>
-
-<body>
     <style>
-        .holder {
-            display: flex;
-            align-items: center;
+        .holder { display: flex; align-items: center; }
+        .rad { margin-left: 10px; margin-top: -4px; }
+        .error { font-size: 14px; color: red; margin-top: 5px; display: none; }
+        .input-upload img { max-width: 100px; margin: 5px; border: 1px solid #661d1d; }
+        #cropper-modal {
+            display: none; position: fixed; top: 20; left: 20; width: 40%; height: 50%;
+            background: rgba(0, 0, 0, 0.7); z-index: 1000; justify-content: center; align-items: center;
         }
-        .rad {
-            margin-left: 10px;
-            margin-top: -4px;
+        #cropper-modal .cropper-container {
+            background: rgb(168, 162, 162); padding: 8px; border-radius: 8px; max-width: 300px; width: 100%;
         }
-        #imageRemoveBtn {
-            padding: 5px;
-            font-size: 13px;
-            border: 1px solid #088178;
-            color: white;
-            background: #088178;
-            margin-top: 35px;
-            margin-left: -84px;
-        }
+        .image-container { position: relative; display: inline-block; }
     </style>
+</head>
+<body>
     <div class="screen-overlay"></div>
+     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="dashboard" class="brand-wrap">
                 <img src="/adminassets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                <button class="btn btn-icon btn-aside-minimize">
+                    <i class="text-muted material-icons md-menu_open"></i>
                 </button>
             </div>
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item ">
-                    <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/dashboard">
+                        <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="productList" class="active"> Product List</a>
-                        <a href="productoffer">Product Offer</a>
-                        <a href="categories">Categories</a>
-                        <a href="categoryoffer">Category Offer</a>
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/productoffer">Product Offer</a>
+                        <a href="/admin/categories">Categories</a>
+                        <a href="/admin/categoryoffer">Category Offer</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-orders-1.html">
+                        <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
-                        <a href="orderlist">Order list </a>
+                        <a href="/admin/orderlist">Order list</a>
                     </div>
                 </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="addProducts"> <i class="icon material-icons md-add_box"></i>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/addProducts">
+                        <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>
                 </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="users"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Users</span> 
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/users">
+                        <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
+                    <a class="menu-link" href="/admin/couponList">
+                        <i class="icon material-icons md-local_offer"></i>
                         <span class="text">Coupon</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
+                    <a class="menu-link" href="/admin/salesReport">
+                        <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Sales Report</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <a class="menu-link" href="page-reviews.html">
+                        <i class="icon material-icons md-comment"></i>
                         <span class="text">Reviews</span>
                     </a>
-                </li> 
+                </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="brand"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
+                    <a class="menu-link" href="/admin/brand">
+                        <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span>
+                    </a>
                 </li>
             </ul>
             <br>
@@ -110,33 +111,6 @@
         </nav>
     </aside>
     <main class="main-wrap">
-        <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminassets/imgs/people/avtar.png" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
         <section class="content-main">
             <div class="row">
                 <div class="col-9">
@@ -144,117 +118,204 @@
                         <h2 class="content-title">Edit Product</h2>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <!-- Basic Information -->
+                <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-header">
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
                             <form method="post" action="/admin/editProduct/<%= product._id %>" id="pdtform" enctype="multipart/form-data">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Product Name</label>
-                                    <input type="text" name="name" placeholder="Type here" value="<%= product.name %>" class="form-control" id="pdtname">
-                                    <p id="error1" style="display: none; color: red;"></p>
+                                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                                    <div class="mb-4" style="width: 50%;">
+                                        <label for="pdtname" class="form-label">Product Name</label>
+                                        <input type="text" name="name" placeholder="Type here" class="form-control" id="pdtname" value="<%= product.name %>">
+                                        <p id="error-name" class="error">Product name is required and must be 3-50 characters (letters, numbers, spaces only).</p>
+                                    </div>
+                                    <div class="mb-4" style="width: 50%;">
+                                        <label class="form-label">Category</label>
+                                        <select name="category" class="form-select" id="product_category">
+                                            <option value="">Select a category</option>
+                                            <% category.forEach(element => { %>
+                                                <option value="<%= element._id %>" <%= element._id.toString() === product.category.toString() ? 'selected' : '' %>><%= element.name %></option>
+                                            <% }) %>
+                                        </select>
+                                        <p id="error-category" class="error">Please select a category.</p>
+                                    </div>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label class="form-label">Brand</label>
+                                    <select name="brand" class="form-select" id="brand">
+                                        <% brand.forEach(element => { %>
+                                            <option value="<%= element.name %>" <%= element.name === product.brand ? 'selected' : '' %>><%= element.name %></option>
+                                        <% }) %>
+                                    </select>
+                                    <p id="error-brand" class="error">Please select a brand.</p>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
                                     <textarea placeholder="Type here" name="description" id="pdtdes" class="form-control" rows="4"><%= product.description %></textarea>
-                                    <p id="error2" style="display: none; color: red;"></p>
+                                    <p id="error-description" class="error">Description is required and must be 10-500 characters.</p>
                                 </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Category</label>
-                                    <select name="category" class="form-select" id="product_category">
-                                        <% category.forEach(element => { %> 
-                                            <option value="<%= element._id %>"><%= element.name %></option>
-                                        <% }) %>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Brand</label>
-                                    <select name="brand" class="form-select" id="brand">
-                                        <option value="<%= product.brand %>">Brand</option>
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Sales price</label>
-                                            <input placeholder=" " id="saleprice" name="salesPrice" type="text" value="<%= product.price.seller %>" class="form-control">
-                                            <p id="error4" style="display: none; color: red;"></p>
-                                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Size Sections -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Small</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="MaxPriceSmall">MRP</label>
+                                        <input placeholder="MRP" id="MaxPriceSmall" name="MaxPriceSmall" type="number" min="0" class="form-control" value="<%= product.sizes.small ? product.sizes.small.Mrp : '' %>">
+                                        <p id="error-mrp-small" class="error">MRP must be a positive number.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="SalesPriceSmall">Sales Price</label>
+                                        <input placeholder="Sales Price" id="SalesPriceSmall" name="SalesPriceSmall" type="number" min="0" class="form-control" value="<%= product.sizes.small ? product.sizes.small.amount : '' %>">
+                                        <p id="error-sales-small" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="StockSmall">Stock</label>
+                                        <input placeholder="Stock" id="StockSmall" name="StockSmall" type="number" min="0" class="form-control" value="<%= product.sizes.small ? product.sizes.small.quantity : '' %>">
+                                        <p id="error-stock-small" class="error">Stock must be a non-negative integer.</p>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Small</label>
-                                            <div class="row gx-2">
-                                                <input placeholder="Price" id="small" name="small" value="<%= product.sizes.small.amount %>" type="text" class="form-control">
-                                                <input placeholder="" id="smallQuantity" name="smallQuantity" value="<%= product.sizes.small.quantity %>" type="text" class="form-control mt-2">
-                                                <p id="error3" style="display: none; color: red;"></p>
-                                                <p id="error8" style="display: none; color: red;"></p>
+                                <p id="error-size-small" class="error">Please provide valid MRP, Sales Price, and Stock for Small size.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Medium</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="MaxPriceMedium">MRP</label>
+                                        <input placeholder="MRP" id="MaxPriceMedium" name="MRPMedium" type="number" min="0" class="form-control" value="<%= product.sizes.medium ? product.sizes.medium.Mrp : '' %>">
+                                        <p id="error-mrp-medium" class="error">MRP must be a positive number.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="SalesPriceMedium">Sales Price</label>
+                                        <input placeholder="Sales Price" id="SalesPriceMedium" name="SalesPriceMedium" type="number" min="0" class="form-control" value="<%= product.sizes.medium ? product.sizes.medium.amount : '' %>">
+                                        <p id="error-sales-medium" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="StockMedium">Stock</label>
+                                        <input placeholder="Stock" id="StockMedium" name="StockMedium" type="number" min="0" class="form-control" value="<%= product.sizes.medium ? product.sizes.medium.quantity : '' %>">
+                                        <p id="error-stock-medium" class="error">Stock must be a non-negative integer.</p>
+                                    </div>
+                                </div>
+                                <p id="error-size-medium" class="error">Please provide valid MRP, Sales Price, and Stock for Medium size.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Large</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="MaxPriceLarge">MRP</label>
+                                        <input placeholder="MRP" id="MaxPriceLarge" name="MRPLarge" type="number" min="0" class="form-control" value="<%= product.sizes.large ? product.sizes.large.Mrp : '' %>">
+                                        <p id="error-mrp-large" class="error">MRP must be a positive number.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="SalesPriceLarge">Sales Price</label>
+                                        <input placeholder="Sales Price" id="SalesPriceLarge" name="SalesPriceLarge" type="number" min="0" class="form-control" value="<%= product.sizes.large ? product.sizes.large.amount : '' %>">
+                                        <p id="error-sales-large" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="StockLarge">Stock</label>
+                                        <input placeholder="Stock" id="StockLarge" name="StockLarge" type="number" min="0" class="form-control" value="<%= product.sizes.large ? product.sizes.large.quantity : '' %>">
+                                        <p id="error-stock-large" class="error">Stock must be a non-negative integer.</p>
+                                    </div>
+                                </div>
+                                <p id="error-size-large" class="error">Please provide valid MRP, Sales Price, and Stock for Large size.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>XL</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="MaxPriceXl">MRP</label>
+                                        <input placeholder="MRP" id="MaxPriceXl" name="MRPXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL.Mrp? product.sizes.XL.Mrp : '' %>">
+                                        <p id="error-mrp-xl" class="error">MRP must be a positive number.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="SalesPriceXl">Sales Price</label>
+                                        <input placeholder="Sales Price" id="SalesPriceXl" name="SalesPriceXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL.amount ? product.sizes.XL.amount : '' %>">
+                                        <p id="error-sales-xl" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="StockXl">Stock</label>
+                                        <input placeholder="Stock" id="StockXl" name="StockXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL ? product.sizes.XL.quantity : '' %>">
+                                        <p id="error-stock-xl" class="error">Stock must be a non-negative integer.</p>
+                                    </div>
+                                </div>
+                                <p id="error-size-xl" class="error">Please provide valid MRP, Sales Price, and Stock for XL size.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Media Section -->
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <% if (product.images && product.images.length > 0) { %>
+                                    <% product.images.forEach((image, index) => { %>
+                                        <div class="image-container" id="image-container-<%= index %>">
+                                            <img id="image-prev-<%= index %>" src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= image %>" style="max-width: 100px; margin: 5px;" alt="Product Image">
+                                            <button class="btn btn-warning" type="button" onclick="replaceImage('<%= index %>')">Replace</button>
+                                            <div id="replace-input-<%= index %>" style="display: none;">
+                                                <input type="file" id="replace-file-<%= index %>" name="replaceImage[<%= index %>]" accept="image/jpeg,image/png,image/webp" onchange="openCropper('<%= index %>', this)">
+                                                <p id="error-replace-<%= index %>" class="error"></p>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Medium</label>
-                                            <input placeholder="Price" id="medium" name="medium" type="text" value="<%= product.sizes.medium.amount %>" class="form-control">
-                                            <input placeholder="" id="medium" name="mediumQuantity" type="text" value="<%= product.sizes.medium.quantity %>" class="form-control mt-2">
-                                            <p id="error4" style="display: none; color: red;"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Large</label>
-                                            <input placeholder="Price" id="large" name="large" type="text" value="<%= product.sizes.large.amount %>" class="form-control">
-                                            <input placeholder="Price" id="largeQuantity" name="largeQuantity" type="text" value="<%= product.sizes.large.quantity %>" class="form-control mt-2">
-                                            <p id="error4" style="display: none; color: red;"></p>
-                                        </div>
-                                    </div>
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary" onclick="debugForm()">update</button>
-                                    </div>
-                                </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                            <div class="input-upload">
+                                <div id="newImagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                                <!-- <input name="newImages" id="newImageInput" class="form-control" type="file" multiple accept="image/jpeg,image/png,image/webp"> -->
+                                <p id="error-new-images" class="error">Please upload up to 3 new images (JPEG/PNG/WebP, max 5MB each).</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h4>Media</h4>
-                            </div>
-                            <div class="card-body">
-                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                    <% if (product.images && product.images.length > 0) { %>
-                                      <% product.images.forEach((image, index) => { %>
-                                        <div id="image-container-<%= index %>" class="image-container">
-                                          <img id="image-prev-<%= index %>" src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= image %>" style="max-width: 100px; margin: 5px;" alt="Product Image">
-                                          <button class="btn btn-warning" type="button" onclick="replaceImage('<%= index %>', '<%= image %>')">Replace</button>
-                                          <div id="replace-input-<%= index %>" style="display: none;">
-                                            <input type="file" id="replace-file-<%= index %>" name="replaceImage[<%= index %>]" accept="image/*" onchange="openCropper('<%= index %>', this)">
-                                            <p id="error-<%= index %>" style="display: none; color: red;"></p>
-                                          </div>
-                                        </div>
-                                      <% }) %>
-                                    <% } else { %>
-                                      <p>No images available.</p>
-                                    <% } %>
-                                </div>
-                                <!-- <div class="input-upload">
-                                    <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
-                                    <input name="image" id="imageInput" class="form-control" type="file" multiple>
-                                    <p id="error9" style="display: none; color: red;"></p>
-                                </div> -->
-                            </div>
-                        </div>
+                    <!--  -->
+                    <div class="d-grid col-lg-6">
+                        <button type="submit" class="btn btn-primary">Update Product</button>
                     </div>
+                </div>
                 </form>
                 <!-- Cropping Modal -->
-                <div id="cropper-modal" style="display: none; position: fixed; top: 0; left: 0; width: 120%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100;">
-                    <div style="background: white; margin: 1% auto; padding: 20px; width: 120%; max-width: 300px;">
+                <div id="cropper-modal">
+                    <div class="cropper-container">
                         <h3>Crop Image</h3>
-                        <img id="cropper-image" style="max-width: 80%;">
+                        <img id="cropper-image" style="max-width: 100%;">
                         <div style="margin-top: 10px;">
                             <button type="button" class="btn btn-primary" onclick="cropImage()">Crop</button>
                             <button type="button" class="btn btn-secondary" onclick="closeCropper()">Cancel</button>
@@ -266,14 +327,10 @@
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©, STAG MEN FASHION .
+                    <script>document.write(new Date().getFullYear())</script> ©, STAG MEN FASHION.
                 </div>
                 <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
+                    <div class="text-sm-end">All rights reserved</div>
                 </div>
             </div>
         </footer>
@@ -283,80 +340,124 @@
     <script src="/adminassets/js/vendors/select2.min.js"></script>
     <script src="/adminassets/js/vendors/perfect-scrollbar.js"></script>
     <script src="/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Cropper.js Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <!-- Main Script -->
     <script src="/adminassets/js/main.js" type="text/javascript"></script>
-    
     <script>
         let cropper;
-        let currentIndex;
+        let croppedFiles = [];
+        let filesToCrop = [];
+        let currentFileIndex = 0;
+        let isReplacing = false;
+        let replaceIndex;
 
-        function replaceImage(index, imageUrl) {
-            const imagePrev = document.getElementById(`image-prev-${index}`);
-            const replaceButton = document.getElementById(`image-container-${index}`)?.querySelector('button');
-            const replaceInput = document.getElementById(`replace-input-${index}`);
+        const newImageInput = document.getElementById('newImageInput');
+        const newImagePreviewContainer = document.getElementById('newImagePreviewContainer');
+        const form = document.getElementById('pdtform');
 
-            if (!imagePrev || !replaceButton || !replaceInput) {
-                console.error('Missing elements:', {
-                    imagePrev: !imagePrev,
-                    replaceButton: !replaceButton,
-                    replaceInput: !replaceInput,
-                });
+        $(document).ready(function() {
+            $('#product_category').select2();
+            $('#brand').select2();
+        });
+
+        // Handle new image uploads
+        newImageInput.addEventListener('change', (event) => {
+            isReplacing = false;
+            newImagePreviewContainer.innerHTML = '';
+            croppedFiles = [];
+            filesToCrop = Array.from(event.target.files);
+            const errorNewImages = document.getElementById('error-new-images');
+
+            if (filesToCrop.length > 3) {
+                errorNewImages.textContent = 'You can upload a maximum of 3 new images.';
+                errorNewImages.style.display = 'block';
+                newImageInput.value = '';
+                filesToCrop = [];
                 return;
             }
 
-            imagePrev.style.display = 'none';
-            replaceButton.style.display = 'none';
-            replaceInput.style.display = 'block';
+            for (let file of filesToCrop) {
+                if (!file.type.match('image/(jpeg|png|webp)')) {
+                    errorNewImages.textContent = 'Only JPEG, PNG, or WebP images are allowed.';
+                    errorNewImages.style.display = 'block';
+                    newImageInput.value = '';
+                    filesToCrop = [];
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    errorNewImages.textContent = 'Each image must be less than 5MB.';
+                    errorNewImages.style.display = 'block';
+                    newImageInput.value = '';
+                    filesToCrop = [];
+                    return;
+                }
+            }
 
-            const hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'removeImages[]';
-            hiddenInput.value = imageUrl;
-            hiddenInput.id = `remove-image-${index}`;
-            document.getElementById(`image-container-${index}`).appendChild(hiddenInput);
-  
+            errorNewImages.style.display = 'none';
+            if (filesToCrop.length > 0) {
+                currentFileIndex = 0;
+                cropNextImage();
+            }
+        });
+
+        function replaceImage(index) {
+            isReplacing = true;
+            replaceIndex = index;
+            document.getElementById(`image-prev-${index}`).style.display = 'none';
+            document.getElementById(`image-container-${index}`).querySelector('button').style.display = 'none';
+            document.getElementById(`replace-input-${index}`).style.display = 'block';
         }
 
         function openCropper(index, input) {
             const file = input.files[0];
             if (file) {
-                if (!file.type.startsWith('image/')) {
-                    document.getElementById(`error-${index}`).style.display = 'block';
-                    document.getElementById(`error-${index}`).textContent = 'Please upload an image file.';
+                const errorElement = document.getElementById(`error-replace-${index}`);
+                if (!file.type.match('image/(jpeg|png|webp)')) {
+                    errorElement.textContent = 'Only JPEG, PNG, or WebP images are allowed.';
+                    errorElement.style.display = 'block';
                     input.value = '';
                     return;
                 }
                 if (file.size > 5 * 1024 * 1024) {
-                    document.getElementById(`error-${index}`).style.display = 'block';
-                    document.getElementById(`error-${index}`).textContent = 'Image size must be less than 5MB.';
+                    errorElement.textContent = 'Image must be less than 5MB.';
+                    errorElement.style.display = 'block';
                     input.value = '';
                     return;
                 }
 
-                currentIndex = index;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const cropperImage = document.getElementById('cropper-image');
-                    cropperImage.src = e.target.result;
-                    document.getElementById('cropper-modal').style.display = 'block';
-
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-                    cropper = new Cropper(cropperImage, {
-                        aspectRatio: 1, 
-                        viewMode: 1,
-                        autoCropArea: 0.8,
-                        movable: true,
-                        zoomable: true,
-                        scalable: true,
-                    });
-                };
-                reader.readAsDataURL(file);
-                document.getElementById(`error-${index}`).style.display = 'none';
+                filesToCrop = [file];
+                currentFileIndex = 0;
+                replaceIndex = index;
+                cropNextImage();
             }
+        }
+
+        function cropNextImage() {
+            if (currentFileIndex >= filesToCrop.length) {
+                if (!isReplacing) updateNewImageInput();
+                return;
+            }
+
+            const file = filesToCrop[currentFileIndex];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const cropperImage = document.getElementById('cropper-image');
+                cropperImage.src = e.target.result;
+                document.getElementById('cropper-modal').style.display = 'flex';
+
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 0.8,
+                    minCropBoxWidth: 200,
+                    minCropBoxHeight: 200,
+                    movable: true,
+                    zoomable: true,
+                    scalable: true,
+                    background: false,
+                });
+            };
+            reader.readAsDataURL(file);
         }
 
         function cropImage() {
@@ -364,22 +465,25 @@
                 cropper.getCroppedCanvas({
                     width: 600,
                     height: 600,
+                    imageSmoothingQuality: 'high',
                 }).toBlob((blob) => {
-                    const previewContainer = document.getElementById(`replace-input-${currentIndex}`);
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(blob);
-                    img.style.maxWidth = '100px';
-                    img.style.margin = '5px';
-                    previewContainer.prepend(img);
-
-                    // Create a File object from the blob
-                    const croppedFile = new File([blob], `cropped-${currentIndex}.jpg`, { type: 'image/jpeg' });
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(croppedFile);
-                    document.getElementById(`replace-file-${currentIndex}`).files = dataTransfer.files;
-
+                    const croppedFile = new File([blob], `cropped-${currentFileIndex}.jpg`, { type: 'image/jpeg' });
+                    if (isReplacing) {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(croppedFile);
+                        document.getElementById(`replace-file-${replaceIndex}`).files = dataTransfer.files;
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(croppedFile);
+                        img.style.maxWidth = '100px';
+                        img.style.margin = '5px';
+                        document.getElementById(`replace-input-${replaceIndex}`).prepend(img);
+                    } else {
+                        croppedFiles.push(croppedFile);
+                    }
+                    currentFileIndex++;
                     closeCropper();
-                }, 'image/jpeg', 0.8);
+                    cropNextImage();
+                }, 'image/jpeg', 0.9);
             }
         }
 
@@ -391,186 +495,132 @@
             }
         }
 
-        function previewNewImage(index, input) {
-            // This function is no longer used since cropping replaces it
-        }
+        function updateNewImageInput() {
+            const dataTransfer = new DataTransfer();
+            croppedFiles.forEach(file => dataTransfer.items.add(file));
+            newImageInput.files = dataTransfer.files;
 
-        const imageInput = document.getElementById('imageInput');
-        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-
-        if (imageInput && imagePreviewContainer) {
-            imageInput.addEventListener('change', (event) => {
-                imagePreviewContainer.innerHTML = '';
-                const files = event.target.files;
-                if (files.length > 3) {
-                    document.getElementById('error9').style.display = 'block';
-                    document.getElementById('error9').textContent = 'You can upload a maximum of 3 images.';
-                    imageInput.value = '';
-                    return;
-                }
-                for (const file of files) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.maxWidth = '100px';
-                        img.style.margin = '5px';
-                        imagePreviewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                }
-                document.getElementById('error9').style.display = 'none';
+            newImagePreviewContainer.innerHTML = '';
+            croppedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = `Cropped Image ${index + 1}`;
+                    img.style.cursor = 'pointer';
+                    img.title = 'Click to re-crop';
+                    img.onclick = () => reCropImage(index);
+                    newImagePreviewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
             });
         }
 
-        function debugForm() {
-            const form = document.querySelector('form');
-            const formData = new FormData(form);
-  
-            for (const [key, value] of formData.entries()) {
-                console.log(`${key}:`, value instanceof File ? value.name : value);
-            }
+        function reCropImage(index) {
+            currentFileIndex = index;
+            filesToCrop = [croppedFiles[index]];
+            croppedFiles.splice(index, 1);
+            cropNextImage();
         }
 
-        const pdtname = document.getElementById('pdtname');
-        const pdtdes = document.getElementById('pdtdes');
-        const regprice = document.getElementById('regprice');
-        const saleprice = document.getElementById('saleprice');
-        const squantity = document.getElementById('squantity');
-        const mquantity = document.getElementById('mquantity');
-        const lquantity = document.getElementById('lquantity');
-        const image = document.getElementById('imageInput');
-        const img = document.getElementById('imagePreviewContainer');
+        // Form Validation
+        form.addEventListener('submit', (e) => {
 
-        const error1 = document.getElementById('error1');
-        const error2 = document.getElementById('error2');
-        const error3 = document.getElementById('error3');
-        const error4 = document.getElementById('error4');
-        const error5 = document.getElementById('error5');
-        const error6 = document.getElementById('error6');
-        const error7 = document.getElementById('error7');
-        const error8 = document.getElementById('error8');
-        const error9 = document.getElementById('error9');
-
-        const pdtform = document.getElementById('pdtform');
-
-        function validateProduct(e) {
-            const nameval = pdtname.value;
-            const namePattern = /^[a-zA-Z][a-zA-Z]*$/;
-            if (nameval === "") {
-                error1.style.display = "block";
-                error1.innerHTML = "Please Enter a valid name.";
-            } else if (namePattern.test(nameval)) {
-                error1.style.display = "block";
-                error1.innerHTML = "Invalid format for the Name. First letter should be capital.";
-            } else {
-                error1.style.display = "none";
-                error1.innerHTML = "";
+            if (validateForm()) {
+                form.submit();
             }
-        }
+        });
 
-        function validatePdtdes(e) {
-            const catdesval = pdtdes.value.trim();
-            if (catdesval === "") {
-                error2.style.display = 'block';
-                error2.innerHTML = 'description is required';
-            } else {
-                error2.style.display = 'none';
-                error2.innerHTML = '';
+        function validateForm() {
+            let isValid = true;
+            clearErrors();
+
+            const pdtName = document.getElementById('pdtname').value.trim();
+            const nameRegex = /^[a-zA-Z0-9\s]{3,50}$/;
+            if (!pdtName || !nameRegex.test(pdtName)) {
+                showError('error-name', 'Product name is required and must be 3-50 characters (letters, numbers, spaces only).');
+                isValid = false;
             }
-        }
 
-        function validateRegPrice(e) {
-            const regPval = regprice.value;
-            const rpPattern = /^(?!-)\d+$/;
-            if (!rpPattern.test(regPval)) {
-                error3.style.display = 'block';
-                error3.innerHTML = 'Invalid!!';
-            } else {
-                error3.style.display = 'none';
-                error3.innerHTML = '';
+            const category = document.getElementById('product_category').value;
+            if (!category) {
+                showError('error-category', 'Please select a category.');
+                isValid = false;
             }
-        }
 
-        function validateSalePrice(e) {
-            const salePval = saleprice.value;
-            const spPattern = /^(?!-)\d+$/;
-            if (!spPattern.test(salePval)) {
-                error4.style.display = 'block';
-                error4.innerHTML = 'Invalid!!';
-            } else {
-                error4.style.display = 'none';
-                error4.innerHTML = '';
+            const brand = document.getElementById('brand').value;
+            if (!brand) {
+                showError('error-brand', 'Please select a brand.');
+                isValid = false;
             }
-        }
 
-        let isChecked = false;
-        if (mquantity) {
-            mquantity.addEventListener('click', (e) => {
-                if (isChecked) {
-                    mquantity.checked = false;
-                    isChecked = false;
-                } else {
-                    isChecked = true;
+            const description = document.getElementById('pdtdes').value.trim();
+            if (!description || description.length < 10 || description.length > 500) {
+                showError('error-description', 'Description is required and must be 10-500 characters.');
+                isValid = false;
+            }
+
+            const sizes = ['small', 'medium', 'large', 'xl'];
+            let atLeastOneSizeValid = false;
+
+            sizes.forEach(size => {
+                const capitalizedSize = size.charAt(0).toUpperCase() + size.slice(1).toLowerCase();
+                const mrpElement = document.getElementById(`MaxPrice${capitalizedSize}`);
+                const salesElement = document.getElementById(`SalesPrice${capitalizedSize}`);
+                const stockElement = document.getElementById(`Stock${capitalizedSize}`);
+
+                const mrp = mrpElement.value;
+                const sales = salesElement.value;
+                const stock = stockElement.value;
+
+                let sizeValid = true;
+
+                if (mrp || sales || stock) {
+                    if (!mrp || isNaN(mrp) || mrp <= 0) {
+                        showError(`error-mrp-${size}`, 'MRP must be a positive number.');
+                        sizeValid = false;
+                    }
+                    if (!sales || isNaN(sales) || sales <= 0) {
+                        showError(`error-sales-${size}`, 'Sales Price must be a positive number.');
+                        sizeValid = false;
+                    } else if (parseFloat(sales) > parseFloat(mrp)) {
+                        showError(`error-sales-${size}`, 'Sales Price cannot be greater than MRP.');
+                        sizeValid = false;
+                    }
+                    if (!stock || isNaN(stock) || stock < 0 || !Number.isInteger(parseFloat(stock))) {
+                        showError(`error-stock-${size}`, 'Stock must be a non-negative integer.');
+                        sizeValid = false;
+                    }
+
+                    if (!sizeValid) {
+                        showError(`error-size-${size}`, `Please provide valid MRP, Sales Price, and Stock for ${capitalizedSize} size.`);
+                        isValid = false;
+                    } else {
+                        atLeastOneSizeValid = true;
+                    }
                 }
             });
-        }
 
-        let sisChecked = false;
-        if (squantity) {
-            squantity.addEventListener('click', (e) => {
-                if (sisChecked) {
-                    squantity.checked = false;
-                    sisChecked = false;
-                } else {
-                    sisChecked = true;
-                }
-            });
-        }
-
-        let lisChecked = false;
-        if (lquantity) {
-            lquantity.addEventListener('click', (e) => {
-                if (lisChecked) {
-                    lquantity.checked = false;
-                    lisChecked = false;
-                } else {
-                    lisChecked = true;
-                }
-            });
-        }
-
-        function validateBothPrice(e) {
-            const regularP = parseFloat(regprice.value);
-            const saleP = parseFloat(saleprice.value);
-            if (regularP < saleP) {
-                error8.style.display = 'block';
-                error8.innerHTML = 'Regular price must be greater than sale price';
-            } else {
-                error8.style.display = 'none';
-                error8.innerHTML = '';
+            if (!atLeastOneSizeValid) {
+                sizes.forEach(size => {
+                    showError(`error-size-${size}`, 'At least one size must have valid MRP, Sales Price, and Stock.');
+                });
+                isValid = false;
             }
+
+            return isValid;
         }
 
-        if (pdtname) pdtname.addEventListener('blur', validateProduct);
-        if (pdtdes) pdtdes.addEventListener('blur', validatePdtdes);
-        if (regprice) {
-            regprice.addEventListener('blur', validateRegPrice);
-            regprice.addEventListener('blur', validateBothPrice);
+        function showError(id, message) {
+            const errorElement = document.getElementById(id);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
         }
-        if (saleprice) saleprice.addEventListener('blur', validateSalePrice);
 
-        if (pdtform) {
-            pdtform.addEventListener('submit', function (e) {
-                validateProduct();
-                validatePdtdes();
-                validateRegPrice();
-                validateSalePrice();
-                validateBothPrice();
-
-                if (error1.innerHTML || error2.innerHTML || error3.innerHTML || error4.innerHTML || error5.innerHTML || error6.innerHTML || error7.innerHTML || error8.innerHTML || error9.innerHTML) {
-                    e.preventDefault();
-                }
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
             });
         }
     </script>

@@ -130,7 +130,7 @@
                                     <p class="product-price mb-0">₹<%= Math.round((element.sizes.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes.small.Mrp %>.00 <% if (element.sizes?.small?.amount) { %>
                                      <span class="text-decoration-line-through text-muted fs-6">₹<%= element.sizes.small.Mrp %>.00</span>
                                     <% } %></p>
-                                    <a href="login" class="product-wishlist" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
+                                    <a href="login" class="product-wishlist wishlist-icon" data-id="<%= element._id %>" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -153,21 +153,24 @@
                 </div>
                
                 <div class="row">
-                    <% products.slice(4,8).forEach(element => { %>
+                    <!-- Product 1 -->
+                    <% products.forEach(element => { %>
                     <div class="col-6 col-md-3 mb-4">
                         <div class="product-card">
+                            <a href="products">
                             <div class="product-image">
-                                <a href="products">
-                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Navy Blue T-Shirt" class="img-fluid">
-                                </a>
-                                <div class="product-badge bg-success text-white pillHigh">New</div>
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
+                                <% if (element.sizes?.small?.amount) { %>
+                                 <div class="product-badge bg-danger text-white pillHigh"><%= element.sizes.small.amount %>% Offer</div>
+                                <% } %>
                             </div>
+                            </a>
                             <div class="product-info pt-3">
                                 <a href="products">
-                                <h5 class="product-title"><%= element.name %></h5>
+                                    <h5 class="product-title"><%= element.name %></h5>
                                 </a>
-                                <p class="product-brand text-muted mb-1"><%= element.brand %></p>
-                                <div class="rating-container mb-3">
+                                <p class="product-brand text-muted "><%= element.brand%></p>
+                                <div class="rating-container mt-0">
                                     <div class="star-rating" id="starRating">
                                         <span class="star" data-value="1">&#9733;</span>
                                         <span class="star" data-value="2">&#9733;</span>
@@ -178,8 +181,10 @@
                                     <input type="hidden" name="rating" id="ratingValue" value="0">
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="product-price mb-0">₹<%= element.sizes.small.Mrp %>.00</p>
-                                    <a href="login" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
+                                    <p class="product-price mb-0">₹<%= Math.round((element.sizes.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes.small.Mrp %>.00 <% if (element.sizes?.small?.amount) { %>
+                                     <span class="text-decoration-line-through text-muted fs-6">₹<%= element.sizes.small.Mrp %>.00</span>
+                                    <% } %></p>
+                                    <a href="login" class="product-wishlist wishlist-icon" data-id="<%= element._id %>" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -306,119 +311,44 @@
                 <a href="category.html" class="btn btn-outline-dark">View All</a>
             </div>
             <div class="row">
-                <!-- Product 1 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/img/product/product-11.jpg" alt="Cashmere Scarf" class="img-fluid">
-                           
-                            <div class="product-badge bg-dark text-white pillHigh">Trending</div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Cashmere Scarf</h5>
-                            <p class="product-brand text-muted mb-1">Burberry</p>
-                            <div class="rating-container mb-3">
-                                <div class="star-rating" id="starRating">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
-                                </div>
-                                <input type="hidden" name="rating" id="ratingValue" value="0">
+                    <!-- Product 1 -->
+                    <% products.forEach(element => { %>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="product-card">
+                            <a href="products">
+                            <div class="product-image">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
+                                <% if (element.sizes?.small?.amount) { %>
+                                 <div class="product-badge bg-danger text-white pillHigh"><%= element.sizes.small.amount %>% Offer</div>
+                                <% } %>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="product-price mb-0">$129.00</p>
-                                <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
+                            </a>
+                            <div class="product-info pt-3">
+                                <a href="products">
+                                    <h5 class="product-title"><%= element.name %></h5>
+                                </a>
+                                <p class="product-brand text-muted "><%= element.brand%></p>
+                                <div class="rating-container mt-0">
+                                    <div class="star-rating" id="starRating">
+                                        <span class="star" data-value="1">&#9733;</span>
+                                        <span class="star" data-value="2">&#9733;</span>
+                                        <span class="star" data-value="3">&#9733;</span>
+                                        <span class="star" data-value="4">&#9733;</span>
+                                        <span class="star" data-value="5">&#9733;</span>
+                                    </div>
+                                    <input type="hidden" name="rating" id="ratingValue" value="0">
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="product-price mb-0">₹<%= Math.round((element.sizes.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes.small.Mrp %>.00 <% if (element.sizes?.small?.amount) { %>
+                                     <span class="text-decoration-line-through text-muted fs-6">₹<%= element.sizes.small.Mrp %>.00</span>
+                                    <% } %></p>
+                                    <a href="login" class="product-wishlist wishlist-icon" data-id="<%= element._id %>" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <% }) %>
                 </div>
-                <!-- Product 2 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/img/product/product-11.jpg" alt="Leather Sneakers" class="img-fluid">
-                            
-                            <div class="product-badge bg-dark text-white pillHigh">Trending</div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Leather Sneakers</h5>
-                            <p class="product-brand text-muted mb-1">Gucci</p>
-                            <div class="rating-container mb-3">
-                                <div class="star-rating" id="starRating">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
-                                </div>
-                                <input type="hidden" name="rating" id="ratingValue" value="0">
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="product-price mb-0">$349.00</p>
-                                <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 3 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/img/product/product-11.jpg" alt="Silk Blouse" class="img-fluid">
-                            
-                            <div class="product-badge bg-dark text-white pillHigh">Trending</div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Silk Blouse</h5>
-                            <p class="product-brand text-muted mb-1">Prada</p>
-                            <div class="rating-container mb-3">
-                                <div class="star-rating" id="starRating">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
-                                </div>
-                                <input type="hidden" name="rating" id="ratingValue" value="0">
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="product-price mb-0">$179.00</p>
-                                <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 4 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/img/product/product-11.jpg" alt="Designer Sunglasses" class="img-fluid">
-                            
-                            <div class="product-badge bg-dark text-white pillHigh">Trending</div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Designer Sunglasses</h5>
-                            <p class="product-brand text-muted mb-1">Ray-Ban</p>
-                            <div class="rating-container mb-3">
-                                <div class="star-rating" id="starRating">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
-                                </div>
-                                <input type="hidden" name="rating" id="ratingValue" value="0">
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="product-price mb-0">$149.00</p>
-                                <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -493,19 +423,71 @@
     <script src="js/script.js"></script>
     <script>
         // Toggle wishlist heart icon
-        function toggleWishlist(element, event) {
+        // Toggle wishlist heart icon
+        document.addEventListener('DOMContentLoaded', restoreWishlistIcons);
+        function toggleWishlist(element, event, id) {
             event.preventDefault();
             const icon = element.querySelector('i');
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                icon.style.color = '#dc3545';
+
+            // Check if item is already in wishlist (from localStorage)
+            const isInWishlist = localStorage.getItem(`wishlist_${id}`) === 'true';
+
+            if (!isInWishlist) {
+                // Add to wishlist
+                fetch(`/wishlist/add/${id}`, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || "", "success");
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = '#dc3545';
+
+                        // Save state
+                        localStorage.setItem(`wishlist_${id}`, 'true');
+                    }
+                });
             } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                icon.style.color = '';
+                // Remove from wishlist
+                fetch(`/wishlist/remove/${id}`, {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || "", "success");
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '';
+
+                        // Remove state
+                        localStorage.setItem(`wishlist_${id}`, 'false');
+                    }
+                });
             }
         }
+        function restoreWishlistIcons() {
+            const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+
+            wishlistIcons.forEach(iconWrapper => {
+                const icon = iconWrapper.querySelector('i');
+                const productId = iconWrapper.dataset.id;
+
+                if (localStorage.getItem(`wishlist_${productId}`) === 'true') {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    icon.style.color = '#dc3545';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    icon.style.color = '';
+                }
+            });
+        }
+
+
         
             // const stars = document.querySelectorAll('#starRating .star');
             // const ratingValue = document.getElementById('ratingValue');

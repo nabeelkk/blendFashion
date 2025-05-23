@@ -439,9 +439,9 @@
 
                                         <a href="/productDetails/<%= elements._id %>" class="btn btn-sm btn-dark">View</a>
                                     </div>
-                                    <% if (elements.offerPrice) { %>
-                                    <div class="product-badge bg-danger text-white"><%= element.offerPrice %></div>
-                                    <% } %>
+                                    <% if (elements.sizes?.small?.amount || elements.sizes?.medium?.amount || elements.sizes?.large?.amount || elements.sizes?.XL?.amount) { %>
+                                 <div class="product-badge bg-danger text-white pillHigh"><%= elements.sizes.small.amount %>% Offer</div>
+                                <% } %>
                                 </div>
                                 <div class="product-info p-3">
                                     <h5 class="product-title mb-1">
@@ -459,7 +459,9 @@
                                         <input type="hidden" name="rating" id="ratingValue" value="0">
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <p class="product-price mb-0">₹ <%= elements.sizes.small.amount %> <span class="text-decoration-line-through text-muted fs-6">₹ <%= elements.sizes.small.Mrp?elements.sizes.small.Mrp:0.00 %></span></p>
+                                        <p class="product-price mb-0">₹ <%= Math.round((elements.sizes.small.Mrp - (elements.sizes?.small?.Mrp * elements.sizes?.small?.amount) / 100)) || elements.sizes.small.Mrp %> <% if (elements.sizes?.small?.amount) { %>
+                                     <span class="text-decoration-line-through text-muted fs-6">₹<%= elements.sizes.small.Mrp %>.00</span>
+                                    <% } %></p>
                                         <a href="#" class="product-wishlist wishlist-icon" data-id="<%= elements._id %>" onclick="toggleWishlist(this, event,'<%=elements._id%>')"><i class="far fa-heart"></i></a>
                                     </div>
                                     <p class="product-description mt-3">Crafted from premium Egyptian cotton, this luxurious shirt offers exceptional comfort and a sophisticated look.</p>

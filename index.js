@@ -19,7 +19,7 @@ const Razorpay = require('razorpay')
 
 
 
-const port = 5000||process.env.PORT;
+const port = 5001||process.env.PORT;
 const app = express();
 
 connectDb();

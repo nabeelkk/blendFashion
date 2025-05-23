@@ -53,7 +53,6 @@
                     </a>
                     <div class="submenu">
                         <a href="productList">Product List</a>
-                        <a href="productoffer">Product Offer</a>
                         <a href="categories">Categories</a>
                         <a href="categoryoffer">Category Offer</a>
                     </div>
@@ -152,6 +151,7 @@
                             <th scope="col">Product</th>
                             <th scope="col">MRP (XL)</th>
                             <th scope="col">Sales Price</th>
+                            <th scope="col">Offer</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Listed</th>
                             <th scope="col">Actions</th>
@@ -178,10 +178,11 @@
                             </td>
                             <div class="d-flex align-items-center">
                                 <td style="margin-top: -40px;">
-                                    ₹<%= prod.sizes?.small?.Mrp || 'N/A' %>
+                                    ₹<%= prod.sizes?.small?.Mrp || 0 %>
                                 </td>
-                                <td>₹<%= prod.sizes?.small?.amount || 'N/A' %></td>
-                                <td><%= prod.sizes?.small?.quantity || 'N/A' %></td>
+                                <td>₹<%= Math.round((prod.sizes.small.Mrp - (prod.sizes?.small?.Mrp * prod.sizes?.small?.amount) / 100))  || 0 %></td>
+                                <td><%= prod.sizes.small.amount %>%</td>
+                                <td><%= prod.sizes?.small?.quantity || 0 %></td>
                                 <td>
                                     <% if (prod.isListed) { %>
                                         <span class="badge bg-success">Listed</span>

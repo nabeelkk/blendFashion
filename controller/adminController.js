@@ -31,7 +31,8 @@ const adminLogin = async(req,res)=>{
         const admin = await Admin.findOne({email});
 
         if(!admin) return res.redirect('/admin/login?error=Admin%20not%20found');
-       
+        const hashed = await bcrypt.hash(password,10)
+        console.log(hashed)
         const isMatch = await bcrypt.compare(password,admin.password)
         if(!isMatch) return res.redirect('/admin/login?error=Invalid%20Credential');
         
@@ -114,7 +115,7 @@ const getProducts =async (req,res)=>{
     try {
         const search = req.query.search || '';
         const page = req.query.page || 1;
-        const limit = 10;
+        const limit = 6;
         const cloudName = process.env.CLOUDINARY_NAME;
         const query={
             isdeleted:false,
@@ -125,16 +126,23 @@ const getProducts =async (req,res)=>{
         const total = await Product.countDocuments(query);
         const totalPage = Math.ceil(total/limit);
         
-
+        
         const product = await Product.find(query)
         .sort({createdAt:-1})
         .skip((page - 1)*limit)
         .limit(limit)
         .populate("category");
+        let salePrice =0;
+        let offer = 0
+        for(let prod of product){
+             offer = prod.sizes.small?.amount ? prod.sizes.small?.amount:0
+             salePrice =prod.sizes.small?.amount?(prod.sizes.small?.Mrp * prod.sizes.small?.amount)/100:prod.sizes.small?.Mrp 
+            
+        }
         
        
 
-        res.render('admin/productList',{totalPage,search,page,product,cloudName})
+        res.render('admin/productList',{totalPage,search,page,product,cloudName,salePrice,offer})
 
 
     } catch (error) {
@@ -162,7 +170,8 @@ const getAddProduct = async (req, res) => {
         const brands = await Brand.find({ isListed: true });
         const sizeError = req.query.errorsize;
         const imageError = req.query.errorimage;
-        res.render('admin/addProduct', { category: categories, sizeError, imageError, brand: brands });
+        const error = req.query.error;
+        res.render('admin/addProduct', { category: categories, sizeError, imageError, brand: brands,error });
     } catch (error) {
         console.error('Error in getAddProduct:', error);
         res.status(500).send('Internal server error');
@@ -184,7 +193,7 @@ const addProducts = async (req, res) => {
         console.log(req.body)
 
         if (!name || !description || !category) {
-            return res.redirect('/admin/addProducts?errorsize=Please%20fill%20all%20required%20fields%20(name,%20description,%20category,%20brand)');
+            return res.redirect('/admin/addProducts?errorsize=Please%20fill%20all%20required%20fields%20(name,%20description,%20category)');
         }
 
         const sizes = {
@@ -213,7 +222,7 @@ const addProducts = async (req, res) => {
 
         const hasValidSize = Object.values(sizes).some(size => size !== null);
         if (!hasValidSize) {
-            return res.redirect('/admin/addProducts?errorsize=At%20least%20one%20size%20(small,%20medium,%20or%20large%20Xl)%20must%20be%20provided%20with%20valid%20MRP,%20Sales%20Price,%20and%20Stock');
+            return res.redirect('/admin/addProducts?errorsize=At%20least%20one%20size%20(small,%20medium,%20or%20large%20Xl)%20must%20be%20provided%20with%20valid%20MRP,%20Offer,%20and%20Stock');
         }
 
         for (const size of ['small', 'medium', 'large']) {
@@ -222,10 +231,10 @@ const addProducts = async (req, res) => {
                     return res.redirect(`/admin/addProducts?errorsize=MRP%20for%20${size}%20must%20be%20a%20positive%20number`);
                 }
                 if (isNaN(sizes[size].amount) || sizes[size].amount <= 0) {
-                    return res.redirect(`/admin/addProducts?errorsize=Sales%20Price%20for%20${size}%20must%20be%20a%20positive%20number`);
+                    return res.redirect(`/admin/addProducts?errorsize=Offer%20for%20${size}%20must%20be%20a%20positive%20number`);
                 }
-                if (sizes[size].amount > sizes[size].Mrp) {
-                    return res.redirect(`/admin/addProducts?errorsize=Sales%20Price%20for%20${size}%20cannot%20be%20greater%20than%20MRP`);
+                if (sizes[size].amount > 99) {
+                    return res.redirect(`/admin/addProducts?errorsize=Offer%20for%20${size}%20cannot%20be%20greater%20than%2099`);
                 }
                 if (sizes[size].quantity < 0 || !Number.isInteger(sizes[size].quantity)) {
                     return res.redirect(`/admin/addProducts?errorsize=Stock%20for%20${size}%20must%20be%20a%20non-negative%20integer`);
@@ -309,8 +318,9 @@ const loadProduct = async(req,res)=>{
     const category = await Category.find({isListed:true})
     const brand = await Brand.find({isListed:true})
     const cloudName = process.env.CLOUDINARY_NAME;
+    const error = req.query.error
 
-    res.render('admin/editProduct',{product,category,cloudName,brand})
+    res.render('admin/editProduct',{product,category,cloudName,brand,error})
    } catch (error) {
     console.error(error);
     res.redirect('/admin/productList');
@@ -330,14 +340,13 @@ const editProduct = async (req, res) => {
             MRPXL, SalesPriceXL, StockXL
         } = req.body;
 
-        // Fetch the product
+
         const product = await Product.findById(req.params.id);
         if (!product) {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product not found')}`);
         }
 
-        // Validate basic fields
-        if (!name || !name.match(/^[a-zA-Z0-9\s]{3,50}$/)) {
+        if (!name || !name.match(/^[a-zA-Z0-9\s&]{3,50}$/)) {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product name must be 3-50 characters (letters, numbers, spaces only)')}`);
         }
 
@@ -376,10 +385,10 @@ const editProduct = async (req, res) => {
                     return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`MRP for ${size} must be a positive number`)}`);
                 }
                 if (isNaN(salesNum) || salesNum <= 0) {
-                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Sales Price for ${size} must be a positive number`)}`);
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Offer ${size} must be a positive number`)}`);
                 }
-                if (salesNum > mrpNum) {
-                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Sales Price for ${size} cannot be greater than MRP`)}`);
+                if (salesNum > 99) {
+                    return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Offer for ${size} cannot be greater than 100`)}`);
                 }
                 if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
                     return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Stock for ${size} must be a non-negative integer`)}`);
@@ -393,7 +402,7 @@ const editProduct = async (req, res) => {
         }
 
         if (!atLeastOneSizeProvided) {
-            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('At least one size must have valid MRP, Sales Price, and Stock')}`);
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('At least one size must have valid MRP, Offer, and Stock')}`);
         }
 
         // Handle images

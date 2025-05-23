@@ -183,7 +183,6 @@
                 </a>
                 <div class="submenu">
                     <a href="/admin/productList">Product List</a>
-                    <a href="productoffer">Product Offer</a>
                     <a href="/admin/categories">Categories</a>
                     <a href="/admin/categoryoffer">Category Offer</a>
                 </div>
@@ -365,6 +364,7 @@
                   <th>Size</th>
                   <th>MRP</th>
                   <th>Sales Price</th>
+                  <th>Offer</th>
                   <th>Quantity</th>
                   <th>Status</th>
                 </tr>
@@ -373,9 +373,10 @@
                 
                 <tr>
                   <td>Small</td>
-                  <td><%= product.sizes.small.Mrp || 0.00%></td>
-                  <td><%= product.sizes.small.amount || 0.00 %></td>
-                  <td><%= product.sizes.small.quantity || 0.00 %></td>
+                  <td>₹<%= product.sizes.small.Mrp || 0.00%></td>
+                  <td>₹<%= Math.round((product.sizes.small.Mrp - (product.sizes?.small?.Mrp * product.sizes?.small?.amount) / 100)) || 0.00 %></td>
+                  <td><%= product.sizes.small.amount  || 0.00 %>%</td>
+                  <td>₹<%= product.sizes.small.quantity || 0.00 %></td>
                   <td>
                    <% if (product.sizes.small.quantity>=1) { %>
                     <span class="badge bg-success">In Stock</span>
@@ -386,9 +387,10 @@
                 </tr>
                 <tr>
                     <td>Medium</td>
-                    <td><%= product.sizes.medium.Mrp || 0.00 %></td>
-                    <td><%= product.sizes.medium.amount || 0.00 %></td>
-                    <td><%= product.sizes.medium.quantity || 0.00 %></td>
+                    <td>₹<%= product.sizes.medium.Mrp || 0.00 %></td>
+                    <td>₹<%= Math.round((product.sizes.medium.Mrp - (product.sizes?.medium?.Mrp * product.sizes?.medium?.amount) / 100)) || 0.00 %></td>
+                    <td><%= product.sizes.medium.amount || 0.00 %>%</td>
+                    <td>₹<%= product.sizes.medium.quantity || 0.00 %></td>
                     <td>
                      <% if (product.sizes.medium.quantity>=1) { %>
                       <span class="badge bg-success">In Stock</span>
@@ -399,9 +401,10 @@
                   </tr>
                   <tr>
                     <td>Large</td>
-                    <td><%= product.sizes.large.Mrp || 0.00 %></td>
-                    <td><%= product.sizes.large.amount || 0.00 %></td>
-                    <td><%= product.sizes.large.quantity || 0.00 %></td>
+                    <td>₹<%= product.sizes.large.Mrp || 0.00 %></td>
+                    <td>₹<%= Math.round((product.sizes.large.Mrp - (product.sizes?.large?.Mrp * product.sizes?.large?.amount) / 100)) || 0.00 %></td>
+                    <td><%= product.sizes.large.amount || 0.00 %>%</td>
+                    <td>₹<%= product.sizes.large.quantity || 0.00 %></td>
                     <td>
                      <% if (product.sizes.large.quantity>=1) { %>
                       <span class="badge bg-success">In Stock</span>
@@ -412,9 +415,10 @@
                   </tr>
                   <tr>
                     <td>XL</td>
-                    <td><%= product.sizes.XL.Mrp || 0 %></td>
-                    <td><%= product.sizes.XL.amount || 0 %></td>
-                    <td><%= product.sizes.XL.quantity || 0 %></td>
+                    <td>₹<%= product.sizes.XL.Mrp || 0 %></td>
+                    <td>₹<%= Math.round((product.sizes.XL.Mrp - (product.sizes?.XL?.Mrp * product.sizes?.XL?.amount) / 100))  || 0.00 %></td>
+                    <td><%= product.sizes.XL.amount || 0 %>%</td>
+                    <td>₹<%= product.sizes.XL.quantity || 0 %></td>
                     <td>
                      <% if (product.sizes.XL.quantity>=1) { %>
                       <span class="badge bg-success">In Stock</span>

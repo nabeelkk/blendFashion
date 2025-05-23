@@ -91,7 +91,7 @@ const placeOrder = async(req,res)=>{
             }
 
             const sizePrice = product.sizes[size].amount;
-            const regularPrice = product.price.seller;
+            const regularPrice = product.sizes.small.Mrp;
 
             const itemTotal = sizePrice * item.quantity;
             const itemDiscount = req.session.user.discount ? req.session.user.discount :(regularPrice - sizePrice) * item.quantity;
@@ -319,7 +319,7 @@ const createRazorpayOrder = async (req, res) => {
             }
 
             const sizePrice = product.sizes[size].amount;
-            const regularPrice = product.price.seller;
+            const regularPrice = product.sizes.small.Mrp;
 
              itemDiscount = req.session.user.discount ? req.session.user.discount :(regularPrice - sizePrice) * item.quantity;
       return {
@@ -445,7 +445,7 @@ const handlePaymentSuccess = async (req, res) => {
       }
 
       const sizePrice = product.sizes[size].amount;
-      const regularPrice = product.price.seller;
+      const regularPrice = product.sizes.small.Mrp;
 
       itemDiscount = req.session.user.discount ? req.session.user.discount :(regularPrice - sizePrice) * item.quantity;
     }

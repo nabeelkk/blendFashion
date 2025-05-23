@@ -466,10 +466,11 @@
                 isValid = false;
 
             }
-            const addressVal = addressNameInput.value
-            if(addressVal == "Home" ||addressVal == "Office"||addressVal == "Work"){
+            const addressVal = addressNameInput.value // Home
+            console.log(addressVal !== "Home")
+            if(addressVal !== "Home" && addressVal !== "Office" && addressVal !== "Work"){
                 errorAddressName.style.display = 'block';
-                errorAddressName.textContent = 'Address must be Home or Work or Office ';
+                errorAddressName.textContent = 'Address must be Home or Work or Office,First letter should be capital';
                 isValid = false;
             }
             const phoneRegex = /^\d{10}$/;

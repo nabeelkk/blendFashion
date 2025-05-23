@@ -6,27 +6,38 @@ const offerSchema = new mongoose.Schema({
     enum: ['product', 'category'],
     required: true,
   },
-  productId: {
+
+  category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Products',
+    ref: 'Category',
     required: function () {
-      return this.type === 'product';
-    },
+      return this.type === 'category';
+    }
   },
+
   discount: {
     type: Number,
     required: true,
     min: 0,
     max: 100, 
   },
+
   startDate: {
     type: Date,
     required: true,
+    validate: {
+      validator: function (v) {
+        return v < this.endDate; 
+      },
+      message: 'Start date must be before end date'
+    }
   },
+
   endDate: {
     type: Date,
     required: true,
   },
+
   isActive: {
     type: Boolean,
     default: true,

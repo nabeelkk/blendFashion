@@ -30,14 +30,6 @@ router.post('/unblock/:id',authMiddleware,adminAuth,adminController.UnblockProdu
 router.post('/block/:id',authMiddleware,adminAuth,adminController.blockProduct)
 
 
-router.get('/productoffer',authMiddleware,adminAuth,offerController.productOffer)
-router.get('/getaddproduct',authMiddleware,adminAuth,offerController.getAddProduct)
-router.post('/getaddproduct',authMiddleware,adminAuth,offerController.postProductOffer);
-router.post('/deleteproductoffer/:id',adminAuth,offerController.deleteProductOffer)
-router.get('/editproductoffer/:id',authMiddleware,adminAuth,offerController.loadEditProductOffer)
-router.post('/editproductoffer/:id',authMiddleware,adminAuth,offerController.updateProductOffer)
-
-
 router.get('/categories',authMiddleware,adminAuth,adminController.getCategory)
 router.post('/categories',authMiddleware,adminAuth,adminController.category)
 router.get('/editCategory/:id',authMiddleware,adminAuth,adminController.getEditCategory)

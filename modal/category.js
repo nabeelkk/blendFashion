@@ -12,21 +12,6 @@ const categorySchema = new mongoose.Schema({
         required:true,
         trim:true
     },
-    offer:{
-        discount:{
-            type:Number
-        },
-        startDate:{
-            type:String
-        },
-        endDate:{
-            type:String
-        },
-        isActive:{
-            type:Boolean,
-            default:true
-        }
-    },
     isListed:{
         type:Boolean,
         default:true

@@ -459,8 +459,8 @@
                                         <input type="hidden" name="rating" id="ratingValue" value="0">
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <p class="product-price mb-0">₹ <%= elements.price.seller %> <span class="text-decoration-line-through text-muted fs-6">₹ <%= elements.price.regular %></span></p>
-                                        <a href="#" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
+                                        <p class="product-price mb-0">₹ <%= elements.sizes.small.amount %> <span class="text-decoration-line-through text-muted fs-6">₹ <%= elements.sizes.small.Mrp?elements.sizes.small.Mrp:0.00 %></span></p>
+                                        <a href="#" class="product-wishlist wishlist-icon" data-id="<%= elements._id %>" onclick="toggleWishlist(this, event,'<%=elements._id%>')"><i class="far fa-heart"></i></a>
                                     </div>
                                     <p class="product-description mt-3">Crafted from premium Egyptian cotton, this luxurious shirt offers exceptional comfort and a sophisticated look.</p>
                                     <div class="product-actions mt-3">
@@ -525,20 +525,72 @@
     <!-- Custom JS -->
     <script src="js/script.js"></script>
     <script>
+         document.addEventListener('DOMContentLoaded', restoreWishlistIcons);
+
         // Toggle wishlist heart icon
-        function toggleWishlist(element, event) {
+        function toggleWishlist(element, event, id) {
             event.preventDefault();
             const icon = element.querySelector('i');
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                icon.style.color = '#dc3545';
+
+            // Check if item is already in wishlist (from localStorage)
+            const isInWishlist = localStorage.getItem(`wishlist_${id}`) === 'true';
+
+            if (!isInWishlist) {
+                // Add to wishlist
+                fetch(`/wishlist/add/${id}`, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || "", "success");
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = '#dc3545';
+
+                        // Save state
+                        localStorage.setItem(`wishlist_${id}`, 'true');
+                    }
+                });
             } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                icon.style.color = '';
+                // Remove from wishlist
+                fetch(`/wishlist/remove/${id}`, {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || "", "success");
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '';
+
+                        // Remove state
+                        localStorage.setItem(`wishlist_${id}`, 'false');
+                    }
+                });
             }
         }
+        function restoreWishlistIcons() {
+            const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+
+            wishlistIcons.forEach(iconWrapper => {
+                const icon = iconWrapper.querySelector('i');
+                const productId = iconWrapper.dataset.id;
+
+                if (localStorage.getItem(`wishlist_${productId}`) === 'true') {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    icon.style.color = '#dc3545';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    icon.style.color = '';
+                }
+            });
+        }
+
+
         
         // Toggle size filter
         function toggleSizeFilter(element) {

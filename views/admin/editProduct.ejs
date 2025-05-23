@@ -110,6 +110,12 @@
             <br>
         </nav>
     </aside>
+    <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger alert-dismissible fade show" style="width: 50%; margin-left: 50%;"  role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
     <main class="main-wrap">
         <section class="content-main">
             <div class="row">
@@ -175,9 +181,9 @@
                                         <p id="error-mrp-small" class="error">MRP must be a positive number.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="SalesPriceSmall">Sales Price</label>
-                                        <input placeholder="Sales Price" id="SalesPriceSmall" name="SalesPriceSmall" type="number" min="0" class="form-control" value="<%= product.sizes.small ? product.sizes.small.amount : '' %>">
-                                        <p id="error-sales-small" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                        <label for="SalesPriceSmall">Offer </label>
+                                        <input placeholder="Offer %" id="SalesPriceSmall" name="SalesPriceSmall" type="number" min="0" class="form-control" value="<%= product.sizes.small ? product.sizes.small.amount : '' %>">
+                                        <p id="error-sales-small" class="error">Offer must be a positive number and less than 99.</p>
                                     </div>
                                     <div class="mb-3">
                                         <label for="StockSmall">Stock</label>
@@ -185,7 +191,7 @@
                                         <p id="error-stock-small" class="error">Stock must be a non-negative integer.</p>
                                     </div>
                                 </div>
-                                <p id="error-size-small" class="error">Please provide valid MRP, Sales Price, and Stock for Small size.</p>
+                                <p id="error-size-small" class="error">Please provide valid MRP, Offer, and Stock for Small size.</p>
                             </div>
                         </div>
                     </div>
@@ -204,9 +210,9 @@
                                         <p id="error-mrp-medium" class="error">MRP must be a positive number.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="SalesPriceMedium">Sales Price</label>
-                                        <input placeholder="Sales Price" id="SalesPriceMedium" name="SalesPriceMedium" type="number" min="0" class="form-control" value="<%= product.sizes.medium ? product.sizes.medium.amount : '' %>">
-                                        <p id="error-sales-medium" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                        <label for="SalesPriceMedium">Offer </label>
+                                        <input placeholder="Offer %" id="SalesPriceMedium" name="SalesPriceMedium" type="number" min="0" class="form-control" value="<%= product.sizes.medium ? product.sizes.medium.amount : '' %>">
+                                        <p id="error-sales-medium" class="error">Offer must be a positive number and less than 99.</p>
                                     </div>
                                     <div class="mb-3">
                                         <label for="StockMedium">Stock</label>
@@ -214,7 +220,7 @@
                                         <p id="error-stock-medium" class="error">Stock must be a non-negative integer.</p>
                                     </div>
                                 </div>
-                                <p id="error-size-medium" class="error">Please provide valid MRP, Sales Price, and Stock for Medium size.</p>
+                                <p id="error-size-medium" class="error">Please provide valid MRP, Offer, and Stock for Medium size.</p>
                             </div>
                         </div>
                     </div>
@@ -233,9 +239,9 @@
                                         <p id="error-mrp-large" class="error">MRP must be a positive number.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="SalesPriceLarge">Sales Price</label>
-                                        <input placeholder="Sales Price" id="SalesPriceLarge" name="SalesPriceLarge" type="number" min="0" class="form-control" value="<%= product.sizes.large ? product.sizes.large.amount : '' %>">
-                                        <p id="error-sales-large" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                        <label for="SalesPriceLarge">Offer </label>
+                                        <input placeholder="Offer %" id="SalesPriceLarge" name="SalesPriceLarge" type="number" min="0" class="form-control" value="<%= product.sizes.large ? product.sizes.large.amount : '' %>">
+                                        <p id="error-sales-large" class="error">Offer must be a positive number and less than 99.</p>
                                     </div>
                                     <div class="mb-3">
                                         <label for="StockLarge">Stock</label>
@@ -243,7 +249,7 @@
                                         <p id="error-stock-large" class="error">Stock must be a non-negative integer.</p>
                                     </div>
                                 </div>
-                                <p id="error-size-large" class="error">Please provide valid MRP, Sales Price, and Stock for Large size.</p>
+                                <p id="error-size-large" class="error">Please provide valid MRP, Offer, and Stock for Large size.</p>
                             </div>
                         </div>
                     </div>
@@ -258,13 +264,13 @@
                                 <div>
                                     <div class="mb-3">
                                         <label for="MaxPriceXl">MRP</label>
-                                        <input placeholder="MRP" id="MaxPriceXl" name="MRPXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL.Mrp? product.sizes.XL.Mrp : '' %>">
+                                        <input placeholder="MRP" id="MaxPriceXl" name="MRPXL" type="number" min="0" class="form-control" value="<%=product.sizes.XL ? product.sizes.XL.Mrp : '' %>">
                                         <p id="error-mrp-xl" class="error">MRP must be a positive number.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="SalesPriceXl">Sales Price</label>
-                                        <input placeholder="Sales Price" id="SalesPriceXl" name="SalesPriceXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL.amount ? product.sizes.XL.amount : '' %>">
-                                        <p id="error-sales-xl" class="error">Sales Price must be a positive number and not greater than MRP.</p>
+                                        <label for="SalesPriceXl">Offer </label>
+                                        <input placeholder="Offer %" id="SalesPriceXl" name="SalesPriceXL" type="number" min="0" class="form-control" value="<%= product.sizes.XL ? product.sizes.XL.amount : ''%>">
+                                        <p id="error-sales-xl" class="error">Offer must be a positive number and less than 99.</p>
                                     </div>
                                     <div class="mb-3">
                                         <label for="StockXl">Stock</label>
@@ -272,7 +278,7 @@
                                         <p id="error-stock-xl" class="error">Stock must be a non-negative integer.</p>
                                     </div>
                                 </div>
-                                <p id="error-size-xl" class="error">Please provide valid MRP, Sales Price, and Stock for XL size.</p>
+                                <p id="error-size-xl" class="error">Please provide valid MRP, Offer , and Stock for XL size.</p>
                             </div>
                         </div>
                     </div>
@@ -580,11 +586,8 @@
                         showError(`error-mrp-${size}`, 'MRP must be a positive number.');
                         sizeValid = false;
                     }
-                    if (!sales || isNaN(sales) || sales <= 0) {
-                        showError(`error-sales-${size}`, 'Sales Price must be a positive number.');
-                        sizeValid = false;
-                    } else if (parseFloat(sales) > parseFloat(mrp)) {
-                        showError(`error-sales-${size}`, 'Sales Price cannot be greater than MRP.');
+                    if (!sales || isNaN(sales) || sales <= 0 || sales >98) {
+                        showError(`error-sales-${size}`, 'Offer must be a positive number and less than 99.');
                         sizeValid = false;
                     }
                     if (!stock || isNaN(stock) || stock < 0 || !Number.isInteger(parseFloat(stock))) {
@@ -593,7 +596,7 @@
                     }
 
                     if (!sizeValid) {
-                        showError(`error-size-${size}`, `Please provide valid MRP, Sales Price, and Stock for ${capitalizedSize} size.`);
+                        showError(`error-size-${size}`, `Please provide valid MRP, Offer, and Stock for ${capitalizedSize} size.`);
                         isValid = false;
                     } else {
                         atLeastOneSizeValid = true;
@@ -603,7 +606,7 @@
 
             if (!atLeastOneSizeValid) {
                 sizes.forEach(size => {
-                    showError(`error-size-${size}`, 'At least one size must have valid MRP, Sales Price, and Stock.');
+                    showError(`error-size-${size}`, 'At least one size must have valid MRP, Offer, and Stock.');
                 });
                 isValid = false;
             }

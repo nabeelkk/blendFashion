@@ -9,7 +9,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styl1e.css">
+    <link rel="stylesheet" href="css/style1.css">
 </head>
 <body>
     <style>
@@ -106,15 +106,17 @@
                             <a href="products">
                             <div class="product-image">
                                 <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
-                                <!-- <div class="product-badge bg-danger text-white pillHigh">Offer 20%</div> -->
+                                <% if (element.sizes?.small?.amount) { %>
+                                 <div class="product-badge bg-danger text-white pillHigh"><%= element.sizes.small.amount %>% Offer</div>
+                                <% } %>
                             </div>
                             </a>
                             <div class="product-info pt-3">
                                 <a href="products">
                                     <h5 class="product-title"><%= element.name %></h5>
                                 </a>
-                                <p class="product-brand text-muted mb-1"><%= element.brand %></p>
-                                <div class="rating-container mb-3">
+                                <p class="product-brand text-muted "><%= element.brand%></p>
+                                <div class="rating-container mt-0">
                                     <div class="star-rating" id="starRating">
                                         <span class="star" data-value="1">&#9733;</span>
                                         <span class="star" data-value="2">&#9733;</span>
@@ -125,8 +127,10 @@
                                     <input type="hidden" name="rating" id="ratingValue" value="0">
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="product-price mb-0">₹<%= element.sizes.large.amount %>.00 <span class="text-decoration-line-through text-muted fs-6">₹<%= element.price.seller %>.00</span></p>
-                                    <a href="login" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
+                                    <p class="product-price mb-0">₹<%= Math.round((element.sizes.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes.small.Mrp %>.00 <% if (element.sizes?.small?.amount) { %>
+                                     <span class="text-decoration-line-through text-muted fs-6">₹<%= element.sizes.small.Mrp %>.00</span>
+                                    <% } %></p>
+                                    <a href="login" class="product-wishlist" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +178,7 @@
                                     <input type="hidden" name="rating" id="ratingValue" value="0">
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="product-price mb-0">₹<%= element.price.seller %>.00</p>
+                                    <p class="product-price mb-0">₹<%= element.sizes.small.Mrp %>.00</p>
                                     <a href="login" class="product-wishlist" onclick="toggleWishlist(this, event)"><i class="far fa-heart"></i></a>
                                 </div>
                             </div>

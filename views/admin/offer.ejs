@@ -44,7 +44,6 @@
                     </a>
                     <div class="submenu">
                         <a href="productList">Product List</a>
-                        <a href="productoffer">Product Offer</a>
                         <a href="categories">Categories</a>
                         <a href="categoryoffer">Category Offer</a>
                     </div>
@@ -161,15 +160,15 @@
                                     <% category.forEach(element => { %>                                 
                                     <tr>                                      
                                         <td><a href="" class=""><%= element.name %></a> </td>
-                                        <td><%= element.offer.startDate %></td>
+                                        <td>stdate</td>
                                         <td>
-                                            <%= element.offer.endDate %>
+                                            enddate
                                         </td>
                                         <td>
-                                           <%= element.offer.discount %>
+                                           discount
                                         </td>
                                         <td>
-                                          <% if (new Date(element.offer.startDate)>new Date()) { %>
+                                          <!-- <% if (new Date(element.offer.startDate)>new Date()) { %>
                                                 <span class="badge bg-success">Upcoming</span>
                                                 <% } else if (new Date(element.offer.endDate)<new Date()) { %>
                                                  <span class="badge bg-danger">expired</span>
@@ -177,7 +176,7 @@
                                                   <span class="badge bg-warning">Blocked</span>
                                                   <% } else { %>
                                                    <span class="badge bg-success">Active</span>
-                                          <% } %>
+                                          <% } %> -->
                                         </td>
                                         <td>
                                              <button onclick="deleteOffer('<%= element._id %>')" class="btn btn-md rounded font-sm">Delete</button>

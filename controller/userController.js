@@ -116,12 +116,12 @@ const verifyOtp = async (req, res) => {
             name: user.name,
             email: user.email
         };
-        await createReferral(user._id);
-        if (referralCode || referralToken) {
-            await handleReferralSignup({ body: { referralCode, referralToken }, session: { userId: user._id } }, res);
-        } else {
-            res.status(201).json({ message: 'User registered successfully' });
-        }
+        // await createReferral(user._id);
+        // if (referralCode || referralToken) {
+        //     await handleReferralSignup({ body: { referralCode, referralToken }, session: { userId: user._id } }, res);
+        // } else {
+            
+        // }
         return res.redirect('/login');
 
     } catch (error) {
@@ -155,7 +155,7 @@ const resendOtp = async(req,res)=>{
             subject:"You Otp for Signup",
             text:`Yout new Otp is ${newOtp}. It is Valid for 1 minute`
         })
-        res.redirect('/otp?message=OTP%20resent%20successfully')
+        return res.redirect('/otp?message=OTP%20resent%20successfully')
     } catch (error) {
         console.log('Resend otp side',error)
     }
@@ -328,21 +328,21 @@ const products = async (req, res) => {
         filter.category = { $in: categories };
       }
   
-      filter['price.seller'] = { 
+      filter['sizes.small.amount'] = { 
         $gte: Number(minPrice),
         $lte: Math.min(Number(maxPrice), Number.MAX_SAFE_INTEGER)
       };
   
       const sortOptions = {
-        lowToHigh: { 'price.seller': 1 },
-        highToLow: { 'price.seller': -1 },
+        lowToHigh: { 'sizes.small.amount': 1 },
+        highToLow: { 'sizes.small.amount': -1 },
         az: { name: 1 },
         za: { name: -1 },
         newest: { createdAt: -1 }
       };
       const sortQuery = sortOptions[sort] || {};
   
-      const limit = 10;
+      const limit = 6;
       const skip = (page - 1) * limit;
   
       const [totalProduct, productList] = await Promise.all([
@@ -353,7 +353,7 @@ const products = async (req, res) => {
           .limit(limit)
           .populate('category')
       ]);
-  
+      console.log(productList)
       const totalPage = Math.ceil(totalProduct / limit);
       const cloudName = process.env.CLOUDINARY_NAME;
   
@@ -644,29 +644,34 @@ const myCart = async (req, res) => {
 
         if (cart && cart.products.length > 0) {
             products = cart.products;
-
             products.forEach(prod => {
                 const product = prod.productId;
-                const category = product.category;
+                const category = prod.category;
+                const price = prod.price;
                 const quantity = prod.quantity;
-                const sellerPrice = product.price.seller;
+                const size = prod.size
+                console.log(price)
+                
+                const MRP = product.sizes[size].Mrp
 
-                totalMRP += sellerPrice * quantity;
+                totalMRP += MRP * quantity;
                 const today = new Date()
-                const productOffer = (product.offer?.isActive && product.offer?.discount && new Date(product.offer.startDate) <= today && new Date(product.offer.endDate) >= today ) ? product.offer.discount : 0;
+                const productOffer = product.sizes[size].Mrp - price
                 const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
 
                 appliedOffer = Math.max(productOffer, categoryOffer);
-
+                console.log(appliedOffer,"applied offer")
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
-                    const discountedPrice = prod.price - appliedOffer;
-                    productDiscount = (sellerPrice - discountedPrice) * quantity;
+                    const discountedPrice = MRP - appliedOffer;
+                    productDiscount = (MRP - discountedPrice) * quantity;
                 }
                 discount += productDiscount;
-                cartTotal += ((sellerPrice * quantity) - (productDiscount)) ;
+                
+                cartTotal += ((MRP * quantity) - (productDiscount)) ;
+                console.log(cartTotal,"checkout total")
             });
-            req.session.user.discount = discount
+            // req.session.user.discount = discount
             if(coupon){
                 cartTotal =cartTotal - coupon
             }
@@ -698,6 +703,7 @@ const addCart = async(req,res)=>{
         if (!req.session.user) return res.status(401).json({success:false, message: 'Unauthorized' })
         const userId = req.session.user._id;
         const {id,size,price} = req.body
+        console.log(size,"this is the size ")
         if(!size){
             return res.json({sizemessage:"Please select a size"})
         }
@@ -732,7 +738,7 @@ const addCart = async(req,res)=>{
               productId: id,
               size: size,
               price: price,
-              regularPrice: product.price.seller   
+              regularPrice: product.sizes[size].Mrp   
             });
         }
       
@@ -1008,15 +1014,18 @@ const myWallet = async(req,res)=>{
     }
 }
 const logout = (req,res)=>{
-
-    req.session.destroy((err)=>{
-        if(err){
-            console.log("Logout error",err);
-            return res.end(500).send("internal error"); 
-        }
-        res.clearCookie('connect.sid')
-        return res.redirect('/')
-    })
+    try {
+        req.session.destroy((err)=>{
+            if(err){
+                console.log("Logout error",err);
+                return res.end(500).send("internal error"); 
+            }
+            res.clearCookie('connect.sid')
+            return res.redirect('/')
+        })
+    } catch (error) {
+        console.log("logout Side",error)
+    }
 }
 
 module.exports = {home,

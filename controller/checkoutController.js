@@ -57,21 +57,23 @@ const checkOut = async(req,res)=>{
                 const product = prod.productId;
                 const category = product.category;
                 const quantity = prod.quantity;
-                const sellerPrice = product.price.seller;
+                const price = prod.price;
+                const size = prod.size
+                const MRP = product.sizes[size].Mrp
 
-                totalMRP += sellerPrice * quantity;
+                totalMRP += MRP * quantity;
                 const today = new Date()
-                const productOffer = (product.offer?.isActive && product.offer?.discount && new Date(product.offer.startDate) <= today && new Date(product.offer.endDate) >= today) ? product.offer.discount : 0;
+                const productOffer = product.sizes[size].Mrp - price
                 const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
 
                 appliedOffer = Math.max(productOffer, categoryOffer);
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
-                    const discountedPrice = prod.price - appliedOffer;
-                    productDiscount = (sellerPrice - discountedPrice) * quantity;
+                    const discountedPrice = MRP - appliedOffer;
+                    productDiscount = (MRP - discountedPrice) * quantity;
                 }
                 discount += productDiscount;
-                totalPrice += (sellerPrice * quantity) - productDiscount;
+                totalPrice += (MRP * quantity) - productDiscount;
             });
             if(coupon){
                 totalPrice = totalPrice - coupon
@@ -245,24 +247,25 @@ const paymentMethod =async (req,res)=>{
                 const product = prod.productId;
                 const category = product.category;
                 const quantity = prod.quantity;
-                const sellerPrice = product.price.seller;
+                const price = prod.price;
+                const size = prod.size
+                const MRP = product.sizes[size].Mrp
 
-                totalMRP += sellerPrice * quantity;
+                totalMRP += MRP * quantity;
                 const today = new Date()
-                const productOffer = (product.offer?.isActive && product.offer?.discount && new Date(product.offer.startDate) <= today && new Date(product.offer.endDate) >= today) ? product.offer.discount : 0;
+                const productOffer = product.sizes[size].Mrp - price;
                 const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
 
                 appliedOffer = Math.max(productOffer, categoryOffer);
                 console.log(appliedOffer,"offer")
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
-                    const discountedPrice = prod.price - appliedOffer;
-                    console.log(discountedPrice,"discount")
-                    productDiscount = (sellerPrice - discountedPrice) * quantity;
-                    console.log(productDiscount,"pdt disc")
+                    const discountedPrice = MRP - appliedOffer;
+                    productDiscount = (MRP - discountedPrice) * quantity;
                 }
                 discount += productDiscount;
-                totalPrice += (sellerPrice * quantity) - productDiscount;
+                console.log(discount,"checkout discount")
+                totalPrice += (MRP * quantity) - productDiscount;
                 console.log(totalPrice,"final")
             });
             if(coupon){

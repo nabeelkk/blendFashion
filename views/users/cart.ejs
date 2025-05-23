@@ -59,10 +59,10 @@
                                                     <!-- <span class="text-muted ms-3">Color: </span>White -->
                                                 </div>
                                                 <span class="">₹</span><span class="current-price " ><%= element.price %></span><span>.00</span>
-                                                <span class="original-price text-decoration-line-through text-muted ms-2">₹<%= element.productId.price.seller %>.00</span>
+                                                <span class="original-price text-decoration-line-through text-muted ms-2">₹<%= element.productId.sizes.small.Mrp %>.00</span>
                                             </td>
                                             
-                                            <td class="product-price">₹<%= element.price %>.00</td>
+                                            <td class="product-price">₹<%= element.productId.sizes.small.Mrp %>.00</td>
                                             
                                             <td class="product-quantity">
                                                 <div class="quantity-selector d-flex align-items-center">
@@ -73,7 +73,7 @@
                                                 </div>
                                                 <p id="errmsg" style="color: brown; font-size: 12px;" class="mt-2 mb-2"></p>
                                             </td>
-                                            <td class="product-subtotal fw-bold">₹<%= element.price * element.quantity %>.00</td>
+                                            <td class="product-subtotal fw-bold">₹<%= element.productId.sizes.small.Mrp * element.quantity %>.00</td>
                                             <input type="hidden" value="<%= cartCount %>" id="cartCount">
                                             <td class="product-remove">
                                                 <button class="btn btn-link text-danger p-0" onclick="removeFromCart('<%= element.productId._id%>','<%= element.size%>')">

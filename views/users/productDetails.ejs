@@ -142,7 +142,7 @@
                         </div>
                         <div class="product-price mb-4">
                             <span class="fw-bold fs-3">₹</span><span class="current-price fs-3 fw-bold" ><%= product.sizes.small.amount %></span><span class="fw-bold fs-3">.00</span>
-                            <span class="original-price text-decoration-line-through text-muted ms-2">₹<%= product.price.seller %>.00</span>
+                            <span class="original-price text-decoration-line-through text-muted ms-2">₹<%= product.sizes.small.Mrp %>.00</span>
                             <% if (product.offerPrice) { %>
                                 <span class="discount-badge bg-danger text-white px-2 py-1 ms-2">-20%</span>
                             <% } %>
@@ -156,6 +156,7 @@
                                 <button class="btn btn-outline-dark  me-2 active" onclick="changePrice(this,'<%= product._id%>')" data-size="small" data-price="<%= product.sizes.small.amount%>">S</button>
                                 <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="medium" data-price="<%= product.sizes.medium.amount %>">M</button>
                                 <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="large" data-price="<%= product.sizes.large.amount %>">L</button>
+                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="XL" data-price="<%= product.sizes.large.amount %>">XL</button>
                             </div>
                             <!-- <a href="#" class="size-guide mt-2 d-inline-block">Size Guide</a> -->
                         </div>
@@ -453,7 +454,7 @@
                         </div>
                         <div class="product-info pt-3">
                             <h5 class="product-title"><%= element.name %></h5>
-                            <p class="product-price">$<%= element.price.seller %>.00</p>
+                            <p class="product-price">$<%= element.sizes.small.amount %>.00</p>
                         </div>
                         
                     </div>
@@ -477,7 +478,7 @@
                             </div>
                             <div class="product-info pt-3">
                                 <h5 class="product-title"><%= element.name %></h5>
-                                <p class="product-price">$<%= element.price.seller %>.00</p>
+                                <p class="product-price">$<%= element.sizes.small.amount %>.00</p>
                             </div>
                             
                         </div>

@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema({
     googleId:{
         type:String,
         unique:true,
+        sparse: true,
     },
     name:{
         type:String,
@@ -102,7 +103,7 @@ const userSchema = new mongoose.Schema({
     resetTokenExpr:{
         type:String
     },
-    referralCode: { type: String, unique: true },
+    referralCode: { type: String, unique: true,sparse: true, },
     referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
 },{timestamps:true})

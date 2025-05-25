@@ -114,20 +114,20 @@
                                 
                                 <div class="price-row">
                                     <span class="price-label">Total MRP</span>
-                                    <span class="price-value">₹ <%= totalMRP%>.00</span>
+                                    <span class="price-value">₹ <%= totalMRP%></span>
                                 </div>
                                 
                                 <div class="price-row">
                                     <span class="price-label">Discount
                                         <!-- <a href="#" class="know-more">Know More</a> -->
                                     </span>
-                                    <span class="price-value text-success"> ₹ <%= discount %>.00</span>
+                                    <span class="price-value text-success"> ₹ <%= discount %></span>
                                 </div>
                                 <div class="price-row">
                                     <span class="price-label">Coupon Applied
                                         <!-- <a href="#" class="know-more">Know More</a> -->
                                     </span>
-                                    <span class="price-value text-success"> ₹ <%= coupon %>.00</span>
+                                    <span class="price-value text-success"> ₹ <%= discountAmount.toFixed(2) %></span>
                                 </div>
                                 
                                <% if (appliedOffer>10) { %>
@@ -152,7 +152,7 @@
                                 
                                 <div class="price-row total-row">
                                     <span>Total Amount</span>
-                                    <span>₹ <%= totalPrice %>.00</span>
+                                    <span>₹ <%= totalPrice %></span>
                                 </div>
                                 <a ><button class="btn continue-btn w-100 mt-3" onclick="placeOrder()">CONTINUE</button></a>
                             </div>

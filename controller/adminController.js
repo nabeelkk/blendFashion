@@ -358,7 +358,6 @@ const editProduct = async (req, res) => {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Please select a category')}`);
         }
 
-        // Process sizes
         const sizes = {};
         const sizeFieldNames = {
             small: { mrp: MaxPriceSmall, sales: SalesPriceSmall, stock: StockSmall },
@@ -397,7 +396,7 @@ const editProduct = async (req, res) => {
                 sizes[size] = { Mrp: mrpNum, amount: salesNum, quantity: stockNum };
                 atLeastOneSizeProvided = true;
             } else if (product.sizes[size]) {
-                sizes[size] = product.sizes[size]; // Retain existing size data
+                sizes[size] = product.sizes[size]; 
             }
         }
 
@@ -405,20 +404,16 @@ const editProduct = async (req, res) => {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('At least one size must have valid MRP, Offer, and Stock')}`);
         }
 
-        // Handle images
         let images = [...(product.images || [])];
 
-        // Process image replacements
         if (req.files) {
-            // Handle replaceImage fields
+
             for (let i = 0; i < images.length; i++) {
                 const replaceField = `replaceImage[${i}]`;
                 if (req.files[replaceField]) {
                     const file = req.files[replaceField];
                     const tempPath = file.tempFilePath;
-
-                    // Validate file type and size
-                    if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
+                   if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
                         await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
                         return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Only JPEG, PNG, or WebP images are allowed')}`);
                     }
@@ -427,7 +422,6 @@ const editProduct = async (req, res) => {
                         return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Each image must be less than 5MB')}`);
                     }
 
-                    // Upload new image to Cloudinary
                     const result = await cloudinary.uploader.upload(tempPath, {
                         folder: 'blend_products',
                         width: 600,
@@ -438,20 +432,16 @@ const editProduct = async (req, res) => {
                         quality: 'auto'
                     });
 
-                    // Delete old image from Cloudinary
                     if (images[i]) {
                         await cloudinary.uploader.destroy(images[i]);
                     }
 
-                    // Update image array
                     images[i] = result.public_id;
 
-                    // Clean up temporary file
                     await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
                 }
             }
 
-            // Process new images
             if (req.files.newImages) {
                 const newFiles = Array.isArray(req.files.newImages) ? req.files.newImages : [req.files.newImages];
                 if (images.length + newFiles.length > 3) {
@@ -464,7 +454,6 @@ const editProduct = async (req, res) => {
                 for (const file of newFiles) {
                     const tempPath = file.tempFilePath;
 
-                    // Validate file type and size
                     if (!file.mimetype.match(/image\/(jpeg|png|webp)/)) {
                         await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
                         return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Only JPEG, PNG, or WebP images are allowed')}`);
@@ -474,7 +463,6 @@ const editProduct = async (req, res) => {
                         return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Each image must be less than 5MB')}`);
                     }
 
-                    // Upload new image to Cloudinary
                     const result = await cloudinary.uploader.upload(tempPath, {
                         folder: 'blend_products',
                         width: 600,
@@ -487,18 +475,15 @@ const editProduct = async (req, res) => {
 
                     images.push(result.public_id);
 
-                    // Clean up temporary file
                     await fs.unlink(tempPath).catch(err => console.error('Error deleting temp file:', err));
                 }
             }
         }
 
-        // Validate image count
         if (images.length < 1 || images.length > 3) {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product must have 1 to 3 images')}`);
         }
 
-        // Update product
         product.name = name;
         product.description = description;
         product.category = category;
@@ -511,7 +496,6 @@ const editProduct = async (req, res) => {
         res.redirect('/admin/productList');
     } catch (error) {
         console.error('Error updating product:', error);
-        // Clean up any remaining temporary files
         if (req.files) {
             for (let i = 0; i < (product?.images?.length || 0); i++) {
                 const replaceField = `replaceImage[${i}]`;
@@ -670,11 +654,12 @@ const listOrder = async (req,res)=>{
 const orderDetails = async(req,res)=>{
     const _id = req.params.id
     const order = await Order.findOne({_id}).populate('user').populate('products.productId');
+    const couponDiscount = order.coupon
     const prod = order.products.find((prod)=>prod.status)
     const cloudName = process.env.CLOUDINARY_NAME
     
    
-    res.render('admin/orderdetails',{order,prod,cloudName})
+    res.render('admin/orderdetails',{order,prod,cloudName,couponDiscount:Number(couponDiscount).toFixed(2)})
 }
 
 const updateOrderStatus = async (req, res) => {

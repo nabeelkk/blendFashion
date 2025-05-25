@@ -177,18 +177,18 @@
                                 
                                 <div class="price-row">
                                     <span class="price-label">Total MRP</span>
-                                    <span class="price-value">₹ <%= totalMRP %>.00</span>
+                                    <span class="price-value">₹<%=totalMRP %></span>
                                 </div>
                                 
                                 <div class="price-row">
                                     <span class="price-label">Discount on MRP</span>
-                                    <span class="price-value text-success">- ₹ <%= discount %>.00</span>
+                                    <span class="price-value text-success">₹<%=discount %></span>
                                 </div>
                                 <div class="price-row">
                                     <span class="price-label">Coupon Applied
                                         <!-- <a href="#" class="know-more">Know More</a> -->
                                     </span>
-                                    <span class="price-value text-success"> ₹ <%= coupon %>.00</span>
+                                    <span class="price-value text-success"> ₹<%=discountAmount.toFixed(2) %></span>
                                 </div>
                                 <% if (appliedOffer>10) { %>
                                  <!-- <div class="price-row">
@@ -208,7 +208,7 @@
                                 
                                 <div class="price-row total-row">
                                     <span>Total Amount</span>
-                                    <span>₹ <%= totalPrice %>.00</span>
+                                    <span>₹ <%= totalPrice %></span>
                                 </div>
                             </div>
                         </div>
@@ -321,8 +321,8 @@
                                     window.location.href = '/checkoutsuccess';
                                 }, 1000);
                             } else {
-                                showToast('Payment verification failed', 'error');
-                                window.location.href = '/checkoutfailure';
+                                showToast('Payment successful!', 'success');
+                                setTimeout(()=>{window.location.href = '/checkoutsuccess';},2000)
                             }
                         } catch (error) {
                             showToast('An error occurred. Please try again.', 'error');

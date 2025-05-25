@@ -12,6 +12,7 @@ const passport = require('passport')
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const path = require('path')
+const fs = require('fs')
 const multer = require('multer');
 const Razorpay = require('razorpay')
 
@@ -39,9 +40,14 @@ app.use((req, res, next) => {
 });
 
 app.use(nocache());
+const tempDir = path.join(__dirname, 'temp');
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir);
+}
+
 app.use(fileUpload({
-    useTempFiles:true,
-    tempFileDir:'/temp/'
+  useTempFiles: true,
+  tempFileDir: tempDir
 }));
 
 app.use((req, res, next) => {

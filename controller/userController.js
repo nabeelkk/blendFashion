@@ -13,6 +13,8 @@ const cloudinary = require('../config/cloudinary');
 const fs = require('fs');
 const Order = require('../modal/orderModal')
 const Wallet = require('../modal/walletModal')
+const Offer = require('../modal/offerModal')
+const Coupon = require('../modal/coupenModel')
 
 
 
@@ -633,34 +635,47 @@ const myCart = async (req, res) => {
             }
         });
         const cloudName = process.env.CLOUDINARY_NAME;
-
+        const coupon = req.session.user.discountedTotal
+        console.log(coupon,"coup")
+        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const discountAmount = req.session.user.discountAmount
         let cartTotal = 0;
         let discount = 0;
         let totalMRP = 0;
         let cartCount = cart?.products.length || 0;
         let products = [];
         let appliedOffer = 0
-        let coupon = req.session.user?.discounted ? req.session.user?.discounted : 0;
 
         if (cart && cart.products.length > 0) {
             products = cart.products;
             products.forEach(prod => {
                 const product = prod.productId;
-                const category = prod.category;
+                const category = product.category;
                 const price = prod.price;
                 const quantity = prod.quantity;
                 const size = prod.size
-                console.log(price)
                 
                 const MRP = product.sizes[size].Mrp
 
                 totalMRP += MRP * quantity;
                 const today = new Date()
-                const productOffer = product.sizes[size].Mrp - price
-                const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
+                const productOffer = MRP - price
+                let categoryDiscount =0
 
-                appliedOffer = Math.max(productOffer, categoryOffer);
-                console.log(appliedOffer,"applied offer")
+                if(category){
+                    const matchingCategoryOffer = categoryOffer.find(offer =>
+                        offer.category._id.toString() === category._id.toString() &&
+                        new Date(offer.startDate) <= today &&
+                        new Date(offer.endDate) >= today
+                    );
+                
+                if (matchingCategoryOffer) {
+                    categoryDiscount = (product.sizes[size].Mrp * matchingCategoryOffer.discount) / 100;
+                }
+                }
+
+                appliedOffer = Math.max(productOffer, categoryDiscount);
+
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
                     const discountedPrice = MRP - appliedOffer;
@@ -669,11 +684,9 @@ const myCart = async (req, res) => {
                 discount += productDiscount;
                 
                 cartTotal += ((MRP * quantity) - (productDiscount)) ;
-                console.log(cartTotal,"checkout total")
             });
-            // req.session.user.discount = discount
             if(coupon){
-                cartTotal =cartTotal - coupon
+                cartTotal = coupon;
             }
 
         }
@@ -683,11 +696,12 @@ const myCart = async (req, res) => {
             cart: cart || { products: [] },
             cloudName,
             totalMRP,
-            cartTotal,
-            discount,
+            cartTotal:cartTotal.toFixed(2),
+            discount:discount.toFixed(2),
             cartCount,
             appliedOffer,
-            coupon
+            coupon,
+            discountAmount:discountAmount.toFixed(2)
         });
 
     } catch (error) {

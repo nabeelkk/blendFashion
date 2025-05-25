@@ -40,9 +40,10 @@ router.get('/deleteCategory/:id',authMiddleware,adminAuth,adminController.delete
 router.get('/categoryoffer',authMiddleware,adminAuth,offerController.categoryOffer)
 router.get('/getaddcategory',authMiddleware,adminAuth,offerController.getAddCategory)
 router.post('/getaddcategory',authMiddleware,adminAuth,offerController.postCategoryOffer);
-router.post('/deletecategoryoffer/:id',adminAuth,offerController.deleteCetegoryOffer)
+router.post('/blockcategoryoffer/:id',adminAuth,offerController.blockCategoryOffer)
 router.get('/editcategoryoffer/:id',authMiddleware,adminAuth,offerController.loadEditCategoryOffer)
 router.post('/editcategoryoffer/:id',authMiddleware,adminAuth,offerController.updateCategoryOffer)
+router.delete('/deletecategoryoffer/:id',authMiddleware,adminAuth,offerController.deleteCategoryOffer)
 
 
 router.get('/orderlist',authMiddleware,adminAuth,adminController.listOrder)
@@ -57,6 +58,7 @@ router.post('/addCoupon',authMiddleware,adminAuth,couponController.addCoupon)
 router.get('/editCoupon',authMiddleware,adminAuth,couponController.getEditCoupon)
 router.post('/editCoupon',authMiddleware,adminAuth,couponController.postEditCoupon)
 router.get('/blockCoupon',authMiddleware,adminAuth,couponController.blockCoupon)
+router.post('/removecoupon',authMiddleware,adminAuth,couponController.removeCoupon)
 
 
 router.post('/referrals', referralController.handleReferralSignup);

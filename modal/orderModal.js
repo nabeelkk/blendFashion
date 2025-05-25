@@ -10,9 +10,13 @@ const orderSchema = new mongoose.Schema({
       quantity: Number,
       price: Number,
       size: String,
+      MRP:Number,
+      totalAmount:Number,
+      discount:Number,
+      coupon:Number,      
       status: { type: String,
         default: 'Placed',
-        enum: ['Placed', 'Cancelled','Pending', 'Returned', 'Delivered','Out of Delivery','Shipped','Return Processing'] },
+        enum: ['Placed', 'Cancelled','Pending', 'Returned','Completed', 'Delivered','Out of Delivery','Shipped','Return Processing'] },
     }
   ],
   returnRequested: { type: Boolean, default: false },
@@ -31,7 +35,7 @@ const orderSchema = new mongoose.Schema({
   status:{
     type:String,  
     default: 'Placed',
-    enum: ['Placed', 'Cancelled','Pending', 'Returned', 'Delivered','Out of Delivery','Shipped']
+    enum: ['Placed', 'Cancelled','Pending','Confirmed', 'Returned','Completed', 'Delivered','Out of Delivery','Shipped']
   },
   reason:String,
   changeStatus:{

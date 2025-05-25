@@ -13,6 +13,7 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/public/adminassets/imgs/theme/logo.png">
     <!-- Template CSS -->
@@ -33,12 +34,12 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -50,7 +51,7 @@
 
                 </li>
                 <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href="orderlist"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -149,7 +150,7 @@
                                         <th class="align-middle" scope="col">Start Date</th>
                                         <th class="align-middle" scope="col">End date</th>
                                         <th class="align-middle" scope="col">Discount</th>
-                                        <th class="align-middle" scope="col">Status</th>
+                                        <th class="" scope="col">Status</th>
                                         
                                         <th class="align-middle">Action</th>
                                         
@@ -157,30 +158,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% category.forEach(element => { %>                                 
+                                    <% offers.forEach(element => { %>                                 
                                     <tr>                                      
-                                        <td><a href="" class=""><%= element.name %></a> </td>
-                                        <td>stdate</td>
+                                        <td><a href="" class=""><%= element.category.name %></a> </td>
+                                        <td><%= new Date(element.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })%></td>
                                         <td>
-                                            enddate
+                                            <%= new Date(element.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })%>
                                         </td>
                                         <td>
-                                           discount
+                                           <%= element.discount %>%
                                         </td>
                                         <td>
-                                          <!-- <% if (new Date(element.offer.startDate)>new Date()) { %>
+                                          <% if (new Date(element.startDate)>new Date()) { %>
                                                 <span class="badge bg-success">Upcoming</span>
-                                                <% } else if (new Date(element.offer.endDate)<new Date()) { %>
+                                                <% } else if (new Date(element.endDate)<new Date()) { %>
                                                  <span class="badge bg-danger">expired</span>
-                                                 <% } else if (element.offer.isActive == false) { %>
+                                                 <% } else if (element.isActive == false) { %>
                                                   <span class="badge bg-warning">Blocked</span>
                                                   <% } else { %>
                                                    <span class="badge bg-success">Active</span>
-                                          <% } %> -->
+                                          <% } %>
                                         </td>
                                         <td>
-                                             <button onclick="deleteOffer('<%= element._id %>')" class="btn btn-md rounded font-sm">Delete</button>
-                                             <a href="editcategoryoffer/<%= element._id %>" class="btn btn-md rounded font-sm">edit</a>
+                                             <button onclick="deleteOffer('<%= element._id %>')" class="btn rounded font-lg"><i class="fas fa-trash-alt" style="color: red; cursor: pointer; margin-left: 10px;" title="Delete"></i></button>
+                                             <a href="editcategoryoffer/<%= element._id %>" class="btn rounded font-lg"><i class="fas fa-edit" style="color: #007bff; cursor: pointer;" title="Edit"></i></a>
+                                             <button onclick="blockUnBlockOffer('<%= element._id %>')" class="btn rounded font-lg"><i class="fas fa-sync-alt" style="color: green; cursor: pointer; margin-left: 10px;" title="Update" ></i></button>
                                         </td>
                                         <!-- <a href="/deleteoffer?id="
                                           <a href="/editoffer?id=<%= element._id %>" -->
@@ -231,7 +233,7 @@
     <script>
       function deleteOffer(id){
         fetch(`/admin/deletecategoryoffer/${id}`,{
-          method:'post',
+          method:'DELETE',
           headers:{"Content-type":"application/json"}
         }).then((response)=>response.json())
         .then((data)=>{
@@ -243,6 +245,20 @@
           }else{
             showToast("something went wrong","error")
           }
+        })
+      }
+
+      function blockUnBlockOffer(id){
+        console.log(id)
+        fetch(`/admin/blockcategoryoffer/${id}`,{
+            method:'POST',
+        }).then((response)=>response.json())
+        .then((data)=>{
+            if(data.success){
+                showToast(data.message||"","success")
+            }else{
+                showToast(data.message||"","error")
+            }
         })
       }
     </script>

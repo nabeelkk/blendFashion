@@ -2,7 +2,6 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
 
 <head>
     <meta charset="utf-8">
@@ -34,12 +33,12 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -131,7 +130,7 @@
                 <div class="col-9">
 
                     <div class="content-header" style="padding-top: 100px;">
-                        <h2 class="content-title">Add Offer</h2>
+                        <h2 class="content-title">Edit Offer</h2>
                     </div>
                 </div>
                 <div class="col-lg-8">
@@ -146,14 +145,17 @@
                                     <div class="col-lg-6">
                                         <div class="mb-4">
                                             <label class="form-label">Category Offer</label>
-                                            <input placeholder="Type here" value="<%= category.name %>" disabled name="discount" type="text"id="maxdiscount" class="form-control">
-                                            
+                                            <select name="category" class="form-select" id="category">
+                                                <% categories.forEach(element => { %>
+                                                    <option><%= offer.category.equals(element._id) ? offer.category.name : ''  %></option>
+                                                <% }) %>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-4">
                                             <label class="form-label">Discount</label>
-                                            <input placeholder="Type here" name="discount" type="text" value="<%= category.discount %>"
+                                            <input placeholder="Type here" name="discount" type="text" value="<%= offer.discount %>"
                                                 id="maxdiscount" class="form-control">
                                             <p><span id="error1" style="display: none; color: red;"></span></p>
                                         </div>
@@ -165,7 +167,7 @@
                                             <label class="form-label">Start Date</label>
                                             <div class="row gx-2">
                                                 <input placeholder="Type here" name="startdate" type="date"
-                                                    id="startD" class="form-control">
+                                                    id="startD" class="form-control" value="<%= offer.startDate.toISOString().split('T')[0] %>">
                                                 <p><span id="error2" style="display: none; color: red;"></span></p>
                                             </div>
                                         </div>
@@ -174,13 +176,13 @@
                                         <div class="mb-4">
                                             <label class="form-label">End Date</label>
                                             <input placeholder="Type here" name="enddate" id="endD" type="date"
-                                                class="form-control">
+                                                class="form-control" value="<%= offer.endDate.toISOString().split('T')[0]%>">
                                             <p><span id="error3" style="display: none; color: red;"></span></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div style="align-items: center;">
-                                    <button type="button" onclick="editOffer('<%= category._id%>')" class="btn btn-md rounded font-sm hover-up">Update</button>
+                                    <button type="button" onclick="editOffer('<%= offer._id%>')" class="btn btn-md rounded font-sm hover-up">Update</button>
                                 </div>
                                 </form>
 
@@ -219,13 +221,8 @@
 
     <script>
         const discount = document.getElementById('maxdiscount').value
-        const sdate = document.getElementById('startD').value
-        const edate = document.getElementById('endD').value
-        const form = document.getElementById('offerform')
-        
+
         const error1 = document.getElementById('error1').value
-        const error2 = document.getElementById('error2').value
-        const error3 = document.getElementById("error3").value
 
         function validatediscount(e){
             const dis = discount.trim()
@@ -239,20 +236,25 @@
         }
 
         function editOffer(id){
-        fetch(`/admin/editcategoryoffer/${id}`,{
-          method:'post',
-          headers:{"Content-type":"application/json"}
-        }).then((response)=>response.json())
-        .then((data)=>{
-          if(data.success){
-            showToast(data.message||'','success')
-            setTimeout(()=>{
-              window.location.href = '/admin/categoryOffer'
-            },2000)
-          }else{
-            showToast("something went wrong","error")
-          }
-        })
+            const category = document.getElementById('category').value
+            const discount = document.getElementById('maxdiscount').value
+            const startDate = document.getElementById('startD').value
+            const endDate = document.getElementById('endD').value
+            fetch(`/admin/editcategoryoffer/${id}`,{
+            method:'post',
+            headers:{"Content-type":"application/json"},
+            body:JSON.stringify({category,discount,startDate,endDate})
+            }).then((response)=>response.json())
+            .then((data)=>{
+            if(data.success){
+                showToast(data.message||'','success')
+                setTimeout(()=>{
+                window.location.href = '/admin/categoryOffer'
+                },2000)
+            }else{
+                showToast("something went wrong","error")
+            }
+            })
       }
 
     </script>

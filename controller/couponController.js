@@ -1,4 +1,5 @@
 const Coupon = require("../modal/coupenModel")
+const User = require('../modal/userModal')
 
 const displayCoupon = async (req, res) => {
     try {
@@ -82,48 +83,60 @@ const blockCoupon = async (req, res) => {
 }
 
 const applyCoupon = async (req, res) => {
-    try {
-        const user = req.session.user
-        const { couponCode, totalprice } = req.body
-        const coupon = await Coupon.findOne({couponcode:couponCode,isActive:true})
-        console.log(coupon,"coupon")    
-        if (coupon) {
-            let expiryDate = new Date(coupon.expiryDate)
-            let currentDate = new Date()
-            console.log(expiryDate,"expr date")
-            console.log(currentDate,"todays date")
-            console.log(currentDate <= expiryDate)
-            if (currentDate <= expiryDate) {
-                if (!coupon.user.includes(user)) {
-                    if (parseInt(totalprice) >= coupon.minPurchase) {
-                        const randomDiscount = coupon.discount;
-                        const discountAmount = randomDiscount;
-                        const discountedTotal = Math.floor(parseInt(totalprice) - discountAmount);
-                        user.discounted = discountedTotal;
-                        await Coupon.findOneAndUpdate(
-                            { couponcode: couponCode },
-                            { $addToSet: { user: user } }
-                        );
-                        res.json({
-                            success: true, discount: randomDiscount,
-                            discounted: discountedTotal,message:`Coupon Added. You are saved ${discountedTotal} !!`
-                        })
-                    } else {
-                        res.json({ success: false, message: 'Order amount does not meet the minimum purchase requirement for this coupon.' })
-                    }
-                } else {
-                    res.json({ success: false, message: "You have already used this coupon code" })
-                }
-            } else {
-                res.json({ success: false, message: 'The coupen has been expired' })
-            }
-        } else {
-            res.json({ success: false, message: "Invalid coupon code or the coupon is inactive." })
-        }
-    } catch (error) {
-        console.log(error.message);
+  try {
+    const { couponCode, totalprice } = req.body;
+    console.log(req.body,"body")
+    const userId = req.session.user._id;
+
+    const user = await User.findById({_id:userId})
+
+    const coupon = await Coupon.findOne({ couponcode: couponCode, isActive: true });
+    if (!coupon) {
+      return res.json({ success: false, message: 'Invalid or inactive coupon code.' });
     }
-}
+
+    if (new Date() > new Date(coupon.expiryDate)) {
+      return res.json({ success: false, message: 'Coupon has expired.' });
+    }
+
+    if (coupon.user.includes(user._id)) {
+      return res.json({ success: false, message: 'Coupon already used.' });
+    }
+
+    if (totalprice < coupon.minPurchase) {
+      return res.json({ success: false, message: `Minimum purchase of ${coupon.minPurchase} required.` });
+    }
+
+    const discountAmount = (coupon.discount / 100) * totalprice;
+    const discountedTotal = totalprice - discountAmount;
+    req.session.user.discountAmount = discountAmount
+    req.session.user.discountedTotal = discountedTotal;
+    await user.save();
+
+    await Coupon.findByIdAndUpdate(coupon._id, { $addToSet: { user: user._id } });
+
+    res.json({
+      success: true,
+      discount: discountAmount,
+      discountedTotal,
+      message: `Coupon applied. You saved ${discountAmount}!`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+};
+const removeCoupon = async (req, res) => {
+//   try {
+//     const user = req.session.user;
+//     user.discountedTotal = null;
+//     await user.save();
+//     res.json({ success: true, message: 'Coupon removed.' });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Server Error');
+//   }
+};
 
 module.exports = {
     displayCoupon,
@@ -132,5 +145,6 @@ module.exports = {
     getEditCoupon,
     postEditCoupon,
     blockCoupon,
-    applyCoupon
+    applyCoupon,
+    removeCoupon
 }

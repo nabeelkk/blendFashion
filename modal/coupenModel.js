@@ -27,10 +27,7 @@ const couponSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    user:{
-        type:Array,
-        default:[]
-    },
+    user: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     isActive:{
         type:Boolean,
         default:true

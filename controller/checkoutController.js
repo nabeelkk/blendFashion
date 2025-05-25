@@ -3,6 +3,7 @@ const Product = require('../modal/productModal');
 const Cart = require('../modal/cartModal');
 const  mongoose  = require('mongoose');
 const Order = require('../modal/orderModal')
+const Offer =require('../modal/offerModal')
 
 
 
@@ -19,6 +20,7 @@ const checkOut = async(req,res)=>{
                         model: 'Category'
                     }
                 })
+        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME 
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty');
@@ -49,7 +51,8 @@ const checkOut = async(req,res)=>{
         let totalMRP = 0;
         let products = [];
         let appliedOffer = 0
-        let coupon = req.session.user?.discounted ? req.session.user?.discounted : 0;
+        const discountAmount = req.session.user.discountAmount
+        let coupon = req.session.user.discountedTotal
         if (cart && cart.products.length > 0) {
             products = cart.products;
 
@@ -63,10 +66,22 @@ const checkOut = async(req,res)=>{
 
                 totalMRP += MRP * quantity;
                 const today = new Date()
-                const productOffer = product.sizes[size].Mrp - price
-                const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
+                const productOffer = MRP - price
+                let categoryDiscount = 0
 
-                appliedOffer = Math.max(productOffer, categoryOffer);
+                if(category){
+                    const matchingCategoryOffer = categoryOffer.find(offer =>
+                        offer.category._id.toString() === category._id.toString() &&
+                        new Date(offer.startDate) <= today &&
+                        new Date(offer.endDate) >= today
+                    );
+                
+                if (matchingCategoryOffer) {
+                    categoryDiscount = (product.sizes[size].Mrp * matchingCategoryOffer.discount) / 100;
+                }
+                }
+
+                appliedOffer = Math.max(productOffer, categoryDiscount);
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
                     const discountedPrice = MRP - appliedOffer;
@@ -76,13 +91,13 @@ const checkOut = async(req,res)=>{
                 totalPrice += (MRP * quantity) - productDiscount;
             });
             if(coupon){
-                totalPrice = totalPrice - coupon
+                totalPrice = coupon
             }
         }
 
         
 
-        res.render('users/checkOut',{user:req.session.user,address,cart,totalMRP,cloudName,totalPrice,discount,appliedOffer,coupon})
+        res.render('users/checkOut',{user:req.session.user,address,cart,totalMRP,cloudName,totalPrice:totalPrice.toFixed(2),discount:discount.toFixed(2),appliedOffer,coupon,discountAmount:discountAmount.toFixed(2)})
     } catch (error) {
         console.log('checkout side',error)
         res.status(500).send("Internal error")
@@ -205,7 +220,10 @@ const paymentMethod =async (req,res)=>{
                         model: 'Category'
                     }
                 })
+        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME 
+        const discountAmount = req.session.user.discountAmount
+        let coupon = req.session.user.discountedTotal
         if (!cart || !cart.products?.length) {
             req.flash('error', 'Your cart is empty');
             return res.redirect('/cart');
@@ -239,7 +257,6 @@ const paymentMethod =async (req,res)=>{
         let totalMRP = 0;
         let products = [];
         let appliedOffer = 0
-        let coupon = req.session.user?.discounted ? req.session.user?.discounted : 0;
         if (cart && cart.products.length > 0) {
             products = cart.products;
 
@@ -254,9 +271,22 @@ const paymentMethod =async (req,res)=>{
                 totalMRP += MRP * quantity;
                 const today = new Date()
                 const productOffer = product.sizes[size].Mrp - price;
-                const categoryOffer = (category?.offer?.isActive && category.offer?.discount && new Date(category.offer.startDate) <= today && new Date(category.offer.endDate) >= today) ? category.offer.discount : 0;
+                
+                let categoryDiscount = 0
 
-                appliedOffer = Math.max(productOffer, categoryOffer);
+                if(category){
+                    const matchingCategoryOffer = categoryOffer.find(offer =>
+                        offer.category._id.toString() === category._id.toString() &&
+                        new Date(offer.startDate) <= today &&
+                        new Date(offer.endDate) >= today
+                    );
+                
+                if (matchingCategoryOffer) {
+                    categoryDiscount = (product.sizes[size].Mrp * matchingCategoryOffer.discount) / 100;
+                }
+                }
+
+                appliedOffer = Math.max(productOffer, categoryDiscount);
                 console.log(appliedOffer,"offer")
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
@@ -269,11 +299,11 @@ const paymentMethod =async (req,res)=>{
                 console.log(totalPrice,"final")
             });
             if(coupon){
-                totalPrice = totalPrice - coupon
+                totalPrice = coupon
             }
         }
         
-        res.render('users/paymentMethod',{user:req.session.user,address,cart,coupon,cloudName,totalPrice,totalMRP,discount,appliedOffer,defaultAddressId,messages: {
+        res.render('users/paymentMethod',{user:req.session.user,address,cart,coupon,cloudName,totalPrice:totalPrice.toFixed(2),totalMRP,discount:discount.toFixed(2),appliedOffer,defaultAddressId,discountAmount:discountAmount.toFixed(2), messages: {
                 error: req.flash('error'),
                 success: req.flash('success')
             }})

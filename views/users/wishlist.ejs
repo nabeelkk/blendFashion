@@ -237,11 +237,11 @@
                                         <div class="card-body">
                                             <h5 class="card-title"><%= element.productId.name%></h5>
                                             <p class="card-text text-muted mb-2">Prada</p>
-                                            <p class="card-text fw-bold mb-3">₹ <%= element.productId.price.seller %>.00</p>
+                                            <p class="card-text fw-bold mb-3">₹ <%= element.productId.sizes.small.Mrp %>.00</p>
                                             <input type="hidden" name="" value="<%= element.productId._id %>" id="productId">
-                                            <input type="hidden" name="" value="<%= element.productId.sizes.small.amount %>" id="smallPrice">
-                                            <input type="hidden" name="" value="<%= element.productId.sizes.medium.amount %>" id="mediumPrice">
-                                            <input type="hidden" name="" value="<%= element.productId.sizes.large.amount %>" id="largePrice">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.small.Mrp %>" id="smallPrice">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.medium.Mrp %>" id="mediumPrice">
+                                            <input type="hidden" name="" value="<%= element.productId.sizes.large.Mrp %>" id="largePrice">
                                             <input type="hidden" name="size" value="" id="sizee">
                                             <input type="hidden" name="pdtId" value="<%= element.productId._id  %> " id="pdtId"> 
                                             <button class="btn btn-dark w-100" id="add-to-cart" onclick="openModal('<%=element.productId._id%>')">
@@ -260,10 +260,10 @@
                                             <h5 class="mb-2">Size</h5>
                                             <h2 class="mb-2" style="color: red;" id="stock-display"></h2>
                                             <div class="size-options d-flex">
-                                                <span class="current-price fs-3 fw-bold" style="display: none;" ><%= element.productId.sizes.small.amount %></span>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%= element.productId.sizes.small.amount%>">S</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%= element.productId.sizes.medium.amount %>">M</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%= element.productId.sizes.large.amount %>">L</button>
+                                                <span class="current-price fs-3 fw-bold" style="display: none;" ><%= element.productId.sizes.small.Mrp %></span>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%=Math.round((product.sizes.small.Mrp - (product.sizes?.small?.Mrp * product.sizes?.small?.amount) / 100)) || product.sizes.small.Mrp%>">S</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%=Math.round((product.sizes.medium.Mrp - (product.sizes?.medium?.Mrp * product.sizes?.medium?.amount) / 100)) || product.sizes.medium.Mrp%>">M</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%=Math.round((product.sizes.large.Mrp - (product.sizes?.large?.Mrp * product.sizes?.large?.amount) / 100)) || product.sizes.large.Mrp%>">L</button>
                                             
                                             </div>
                                             <button type="submit" id="add-to-cart" onclick="addToCart(`<%= element.productId._id.toString()%>`)" class="btn btn-dark flex-grow-1 mt-2" >

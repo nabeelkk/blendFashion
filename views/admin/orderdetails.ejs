@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Evara Dashboard</title>
+    <title>Blend Fashion Order Details</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,15 +224,15 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th width="30%">Product</th>
-                                            <th width="20%">Coupon</th>
-                                            <th width="20%">Unit Price</th>
-                                            <th width="10%">Discount</th>
-                                            <th width="10%">Size</th>
-                                            <th width="10%">Quantity</th>
-                                            <th width="30%">Status</th>
-                                            <th width="30%">Total</th>
-                                            <th width="40%" class="text-end">Action</th>
+                                            <th>Product</th>
+                                            <th>Coupon</th>
+                                            <th>Unit Price</th>
+                                            <th>Discount</th>
+                                            <th>Total</th>
+                                            <th>Size</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -250,16 +250,16 @@
                                                     <div class="info"> <%= element.productId.name %> </div>
                                                 </a>
                                             </td>
-                                            <td>coupon</td>
+                                            <td><%= couponDiscount %></td>
                                             <td> <%= element.price %> </td>
-                                            
-                                            <td>10%</td>
+                                            <td><%= order.totalDiscount %> </td>
+                                            <td> <%= order.totalAmount%></td>
                                             <td><%= element.size %></td>
                                             <td> <%= element.quantity %> </td>
                                             <td><span
                                                 class="badge rounded-pill alert-success text-success" id="pdt-status" ><%= element.status %>
                                             </span></td>
-                                            <td> <%= element.price * element.quantity %></td>
+                                            
                                            
                                                 <td> <button class="btn btn-primary"
                                                     onclick="openStatusModal('<%= order._id %>','<%= element._id%>','<%= element.status %>')">Change</button>
@@ -356,6 +356,7 @@
                                                         <select class="form-select" id="statusSelect" name="status" required>
                                                             <option value="">Select Status</option>
                                                             <option value="Pending">Pending</option>
+                                                            <option value="Placed">Placed</option>
                                                             <option value="Shipped">Shipped</option>
                                                             <option value="Out for Delivery">Out for Delivery</option>
                                                             <option value="Delivered">Delivered</option>

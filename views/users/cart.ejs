@@ -133,12 +133,13 @@
                                 <% } %>
                                 <div class="d-flex justify-content-between mb-2 text-success">
                                     <span>Discount</span>
-                                    <span class="fw-bold" id="cart-discount">₹ <%= discount %>.00</span>
+                                    <span class="fw-bold" id="cart-discount">₹ <%= discount %></span>
                                 </div>
                                 <% if (coupon) { %>
                                  <div class="d-flex justify-content-between mb-2 text-success">
                                     <span>Coupon Applied</span>
-                                    <span class="fw-bold" id="cart-discount">₹ <%= coupon %>.00</span>
+                                     <span class="fw-bold" id="cart-discount">₹ <%= discountAmount.toFixed(2) %></span>
+                                    
                                 </div>
                                 <% } %>
                                 <hr>

@@ -165,7 +165,7 @@
                                 <button class="btn btn-outline-dark  me-2 active" onclick="changePrice(this,'<%= product._id%>')" data-size="small" data-amount="<%= product.sizes?.small.amount %>" data-price="<%=Math.round((product.sizes.small.Mrp - (product.sizes?.small?.Mrp * product.sizes?.small?.amount) / 100)) || product.sizes.small.Mrp%>">S</button>
                                 <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="medium" data-amount="<%= product.sizes?.medium.amount %>" data-price="<%= Math.round((product.sizes.medium.Mrp - (product.sizes?.medium?.Mrp * product.sizes?.medium?.amount) / 100)) || product.sizes.medium.Mrp %>">M</button>
                                 <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="large" data-amount="<%= product.sizes?.large.amount %>" data-price="<%= Math.round((product.sizes.large.Mrp - (product.sizes?.large?.Mrp * product.sizes?.large?.amount) / 100)) || product.sizes.large.Mrp %>">L</button>
-                                <% if (product.sizes?.XL.Mrp<0) { %>
+                                <% if (product.sizes?.XL.Mrp<10) { %>
                                  <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= product._id%>')" data-size="XL" data-amount="<%= product.sizes?.XL.amount %>" data-price="<%= Math.round((product.sizes.XL.Mrp - (product.sizes?.XL?.Mrp * product.sizes?.XL?.amount) / 100)) || product.sizes.XL.Mrp %>">XL</button>
                                 <% } %>
                                 

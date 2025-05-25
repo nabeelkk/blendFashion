@@ -34,12 +34,12 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -51,7 +51,7 @@
 
                 </li>
                 <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -129,7 +129,7 @@
         <section class="content-main ">
             <div class="row ">
                 <div class="col-9">
-
+                    
                     <div class="content-header" style="padding-top: 100px;">
                         <h2 class="content-title">Add Offer</h2>
                     </div>
@@ -139,6 +139,11 @@
                         <div class="card-header">
                             <h4>Basic</h4>
                         </div>
+                        <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" style="width: 100%;"  role="alert">
+                        <%= error %>
+                    </div>  
+                    <% } %>
                         <div class="card-body">
                             <form method="post" id="offerform">
                                 
@@ -146,10 +151,10 @@
                                     <div class="col-lg-6">
                                         <div class="mb-4">
                                             <label class="form-label">Category Offer</label>
-                                            <select name="name" class="form-select" id="category-offer">
+                                            <select name="category" class="form-select" id="category-offer">
 
-                                                <% category.forEach(element => { %>
-                                                    <option><%= element.name %></option>
+                                                <% categories.forEach(element => { %>
+                                                    <option value="<%= element._id %>"><%= element.name %></option>
                                                 <% }) %>
                                         
                                             </select>
@@ -169,7 +174,7 @@
                                         <div class="mb-4">
                                             <label class="form-label">Start Date</label>
                                             <div class="row gx-2">
-                                                <input placeholder="Type here" name="startdate" type="date"
+                                                <input placeholder="Type here" name="startDate" type="date"
                                                     id="startD" class="form-control">
                                                 <p><span id="error2" style="display: none; color: red;"></span></p>
                                             </div>
@@ -178,7 +183,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-4">
                                             <label class="form-label">End Date</label>
-                                            <input placeholder="Type here" name="enddate" id="endD" type="date"
+                                            <input placeholder="Type here" name="endDate" id="endD" type="date"
                                                 class="form-control">
                                             <p><span id="error3" style="display: none; color: red;"></span></p>
                                         </div>

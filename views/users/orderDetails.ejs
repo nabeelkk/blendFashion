@@ -171,7 +171,7 @@
                                     <div class="product-meta">Size: <%= prod.size %></div>
                                     <div class="product-meta">Quantity: <%= prod.quantity %></div>
                                 <div class="product-meta">Status: <span class="status-badge" ><%= prod.status %> </span></div>
-                                    <div class="product-price">₹ <%= prod.price %></div>
+                                    <div class="product-price">₹ <%= orders.totalAmount %></div>
                                 </div>
                                 <div class="text-end d-flex flex-column justify-content-end" >
                                     
@@ -183,12 +183,11 @@
                                             
                                         </div>
                                         <div class="mt-5">
-                                            <% if (prod.status !== "Delivered" && prod.status !== "Return" && prod.status !=="Cancelled" && prod.status !== 'Return Processing' ){ %>
+                                            <% if (prod.status !== "Delivered" && prod.status !== "Return" && prod.status !=="Cancelled" && prod.status !== 'Return Processing' && prod.status !== 'Pending' && prod.status !== 'Returned' ){ %>
                                                 <button onclick="openModal('<%=prod._id%>','<%=orders._id%>')"  class="btn btn-danger cancel">Cancel</button>
+                                                
                                             <% } %>
-                                            <% if (orders.paymentStatus == "Completed") { %>
-                                                <button onclick="openModal('<%=prod._id%>','<%=orders._id%>')"  class="btn btn-danger cancel">Cancel</button>
-                                            <% } %>
+                                            
                                            
                                         </div>
                                     </div>
@@ -276,7 +275,7 @@
                                 <h5 class="mb-3">Order Summary</h5>
                                 <div class="summary-row">
                                     <div class="summary-label">Item(s) Subtotal:</div>
-                                    <div class="summary-value">₹ <%= orders.totalAmount %></div>
+                                    <div class="summary-value">₹ <%= orders.totalAmount+orders.totalDiscount %></div>
                                 </div>
                                 <div class="summary-row">
                                     <div class="summary-label">Shipping:</div>
@@ -286,6 +285,12 @@
                                     <div class="summary-label">Tax:</div>
                                     <div class="summary-value">₹0</div>
                                 </div>
+                                <% if (orders.coupon>10) { %>
+                                    <div class="summary-row">
+                                    <div class="summary-label">Coupon:</div>
+                                    <div class="summary-value">₹<%= couponDiscount%></div>
+                                </div>
+                                <% } %>
                                 <div class="summary-row">
                                     <div class="summary-label">Discount:</div>
                                     <div class="summary-value text-success"><%= orders.totalDiscount %></div>
@@ -602,7 +607,7 @@
                     return;
                 }
 
-                const response = await fetch('/create-razorpay-order    ', {
+                const response = await fetch('/create-razorpay-order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -624,7 +629,7 @@
                     amount: data.amount,
                     currency: data.currency,
                     order_id: data.order_id,
-                    name: 'The Style',
+                    name: 'Blend',
                     description: `Retry Payment for Order ${retryOrderId}`,
                     handler: async function (response) {
                         try {
@@ -651,7 +656,7 @@
                             console.error('Payment Success Error:', error);
                             showToast('Payment Success', 'success');
                             setTimeout(() => {
-                                window.location.reload()
+                                window.location.location = '/checkoutsuccess'
                             }, 2000);
                         }
                     },

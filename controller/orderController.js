@@ -141,7 +141,7 @@ const placeOrder = async(req,res)=>{
               MRP: itemTotalMrp,
               totalAmount:orderedAmount,
               discount: discount.toFixed(2),
-              coupon:couponDiscount.toFixed(2)
+              coupon:couponDiscount?couponDiscount.toFixed(2):'0.00'
             });
       
             product.sizes[size].quantity -= item.quantity;
@@ -154,7 +154,7 @@ const placeOrder = async(req,res)=>{
             products: orderedProducts,
             totalAmount:orderedAmount,
             totalDiscount:discount.toFixed(2),
-            coupon:couponDiscount.toFixed(2),
+            coupon:couponDiscount?.toFixed(2),
             paymentMethod: "Cash on Delivery",
             status: "Placed",
             address: selectedAddress
@@ -183,7 +183,7 @@ const  orderdetails =async (req,res)=>{
         if(!orders){
             return res.redirect('/')
         }
-        const couponDiscount = orders.coupon
+        const couponDiscount = orders?.coupon
         let productElem;
         orders.products.forEach(element => {
             productElem = element
@@ -198,7 +198,7 @@ const  orderdetails =async (req,res)=>{
      
         const month = moment(orders.createdAt).format('DD MM YYYY')
         const cloudName = process.env.CLOUDINARY_NAME
-        res.render('users/orderDetails',{user:req.session.user,orders,orderId,month,cloudName,productElem,cartCount,cart,address,couponDiscount:Number(couponDiscount).toFixed(2)})
+        res.render('users/orderDetails',{user:req.session.user,orders,orderId,month,cloudName,productElem,cartCount,cart,address,couponDiscount:couponDiscount?Number(couponDiscount).toFixed(2):'0.00'})
     } catch (error) {
         console.log("order Details side",error)
         return res.status(500).send("Internal server error")
@@ -450,7 +450,7 @@ const createRazorpayOrder = async (req, res) => {
       address: selectedAddress,
       items:resolvedItems,
       totalDiscount:discount.toFixed(2),
-      coupon:couponDiscount.toFixed(2),
+      coupon:couponDiscount?couponDiscount.toFixed(2):'0.00'
     });
   } catch (error) {
     console.error("Razorpay Error:", error);
@@ -581,7 +581,7 @@ const handlePaymentSuccess = async (req, res) => {
         address,
         status: 'Completed',
         totalDiscount: discount.toFixed(2),
-        coupon: couponDiscount.toFixed(2),
+        coupon:couponDiscount?couponDiscount.toFixed(2):'0.00'
       });
     }
 
@@ -693,7 +693,7 @@ const handleCheckoutFailure = async (req, res) => {
       orderId: '#ORD' + Date.now(),
       address: selectedAddress,
       Status: 'Pending',
-      coupon:couponDiscount.toFixed(2),
+      coupon:couponDiscount?couponDiscount.toFixed(2):'0.00'
     });
 
     // Update stock

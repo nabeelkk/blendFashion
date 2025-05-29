@@ -76,13 +76,10 @@
                     
                     <p class="lead mb-4">Discover our latest collections and exclusive offers tailored just for you.</p>
                     <div class="d-flex flex-wrap">
-                        <% if (!user) { %>
-                            <a href="/login" class="btn btn-dark btn-lg me-2 mb-2">Shop Now</a>
-                            <a href="/login" class="btn btn-outline-dark btn-lg mb-2">View Wishlist</a>
-                            <% } else { %>
-                                <a href="/category" class="btn btn-dark btn-lg me-2 mb-2">Shop Now</a>
+                        
+                                <a href="/products" class="btn btn-dark btn-lg me-2 mb-2">Shop Now</a>
                                 <a href="/wishlist" class="btn btn-outline-dark btn-lg mb-2">View Wishlist</a>
-                        <% } %>
+                        
                         
                     </div>
                 </div>
@@ -100,10 +97,10 @@
             <p class="text-muted mb-4">Based on your browsing history and preferences</p>
                 <div class="row">
                     <!-- Product 1 -->
-                    <% products.forEach(element => { %>
+                    <% products.slice(0,8).forEach(element => { %>
                     <div class="col-6 col-md-3 mb-4">
                         <div class="product-card">
-                            <a href="products">
+                            <a href="/productDetails/<%= element._id %>">
                             <div class="product-image">
                                 <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
                                 <% if (element.sizes?.small?.amount) { %>
@@ -154,14 +151,14 @@
                
                 <div class="row">
                     <!-- Product 1 -->
-                    <% products.forEach(element => { %>
+                    <% newArrival.slice(0,4).forEach(element => { %>
                     <div class="col-6 col-md-3 mb-4">
                         <div class="product-card">
-                            <a href="products">
+                            <a href="/productDetails/<%= element._id %>">
                             <div class="product-image">
                                 <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
                                 <% if (element.sizes?.small?.amount) { %>
-                                 <div class="product-badge bg-danger text-white pillHigh"><%= element.sizes.small.amount %>% Offer</div>
+                                 <div class="product-badge bg-success text-white pillHigh">New Arrival </div>
                                 <% } %>
                             </div>
                             </a>
@@ -312,10 +309,10 @@
             </div>
             <div class="row">
                     <!-- Product 1 -->
-                    <% products.forEach(element => { %>
+                    <% trendingProd.slice(0,4).forEach(element => { %>
                     <div class="col-6 col-md-3 mb-4">
                         <div class="product-card">
-                            <a href="products">
+                            <a href="/productDetails/<%= element._id %>">
                             <div class="product-image">
                                 <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
                                 <% if (element.sizes?.small?.amount) { %>

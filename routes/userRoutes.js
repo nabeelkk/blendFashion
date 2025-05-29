@@ -35,7 +35,7 @@ router.get('/user/google',redirect,nocache,passport.authenticate('google', { sco
 router.get('/user/google/callback',
     passport.authenticate('google', { failureRedirect: '/login?error=This%20user%20is%20blocked',
         failureMessage:true
-     }),
+    }),
     (req, res) => {
         req.session.user = req.user;
         req.session.isAuth = true;
@@ -48,9 +48,10 @@ router.post('/forgotpassword',userController.forgetpassword)
 router.get('/reset-pass/:token',userController.getresetPass)
 router.post('/reset-pass/:token',userController.resetPass)
 
-router.get('/products',userController.products)
+
 router.get('/userdash',isAuthenticated,nocache,userController.userDash) 
-router.get('/cart',isAuthenticated,userController.myCart)
+
+router.get('/cart',userController.myCart)
 router.post('/cart/add',userController.addCart)
 router.post('/cart/update-quantity',userController.updateQuantity)
 router.post('/checkQuantity',userController.checkQuantity)
@@ -63,9 +64,9 @@ router.delete('/checkout/delete/:id',isAuthenticated,checkoutController.deleteCh
 router.put('/checkout/edit/:id',isAuthenticated,checkoutController.editCheckoutAddress)
 router.get('/checkout/paymentmethod/:id',isAuthenticated,checkoutController.paymentMethod)
 router.post('/place-order',isAuthenticated,orderController.placeOrder)
-router.post('/create-razorpay-order',orderController.createRazorpayOrder)
-router.post('/payment-success', orderController.handlePaymentSuccess)
-router.get('/checkoutfailure', orderController.handleCheckoutFailure);
+router.post('/create-razorpay-order',isAuthenticated,orderController.createRazorpayOrder)
+router.post('/payment-success',isAuthenticated, orderController.handlePaymentSuccess)
+router.get('/checkoutfailure',isAuthenticated, orderController.handleCheckoutFailure);
 
 
 router.get('/address',isAuthenticated,userController.addresses)
@@ -88,7 +89,8 @@ router.post('/myorder/bulkCancel',isAuthenticated,orderController.bulkCancel)
 router.post('/order/return',isAuthenticated,orderController.returnProduct)
 router.get('/order/invoice/:id',isAuthenticated,orderController.invoice)
 
-router.get('/productdetails/:id',isAuthenticated,userController.productDetails)
+router.get('/products',userController.products)
+router.get('/productdetails/:id',userController.productDetails)
 router.get('/editprofile',isAuthenticated,userController.editProfile)
 router.post('/editprofile',isAuthenticated,userController.updateProfile)
 router.get('/changeEmail',isAuthenticated,userController.changeEmail)
@@ -100,7 +102,8 @@ router.post('/wishlist/add/:id',isAuthenticated,wishlistController.addwishList)
 router.delete('/wishlist/remove/:productId',isAuthenticated,wishlistController.removewishList)
 
 router.get('/myWallet',isAuthenticated,userController.myWallet)
-router.post('/applycoupon',couponController.applyCoupon)
+router.post('/applycoupon',isAuthenticated,couponController.applyCoupon)
+router.post('/removecoupon',isAuthenticated,couponController.removeCoupon)
 
 
 

@@ -94,6 +94,45 @@
             color: white;
             border-color: #007bff;
         }
+        .empty-wishlist {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        .empty-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .empty-text {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        .add-wishlist-btn {
+            background-color: #4169e1;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        .add-wishlist-btn:hover {
+            background-color: #3151b7;
+        }
 
         /* Responsive Design */
         @media (max-width: 400px) {
@@ -222,7 +261,24 @@
                             <i class="fas fa-trash-alt me-2"></i> Clear Wishlist
                         </button>
                     </div>
-                    
+                    <% if (wishlist.products.length<1) { %>
+                     <div class="empty-wishlist">
+                        <div class="empty-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#4169e1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="empty-title">Your Wishlist is Empty</h2>
+                        <p class="empty-text">Discover and save items you love for future purchases</p>
+                        <a href="/products">
+                        <button class="add-wishlist-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            Add to Wishlist
+                        </button></a>
+                    </div> 
+                    <% } %>
                     <div class="wishlist-items">
                         <div class="row">
                             <% wishlist?.products?.forEach(element => { %>
@@ -261,9 +317,9 @@
                                             <h2 class="mb-2" style="color: red;" id="stock-display"></h2>
                                             <div class="size-options d-flex">
                                                 <span class="current-price fs-3 fw-bold" style="display: none;" ><%= element.productId.sizes.small.Mrp %></span>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%=Math.round((product.sizes.small.Mrp - (product.sizes?.small?.Mrp * product.sizes?.small?.amount) / 100)) || product.sizes.small.Mrp%>">S</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%=Math.round((product.sizes.medium.Mrp - (product.sizes?.medium?.Mrp * product.sizes?.medium?.amount) / 100)) || product.sizes.medium.Mrp%>">M</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%=Math.round((product.sizes.large.Mrp - (product.sizes?.large?.Mrp * product.sizes?.large?.amount) / 100)) || product.sizes.large.Mrp%>">L</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%=Math.round((element.sizes?.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes?.small.Mrp%>">S</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%=Math.round((element.sizes?.medium.Mrp - (element.sizes?.medium?.Mrp * element.sizes?.medium?.amount) / 100)) || element.sizes?.medium.Mrp%>">M</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%=Math.round((element.sizes?.large.Mrp - (element.sizes?.large?.Mrp * element.sizes?.large?.amount) / 100)) || element.sizes?.large.Mrp%>">L</button>
                                             
                                             </div>
                                             <button type="submit" id="add-to-cart" onclick="addToCart(`<%= element.productId._id.toString()%>`)" class="btn btn-dark flex-grow-1 mt-2" >

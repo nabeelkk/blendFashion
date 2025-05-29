@@ -123,21 +123,15 @@
                                     </span>
                                     <span class="price-value text-success"> ₹ <%= discount %></span>
                                 </div>
-                                <div class="price-row">
+                                
+                                    <% if (discountAmount) { %>
+                                        <div class="price-row">
                                     <span class="price-label">Coupon Applied
                                         <!-- <a href="#" class="know-more">Know More</a> -->
                                     </span>
-                                    <span class="price-value text-success"> ₹ <%= discountAmount.toFixed(2) %></span>
-                                </div>
-                                
-                               <% if (appliedOffer>10) { %>
-                                 <!-- <div class="price-row">
-                                    <span class="price-label">Special Offer
-                                        <a href="#" class="know-more">Know More</a>
-                                    </span>
-                                    <span class="price-value text-success"> ₹ <%= appliedOffer %>.00</span>
-                                </div> -->
-                               <% } %>
+                                     <span class="price-value text-success"> ₹ <%= discountAmount %></span>
+                                     </div>
+                                    <% } %> 
                                 
                                 <div class="price-row">
                                     <span class="price-label">Shipping Fee

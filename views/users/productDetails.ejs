@@ -461,12 +461,16 @@
                 <% products.slice(0,4).forEach(element => { %>
                 <div class="col-6 col-md-3 mb-4">
                     <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Related Product 1" class="img-fluid">
-                        </div>
+                        <a href="/productDetails/<%= element._id %>">
+                            <div class="product-image">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Related Product 1" class="img-fluid">
+                            </div>
+                        </a>
                         <div class="product-info pt-3">
-                            <h5 class="product-title"><%= element.name %></h5>
-                            <p class="product-price">$<%= element.sizes.small.amount %>.00</p>
+                            <a href="/productDetails/<%= element._id %>">
+                                <h5 class="product-title"><%= element.name %></h5>
+                            </a>
+                            <p class="product-price">₹<%= element.sizes.small.Mrp %>.00</p>
                         </div>
                         
                     </div>
@@ -482,15 +486,19 @@
             <h2 class="section-title text-center mb-5">Recently Viewed</h2>
             <div class="row">
                 <!-- Recently Viewed Product 1 -->
-                <% products.slice(0,4).forEach(element => { %>
+                <% recentlyViewed.slice(0,4).forEach(element => { %>
                     <div class="col-6 col-md-3 mb-4">
                         <div class="product-card">
-                            <div class="product-image">
-                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[1] %>" alt="Related Product 1" class="img-fluid">
-                            </div>
+                            <a href="/productDetails/<%= element._id %>">
+                                <div class="product-image">
+                                    <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[1] %>" alt="Related Product 1" class="img-fluid">
+                                </div>
+                            </a>
                             <div class="product-info pt-3">
-                                <h5 class="product-title"><%= element.name %></h5>
-                                <p class="product-price">$<%= element.sizes.small.amount %>.00</p>
+                                <a href="/productDetails/<%= element._id %>">
+                                    <h5 class="product-title"><%= element.name %></h5>
+                                </a>
+                                <p class="product-price">₹<%= element.sizes.small.Mrp %>.00</p>
                             </div>
                             
                         </div>

@@ -11,11 +11,12 @@ const Wishlist = require('../modal/whishListModel');
 const validator = require('validator')
 const cloudinary = require('../config/cloudinary');
 const fs = require('fs');
+const path = require('path')
 const Order = require('../modal/orderModal')
 const Wallet = require('../modal/walletModal')
 const Offer = require('../modal/offerModal')
 const Coupon = require('../modal/coupenModel')
-
+const ejs = require('ejs')
 
 
 
@@ -47,7 +48,6 @@ const signup =async (req,res)=>{
         
         const otp = generateOtp();
         const otpExpr = Date.now() + 1 * 60 * 1000;
-
         
         console.log(otp)
 
@@ -57,15 +57,16 @@ const signup =async (req,res)=>{
         req.session.newUser={
             name,email,mobile,password:hashedPass,otherreferalcode,otp,otpExpr
         }
-        
+        const cloudName = process.env.CLOUDINARY_NAME
+        const templatePath = path.join(__dirname, '../views/users/reset-password.ejs');
+        const htmlContent = await ejs.renderFile(templatePath, { username , otp,cloudName});
 
         await transport.sendMail({
             from:process.env.MYGMAIL,
             to:email,
             subject:"You Otp for Signup",
-            text:`Yout Otp is ${otp}. It is Valid for 1 minute`
+            html:htmlContent
         })
-        
 
         return res.redirect('/otp')
 
@@ -112,19 +113,8 @@ const verifyOtp = async (req, res) => {
         await user.save();
         req.session.newUser = null;
         req.session.otpExpr = null;
-
-        req.session.user = {
-            _id: user._id,
-            name: user.name,
-            email: user.email
-        };
-        // await createReferral(user._id);
-        // if (referralCode || referralToken) {
-        //     await handleReferralSignup({ body: { referralCode, referralToken }, session: { userId: user._id } }, res);
-        // } else {
-            
-        // }
-        return res.redirect('/login');
+  
+        return res.redirect('/login?SignupSuccess=Account Created.');
 
     } catch (error) {
         console.error("OTP verification error:", error);
@@ -165,10 +155,11 @@ const resendOtp = async(req,res)=>{
 }
 const getLogin = (req,res)=>{
     const error = req.query.error;
+    const signupSuccess = req.query.SignupSuccess
     if(req.session.user){
        return res.redirect('/')
     }
-    res.render('users/login',{error})
+    res.render('users/login',{error,signupSuccess})
 }
 
 const login =async (req,res)=>{
@@ -200,16 +191,25 @@ const login =async (req,res)=>{
     }
 }
 const home =async (req,res)=>{
-    const products = await Product.find({isdeleted:false})
-    const user = req.session.user
-    if(!user){
+    try{
+        const products = await Product.find({isdeleted:false})
+        const user = req.session.user
+        console.log(user,"home user")
+        const trendingProd = await Product.find({isdeleted:false}).sort({updatedAt:-1})
+        const newArrival = await Product.find({isdeleted:false}).sort({createdAt:-1})
+        
+        if(!user){
+            const cloudName = process.env.CLOUDINARY_NAME
+            return res.render('index',{user:req.session.user,products,cloudName,newArrival,trendingProd})
+        }
+        const cart = await Cart.findOne({userId:user._id})
+        
         const cloudName = process.env.CLOUDINARY_NAME
-        return res.render('index',{user:req.session.user,products,cloudName})
+        return res.render('index',{user:req.session.user,products,cloudName,cart,newArrival,trendingProd})
+    }catch(error){
+        console.log('home side ',error)
     }
-    const cart = await Cart.findOne({userId:req.session.user._id})
-    
-    const cloudName = process.env.CLOUDINARY_NAME
-    return res.render('index',{user:req.session.user,products,cloudName,cart})
+
     
 }
 
@@ -240,12 +240,14 @@ const forgetpassword = async (req,res)=>{
         user.resetTokenExpr = new Date()+3600000
         await user.save()
 
-        const resetLink = `http://localhost:5000/reset-pass/${token}`
+        const resetLink = `http://localhost:5001/reset-pass/${token}`
+        const templatePath = path.join(__dirname, '../views/users/reset-password.ejs');
+        const htmlContent = await ejs.renderFile(templatePath, { user, resetLink });
 
         await transport.sendMail({
             to:user.email,
             subject:"Password Reset",
-            html:`<p>Click <a href="${resetLink}">here </a> to reset your password</p>`
+            html:htmlContent
         });
 
         res.send("check your email for reset link");
@@ -636,7 +638,9 @@ const myCart = async (req, res) => {
         });
         const cloudName = process.env.CLOUDINARY_NAME;
         const coupon = req.session.user.discountedTotal
+        const coupons = await Coupon.find({isActive:true})
         console.log(coupon,"coup")
+
         const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const discountAmount = req.session.user.discountAmount
         let cartTotal = 0;
@@ -701,7 +705,8 @@ const myCart = async (req, res) => {
             cartCount,
             appliedOffer,
             coupon,
-            discountAmount:discountAmount.toFixed(2)
+            coupons,    
+            discountAmount: discountAmount ? discountAmount.toFixed(2) : '0.00'
         });
 
     } catch (error) {
@@ -993,15 +998,17 @@ const productDetails = async(req,res)=>{
             return res.redirect('/login')
         }
         const productId = req.params.id; 
+        console.log(productId,"pdtId")
         const cloudName = process.env.CLOUDINARY_NAME
         const products = await Product.find({isdeleted:false}) 
         const product = await Product.findById(productId);
         const cart = await Cart.findOne({userId:req.session.user._id})
+        const recentlyViewed = await Product.find({isdeleted:false}).sort({updatedAt:1})
     
         if (!product) {
             return res.render('users/error'); 
         }
-        res.render('users/productDetails', { product ,products,cloudName,user:req.session.user,cart});
+        res.render('users/productDetails', { product ,products,cloudName,user:req.session.user,cart,recentlyViewed});
     } catch (error) {
         console.log('Product Details Error:', error);
         res.redirect('/error');
@@ -1013,15 +1020,26 @@ const productDetails = async(req,res)=>{
 
 const myWallet = async(req,res)=>{
     try {
-        const wallet = await Wallet.find({user:req.session.user._id})
-        const cart = await Cart.find({userId:req.session.user._id})
+        const userId = req.session.user._id
+        const page = parseInt(req.query.page)||1;
+        const limit = 5;
+        const totalWallet = await Wallet.countDocuments({user:userId})
+        console.log(totalWallet,"wallet count")
+        const totalPge = Math.ceil(totalWallet/limit)
+        const skip = (page-1)*limit;         
+        const wallet = await Wallet.find({user:userId})
+        .sort({createdAt:-1})
+        .limit(limit)
+        .skip(skip)
+
+        const cart = await Cart.find({userId:userId})
         let cartCount
         cart.forEach((elem)=>cartCount = elem.products.length)
         let balance
         wallet.forEach((element)=>{
             balance = element.balance
         })
-        res.render('users/wallet',{user:req.session.user,wallet,balance,cartCount})
+        res.render('users/wallet',{user:req.session.user,wallet,balance,cartCount,page,totalPge})
     } catch (error) {
         console.log('Wallet side',error)
         return res.status(500).send("Internal Error")

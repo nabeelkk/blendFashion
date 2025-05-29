@@ -34,13 +34,13 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                    <a class="menu-link" href="productList"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
@@ -51,7 +51,7 @@
 
                 </li>
                 <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href="orderlist"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -72,7 +72,7 @@
                     </a>
 
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                     <a class="menu-link" href="couponList"> <i class="icon material-icons md-local_offer"></i>
                         <span class="text">Coupon</span>
                     </a>
@@ -147,6 +147,12 @@
                                     <input type="text"  placeholder="Type here" id="couponname" name="name" value="<%= coupon.name %>"
                                         class="form-control" id="product_name">
                                         <p id="error1" style="display: none; color: red;"></p>
+                                        <% if (error) { %>
+                                     <p><span style="color: red;"><%= error %></span></p>
+                                    <% } %>
+                                    <% if (nameError) { %>
+                                     <p><span style="color: red;"><%= nameError %></span></p>
+                                    <% } %>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -156,6 +162,12 @@
                                                 <input placeholder="Type here" id="mindiscount" name="discount"
                                                     value="<%= coupon.discount %>" type="text" class="form-control">
                                                     <p id="error2" style="display: none; color: red;"></p>
+                                                    <% if (error) { %>
+                                                    <p><span style="color: red;"><%= error %></span></p>
+                                                <% } %>
+                                                <% if (discounterror) { %>
+                                                    <p><span style="color: red;"><%= discounterror %></span></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -176,6 +188,12 @@
                                                 <input placeholder="" id="minpurchase" name="minpurchase"
                                                     value="<%= coupon.minPurchase %>" type="text" class="form-control">
                                                     <p id="error4" style="display: none; color: red;"></p>
+                                                    <% if (error) { %>
+                                                    <p><span style=" color: red;"><%= error %></span></p>
+                                                <% } %>
+                                                <% if (minPurchaseerror) { %>
+                                                 <p><span style=" color: red;"><%= minPurchaseerror %></span></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -186,6 +204,9 @@
                                                 value="<%= coupon.expiryDate.toISOString().split('T')[0] %>" type="date"
                                                 class="form-control">
                                                 <p id="error5" style="display: none; color: red;"></p>
+                                                <% if (error) { %>
+                                                <p><span style=" color: red;"><%= error %></span></p>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>
@@ -216,107 +237,115 @@
     </main>
     <script>
         const cname = document.getElementById('couponname');
-        const mindisc = document.getElementById('mindiscount');
-        const maxdisc = document.getElementById('maxdiscount');
-        const purchase = document.getElementById('minpurchase');
-        const expiry = document.getElementById('expiry');
-        const copform = document.getElementById('copform');
+    const mindisc = document.getElementById('mindiscount');
+    const maxdisc = document.getElementById('maxdiscount');
+    const purchase = document.getElementById('minpurchase');
+    const expiry = document.getElementById('expiry');
+    const copform = document.getElementById('copform');
 
-        const error1 = document.getElementById('error1');
-        const error2 = document.getElementById('error2');
-        const error3 = document.getElementById('error3');
-        const error4 = document.getElementById('error4');
-        const error5 = document.getElementById('error5');
+    const error1 = document.getElementById('error1');
+    const error2 = document.getElementById('error2');
+    const error3 = document.getElementById('error3');
+    const error4 = document.getElementById('error4');
+    const error5 = document.getElementById('error5');
 
-        function validateCouponName() {
-            const nameval = cname.value.trim();
-            const namePattern = /^[a-zA-Z][a-zA-Z]*$/;
-            if (nameval === "") {
-                showError(error1, "Please Enter a valid name.");
-            } else if (namePattern.test(nameval)) {
-                showError(error1, "Invalid format for the Name. First letter should be capital.");
-            } else {
-                hideError(error1);
-            }
+    function validateCouponName() {
+        const nameval = cname.value.trim();
+        const namePattern = /^[A-Z][a-zA-Z]*$/; // Starts with capital and only letters
+
+        if (nameval === "") {
+            showError(error1, "Please enter a valid name.");
+            return false;
+        } else if (!namePattern.test(nameval)) {
+            showError(error1, "Invalid format. Name should start with a capital letter and contain only letters.");
+            return false;
+        } else {
+            hideError(error1);
+            return true;
         }
+    }
 
-        function validateMinDiscount() {
-            const minDiscVal = parseFloat(mindisc.value.trim());
-            if (isNaN(minDiscVal) || minDiscVal < 0) {
-                showError(error2, "Please enter a valid minimum discount.");
-            } else {
-                hideError(error2);
-            }
+    function validateMinDiscount() {
+        const minDiscVal = parseFloat(mindisc.value.trim());
+        if (isNaN(minDiscVal) || minDiscVal < 0 || minDiscVal>99) {
+            showError(error2, "Please enter a valid discount.");
+            return false;
+        } else {
+            hideError(error2);
+            return true;
         }
+    }
 
-        function validateMaxDiscount() {
-            const maxDiscVal = parseFloat(maxdisc.value.trim());
-            if (isNaN(maxDiscVal) || maxDiscVal < 0) {
-                showError(error3, "Please enter a valid maximum discount.");
-            } else {
-                hideError(error3);
-            }
-        }
+    function validateMaxGreaterMin() {
+        const minDiscount = parseFloat(mindisc.value.trim());
+        const maxDiscount = parseFloat(maxdisc.value.trim());
 
-        function validateMaxGreaterMin() {
-            const minDiscount = parseFloat(mindisc.value.trim());
-            const maxDiscount = parseFloat(maxdisc.value.trim());
+        if (!isNaN(minDiscount) && !isNaN(maxDiscount)) {
             if (maxDiscount <= minDiscount) {
-                showError(error3, "Maximum discount should be greater than Minimum");
+                showError(error3, "Maximum discount should be greater than minimum discount.");
+                return false;
             } else {
                 hideError(error3);
+                return true;
             }
         }
+        return true; // Skip this if values are invalid already (handled in min/max validations)
+    }
 
-        function validateMinPurchase() {
-            const minPurchaseVal = parseFloat(purchase.value.trim());
-            if (isNaN(minPurchaseVal) || minPurchaseVal < 0) {
-                showError(error4, "Please enter a valid minimum purchase amount.");
-            } else {
-                hideError(error4);
-            }
+    function validateMinPurchase() {
+        const minPurchaseVal = parseFloat(purchase.value.trim());
+        if (isNaN(minPurchaseVal) || minPurchaseVal < 0) {
+            showError(error4, "Please enter a valid minimum purchase amount.");
+            return false;
+        } else {
+            hideError(error4);
+            return true;
         }
+    }
 
-        function validateExpiryDate() {
-            const currentDate = new Date();
-            const selectedDate = new Date(expiry.value);
-            if (!expiry.value || selectedDate <= currentDate) {
-                showError(error5, "Please select a future expiry date.");
-            } else {
-                hideError(error5);
-            }
+    function validateExpiryDate() {
+        const currentDate = new Date();
+        const selectedDate = new Date(expiry.value);
+        if (!expiry.value || selectedDate <= currentDate) {
+            showError(error5, "Please select a future expiry date.");
+            return false;
+        } else {
+            hideError(error5);
+            return true;
         }
+    }
 
-        function showError(errorElement, message) {
-            errorElement.style.display = "block";
-            errorElement.innerHTML = message;
+    function showError(errorElement, message) {
+        errorElement.style.display = "block";
+        errorElement.innerHTML = message;
+    }
+
+    function hideError(errorElement) {
+        errorElement.style.display = "none";
+        errorElement.innerHTML = "";
+    }
+
+    // Attach validation on blur
+    cname.addEventListener('blur', validateCouponName);
+    mindisc.addEventListener('blur', validateMinDiscount);
+    maxdisc.addEventListener('blur', validateMaxDiscount);
+    maxdisc.addEventListener('blur', validateMaxGreaterMin);
+    purchase.addEventListener('blur', validateMinPurchase);
+    expiry.addEventListener('blur', validateExpiryDate);
+
+    // Handle form submission
+    copform.addEventListener('submit', function (e) {
+        const valid1 = validateCouponName();
+        const valid2 = validateMinDiscount();
+        const valid3 = validateMaxDiscount();
+        const valid4 = validateMaxGreaterMin();
+        const valid5 = validateMinPurchase();
+        const valid6 = validateExpiryDate();
+
+        if (!valid1 || !valid2 || !valid3 || !valid4 || !valid5 || !valid6) {
+            e.preventDefault(); // Prevent submission if any validation fails
         }
-
-        function hideError(errorElement) {
-            errorElement.style.display = "none";
-            errorElement.innerHTML = "";
-        }
-
-        cname.addEventListener('blur', validateCouponName);
-        mindisc.addEventListener('blur', validateMinDiscount);
-        maxdisc.addEventListener('blur', validateMaxDiscount);
-        maxdisc.addEventListener('blur', validateMaxGreaterMin);
-        purchase.addEventListener('blur', validateMinPurchase);
-        expiry.addEventListener('blur', validateExpiryDate);
-
-        copform.addEventListener('submit', function (e) {
-            validateCouponName();
-            validateMinDiscount();
-            validateMaxDiscount();
-            validateMaxGreaterMin();
-            validateMinPurchase();
-            validateExpiryDate();
-
-            if (error1.innerHTML || error2.innerHTML || error3.innerHTML || error4.innerHTML || error5.innerHTML) {
-                e.preventDefault();
-            }
-        });
-
+    });
 
     </script>
 

@@ -97,7 +97,7 @@ const checkOut = async(req,res)=>{
 
         
 
-        res.render('users/checkOut',{user:req.session.user,address,cart,totalMRP,cloudName,totalPrice:totalPrice.toFixed(2),discount:discount.toFixed(2),appliedOffer,coupon,discountAmount:discountAmount.toFixed(2)})
+        res.render('users/checkOut',{user:req.session.user,address,cart,totalMRP,cloudName,totalPrice:totalPrice.toFixed(2),discount:discount.toFixed(2),appliedOffer,coupon,discountAmount: discountAmount ? discountAmount.toFixed(2) : '0.00'})
     } catch (error) {
         console.log('checkout side',error)
         res.status(500).send("Internal error")
@@ -303,7 +303,7 @@ const paymentMethod =async (req,res)=>{
             }
         }
         
-        res.render('users/paymentMethod',{user:req.session.user,address,cart,coupon,cloudName,totalPrice:totalPrice.toFixed(2),totalMRP,discount:discount.toFixed(2),appliedOffer,defaultAddressId,discountAmount:discountAmount.toFixed(2), messages: {
+        res.render('users/paymentMethod',{user:req.session.user,address,cart,coupon,cloudName,totalPrice:totalPrice.toFixed(2),totalMRP,discount:discount.toFixed(2),appliedOffer,defaultAddressId,discountAmount: discountAmount ? discountAmount.toFixed(2) : 0, messages: {
                 error: req.flash('error'),
                 success: req.flash('success')
             }})

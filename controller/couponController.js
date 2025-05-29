@@ -4,7 +4,6 @@ const User = require('../modal/userModal')
 const displayCoupon = async (req, res) => {
     try {
         const coupon = await Coupon.find({})
-        console.log(coupon);
         res.render('admin/couponList', { coupon })
     } catch (error) {
         console.log(error.message);
@@ -13,7 +12,11 @@ const displayCoupon = async (req, res) => {
 
 const displayAddCoupon = async (req, res) => {
     try {
-        res.render('admin/addCoupon')
+        const error = req.query.error
+        const discounterror = req.query.discounterror
+        const minPurchaseerror = req.query.minPurchaseerror
+        const nameError = req.query.nameError
+        res.render('admin/addCoupon',{error,minPurchaseerror,discounterror,nameError})
     } catch (error) {
         console.log(error.message);
     }
@@ -22,6 +25,19 @@ const displayAddCoupon = async (req, res) => {
 const addCoupon = async (req, res) => {
     try {
         const { name, discount, expirydate, minpurchase } = req.body
+        const validName = /^[A-Za-z][A-Za-z\s]*$/;
+        if(validName.test(name)){
+            return res.redirect('/admin/addCoupon?nameError=Please%20enter%20valid%20name')
+        }
+        if(!name || !discount || !expirydate || !minpurchase){
+            return res.redirect('/admin/addCoupon?error=This%20Field%20is%20required')
+        }
+        if(discount>99 || discount<1){
+            return res.redirect('/admin/addCoupon?discounterror=Discount%20must%20be%20less%20than%2099%20and%20must%20be%20positive%20number')
+        }
+        if(minpurchase<500){
+            return res.redirect('/admin/addCoupon?minPurchaseerror=Minimum purchase must be greater than 500')
+        }
         const coupon = new Coupon({
             name: name,
             discount: discount,
@@ -40,8 +56,13 @@ const getEditCoupon = async (req, res) => {
     try {
         const couponID = req.query.id
         req.session.cid = couponID
-        const coupon = await Coupon.findById({ _id: couponID })
-        res.render('admin/editCoupon', { coupon })
+        const error = req.query.error
+        const discounterror = req.query.discounterror
+        const minPurchaseerror = req.query.minPurchaseerror
+        const nameError = req.query.nameError
+
+        const coupon = await Coupon.findById({ _id: couponID})
+        res.render('admin/editCoupon', { coupon,error,discounterror,minPurchaseerror,nameError  })
     } catch (error) {
         console.log(error.message);
     }
@@ -50,13 +71,12 @@ const getEditCoupon = async (req, res) => {
 const postEditCoupon = async (req, res) => {
     try {
         const couponID = req.session.cid
-        const { name, discount, maxdiscount, expirydate, minpurchase } = req.body
+        const { name, discount, expirydate, minpurchase } = req.body
         const coupon = await Coupon.findByIdAndUpdate({ _id: couponID },
             {
                 $set: {
                     name: name,
                     discount: discount,
-                    maxdiscount: maxdiscount,
                     minPurchase: minpurchase,
                     expiryDate: expirydate
                 }
@@ -85,12 +105,12 @@ const blockCoupon = async (req, res) => {
 const applyCoupon = async (req, res) => {
   try {
     const { couponCode, totalprice } = req.body;
-    console.log(req.body,"body")
     const userId = req.session.user._id;
-
+    console.log(couponCode,"from front")
     const user = await User.findById({_id:userId})
 
     const coupon = await Coupon.findOne({ couponcode: couponCode, isActive: true });
+    console.log(coupon,'ddddd')
     if (!coupon) {
       return res.json({ success: false, message: 'Invalid or inactive coupon code.' });
     }
@@ -111,6 +131,7 @@ const applyCoupon = async (req, res) => {
     const discountedTotal = totalprice - discountAmount;
     req.session.user.discountAmount = discountAmount
     req.session.user.discountedTotal = discountedTotal;
+    req.session.user.coupon = coupon.couponcode
     await user.save();
 
     await Coupon.findByIdAndUpdate(coupon._id, { $addToSet: { user: user._id } });
@@ -119,6 +140,7 @@ const applyCoupon = async (req, res) => {
       success: true,
       discount: discountAmount,
       discountedTotal,
+      coupon:coupon,
       message: `Coupon applied. You saved ${discountAmount}!`,
     });
   } catch (error) {
@@ -127,15 +149,33 @@ const applyCoupon = async (req, res) => {
   }
 };
 const removeCoupon = async (req, res) => {
-//   try {
-//     const user = req.session.user;
-//     user.discountedTotal = null;
-//     await user.save();
-//     res.json({ success: true, message: 'Coupon removed.' });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send('Server Error');
-//   }
+  try {
+    const userSession = req.session.user;
+    const user = await User.findById(userSession._id);  
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const couponCode = req.session.user.coupon;
+    const coupon = await Coupon.findOne({ couponcode: couponCode });
+
+    if (!coupon) {
+      return res.status(404).json({ success: false, message: 'Coupon not found' });
+    }
+    await Coupon.findByIdAndUpdate(coupon._id, { $pull: { user: user._id } });
+
+    user.discountedTotal = null;
+    await user.save();
+
+    req.session.user.discountedTotal = null;
+    req.session.user.discountAmount = null;
+    req.session.user.coupon = null;
+
+    res.json({ success: true, message: 'Coupon removed.' });
+  } catch (error) {
+    console.error("remove coupon", error);
+    res.status(500).send('Server Error');
+  }
 };
 
 module.exports = {

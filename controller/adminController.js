@@ -116,17 +116,21 @@ const getProducts =async (req,res)=>{
         const search = req.query.search || '';
         const page = req.query.page || 1;
         const limit = 6;
+        const category = req.query.category
         const cloudName = process.env.CLOUDINARY_NAME;
         const query={
             isdeleted:false,
-            name:{$regex : new RegExp(search,'i')}
+            name:{$regex : new RegExp(search,'i')},
+        }
+        if(category){
+            query.category = category
         }
         
 
         const total = await Product.countDocuments(query);
         const totalPage = Math.ceil(total/limit);
         
-        
+        const categories = await Category.find({ isListed: true });
         const product = await Product.find(query)
         .sort({createdAt:-1})
         .skip((page - 1)*limit)
@@ -139,10 +143,8 @@ const getProducts =async (req,res)=>{
              salePrice =prod.sizes.small?.amount?(prod.sizes.small?.Mrp * prod.sizes.small?.amount)/100:prod.sizes.small?.Mrp 
             
         }
-        
-       
-
-        res.render('admin/productList',{totalPage,search,page,product,cloudName,salePrice,offer})
+        console.log(product,"sssddss")
+        res.render('admin/productList',{totalPage,search,page,product,cloudName,salePrice,offer,categories,category})
 
 
     } catch (error) {
@@ -153,11 +155,11 @@ const getProducts =async (req,res)=>{
 const productDetails = async(req,res)=>{
     try {
         const prodId=req.params.prodId
-        const product = await Product.findById({_id:prodId}).populate('category')
         
+        const categories = await Category.find({ isListed: true });
         const cloudName = process.env.CLOUDINARY_NAME
 
-        res.render('admin/productDetails',{product,cloudName})
+        res.render('admin/productDetails',{product,cloudName,categories})
     } catch (error) {
         console.log('productDetails admin side',error)
         return res.status(500).send('Internal error')
@@ -192,8 +194,16 @@ const addProducts = async (req, res) => {
         } = req.body;
         console.log(req.body)
 
-        if (!name || !description || !category) {
-            return res.redirect('/admin/addProducts?errorsize=Please%20fill%20all%20required%20fields%20(name,%20description,%20category)');
+        if (!name || !name.match(/^[A-Za-z][A-Za-z0-9\s&]{2,49}$/)) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product name must be 3-50 characters (letters, numbers, spaces only)')}`);
+        }
+
+        if (!description || description.length < 10 || description.length > 500) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Description must be 10-500 characters')}`);
+        }
+
+        if (!category) {
+            return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Please select a category')}`);
         }
 
         const sizes = {
@@ -227,10 +237,10 @@ const addProducts = async (req, res) => {
 
         for (const size of ['small', 'medium', 'large']) {
             if (sizes[size]) {
-                if (isNaN(sizes[size].Mrp) || sizes[size].Mrp <= 0) {
+                if (isNaN(sizes[size].Mrp) || sizes[size].Mrp < 0) {
                     return res.redirect(`/admin/addProducts?errorsize=MRP%20for%20${size}%20must%20be%20a%20positive%20number`);
                 }
-                if (isNaN(sizes[size].amount) || sizes[size].amount <= 0) {
+                if (isNaN(sizes[size].amount) || sizes[size].amount < 0) {
                     return res.redirect(`/admin/addProducts?errorsize=Offer%20for%20${size}%20must%20be%20a%20positive%20number`);
                 }
                 if (sizes[size].amount > 99) {
@@ -346,7 +356,7 @@ const editProduct = async (req, res) => {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product not found')}`);
         }
 
-        if (!name || !name.match(/^[a-zA-Z0-9\s&]{3,50}$/)) {
+        if (!name || !name.match(/^[A-Za-z][A-Za-z0-9\s&]{2,49}$/)) {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product name must be 3-50 characters (letters, numbers, spaces only)')}`);
         }
 
@@ -380,10 +390,10 @@ const editProduct = async (req, res) => {
                 const salesNum = parseFloat(sales);
                 const stockNum = parseInt(stock);
 
-                if (isNaN(mrpNum) || mrpNum <= 0) {
+                if (isNaN(mrpNum) || mrpNum < 0) {
                     return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`MRP for ${size} must be a positive number`)}`);
                 }
-                if (isNaN(salesNum) || salesNum <= 0) {
+                if (isNaN(salesNum) || salesNum < 0) {
                     return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent(`Offer ${size} must be a positive number`)}`);
                 }
                 if (salesNum > 99) {
@@ -534,7 +544,7 @@ const UnblockProduct = async(req,res)=>{
         return res.redirect('/admin/productList')
     }
     await Product.findByIdAndUpdate(prodId,{isListed:true})
-    return res.json({success:true,message:"Product id Unblocked"})
+    return res.json({success:true,message:"Product is Unblocked"})
 
 }
 const blockProduct = async(req,res)=>{
@@ -543,7 +553,7 @@ const blockProduct = async(req,res)=>{
         return res.redirect('/admin/productList')
     }
     await Product.findByIdAndUpdate(prodId,{isListed:false})
-    return res.json({success:true,message:"Product id Blocked"})
+    return res.json({success:true,message:"Product is Blocked"})
 }
 
 const getCategory = async (req, res) => {
@@ -839,36 +849,49 @@ const customDate = async (req, res) => {
 const filterDate = async (req, res) => {
     try {
         const sort = req.query.value;
-        const currentDate = new Date();
+        const now = new Date(); 
         let dateFilter = {};
 
+        // Set filter based on the sort value
         if (sort === "Day") {
-            const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0));
-            const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999));
+            const startOfDay = new Date(now);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(now);
+            endOfDay.setHours(23, 59, 59, 999);
+
             dateFilter = { updatedAt: { $gte: startOfDay, $lte: endOfDay } };
 
         } else if (sort === "Week") {
-            const firstDayOfWeek = new Date(currentDate);
-            firstDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-            firstDayOfWeek.setHours(0, 0, 0, 0);
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            startOfWeek.setHours(0, 0, 0, 0);
 
-            const lastDayOfWeek = new Date(currentDate);
-            lastDayOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6);
-            lastDayOfWeek.setHours(23, 59, 59, 999);
+            const endOfWeek = new Date(now);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            endOfWeek.setHours(23, 59, 59, 999);
 
-            dateFilter = { updatedAt: { $gte: firstDayOfWeek, $lte: lastDayOfWeek } };
+            dateFilter = { updatedAt: { $gte: startOfWeek, $lte: endOfWeek } };
 
         } else if (sort === "Month") {
-            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-            const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            endOfMonth.setHours(23, 59, 59, 999);
 
-            dateFilter = { updatedAt: { $gte: firstDayOfMonth, $lte: lastDayOfMonth } };
+            dateFilter = { updatedAt: { $gte: startOfMonth, $lte: endOfMonth } };
 
         } else if (sort === "Year") {
-            const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
-            const lastDayOfYear = new Date(currentDate.getFullYear(), 11, 31, 23, 59, 59, 999);
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear(), 11, 31);
+            endOfYear.setHours(23, 59, 59, 999);
 
-            dateFilter = { updatedAt: { $gte: firstDayOfYear, $lte: lastDayOfYear } };
+            dateFilter = { updatedAt: { $gte: startOfYear, $lte: endOfYear } };
+        }
+
+        // Validate dateFilter values
+        const range = dateFilter.updatedAt;
+        if (range && (isNaN(range.$gte) || isNaN(range.$lte))) {
+            return res.status(400).send("Invalid date range provided.");
         }
 
         const allOrders = await Order.find(dateFilter)
@@ -876,6 +899,7 @@ const filterDate = async (req, res) => {
             .populate('user')
             .sort({ _id: -1 });
 
+        // Filter delivered products
         const deliveredOrders = allOrders
             .map(order => {
                 const deliveredProducts = order.products.filter(p => p.status === 'Delivered');
@@ -889,10 +913,11 @@ const filterDate = async (req, res) => {
         res.render("admin/sales-report", { deliveredOrders });
 
     } catch (error) {
-        console.log("Filter Date Error:", error.message);
+        console.error("Filter Date Error:", error);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 

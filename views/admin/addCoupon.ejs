@@ -39,8 +39,8 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                <li class="menu-item has-submenu ">
+                    <a class="menu-link" href="productList"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
@@ -51,7 +51,7 @@
 
                 </li>
                 <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -145,6 +145,12 @@
                                     <input type="text" placeholder="Type here" name="name" class="form-control"
                                         id="couponname">
                                     <p><span id="error1" style="display: none; color: red;"></span></p>
+                                    <% if (error) { %>
+                                     <p><span style="color: red;"><%= error %></span></p>
+                                    <% } %>
+                                    <% if (nameError) { %>
+                                     <p><span style="color: red;"><%= nameError %></span></p>
+                                    <% } %>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -154,6 +160,12 @@
                                                 <input placeholder="Type here" name="discount" type="text"
                                                     id="mindiscount" class="form-control">
                                                 <p><span id="error2" style="display: none; color: red;"></span></p>
+                                                <% if (error) { %>
+                                                    <p><span style="color: red;"><%= error %></span></p>
+                                                <% } %>
+                                                <% if (discounterror) { %>
+                                                    <p><span style="color: red;"><%= discounterror %></span></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -174,6 +186,12 @@
                                                 <input placeholder="Type here" name="minpurchase" type="text"
                                                     id="minpurchase" class="form-control">
                                                 <p><span id="error4" style="display: none; color: red;"></span></p>
+                                                <% if (error) { %>
+                                                    <p><span style=" color: red;"><%= error %></span></p>
+                                                <% } %>
+                                                <% if (minPurchaseerror) { %>
+                                                 <p><span style=" color: red;"><%= minPurchaseerror %></span></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -183,6 +201,9 @@
                                             <input placeholder="Type here" name="expirydate" id="expiry" type="date"
                                                 class="form-control">
                                             <p><span id="error5" style="display: none; color: red;"></span></p>
+                                            <% if (error) { %>
+                                                <p><span style=" color: red;"><%= error %></span></p>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>

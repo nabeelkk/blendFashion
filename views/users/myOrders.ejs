@@ -10,6 +10,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style1.css">
+    <style>
+        .empty-orders {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        .empty-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .empty-text {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .add-cart-btn {
+            background-color: #4169e1;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        .add-cart-btn:hover {
+            background-color: #3151b7;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -164,7 +206,29 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <% if (orders.length<1) { %>
+                         <div class="empty-orders">
+                            <div class="empty-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#4169e1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                            </div>
+                            <h2 class="empty-title">No Orders Yet</h2>
+                            <p class="empty-text">You haven't placed any orders yet.<br>Start shopping to see your order history here.</p>
+                            <a href="/products">
+                            <button class="add-cart-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Start Shopping
+                            </button>
+                            </a>
+                        </div>
+                        <% } %>
                         <!-- Orders List -->
                         <div class="orders-list">
                             <% orders.forEach(element => { %>

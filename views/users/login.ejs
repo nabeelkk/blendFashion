@@ -5,7 +5,7 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-login-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
 <head>
     <meta charset="utf-8">
-    <title>STAG MEN FASHION</title>
+    <title>BLEND FASHION</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,11 +62,20 @@
                 <div class="row">
                     <div class="col-lg-10 m-auto">
                         <div class="row">
+                            
                             <div class="col-lg-1"></div>
                             <div class="col-lg-1"></div>
                             <div class="col-lg-1"></div>
                             <div class="col-lg-1"></div>
                             <div class="col-lg-5">
+                                <% if (signupSuccess) { %>
+                                 <div class="mb-2" style="width: 100%;height: fit-content;background-color: rgba(49, 185, 174, 0.513) ;margin: auto; padding: 10px; border-radius: 10px;display: flex;align-items: center;">
+                                        <div><p style="margin-left: 20px;color: rgb(13, 111, 68);"><strong>Success: </strong></p></div>
+                                        <div><p style="margin-left: 8px;color: rgb(13, 111, 68);"><%= signupSuccess %></p></div>
+                                 </div>
+                                <% } %>
+                                 
+                                
                                 <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
                                     <div class="padding_eight_all bg-white">
                                        <% if (error) { %>

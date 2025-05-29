@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Evara Dashboard</title>
+    <title>Blend Fashion Sales Report</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,7 +36,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -53,7 +53,7 @@
 
                 </li>
                 <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -79,7 +79,7 @@
                         <span class="text">Coupon</span>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                     <a class="menu-link" href="salesReport"> <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Sales Report</span>
                     </a>
@@ -191,20 +191,15 @@
                                                <td>
                                                     <%= new Date(el.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
                                                 </td>
-                                                <% el.products.every(element => { %>
-                                                        <td>
-                                                            <%= element.productId.price.seller * element.quantity%>.00
-                                                        </td>
-                                                <% }) %>
                                                 
-                                                <% if (el.totalDiscount) { %>
-                                                    <td><%=el.totalDiscount%>.00</td>
-                                                <% } else { %>
-                                                    <td>0.00</td>
-                                                <% } %>
+                                                <td><%= ((Number(el.totalDiscount || 0) + Number(el.totalAmount || 0) + Number(el.coupon || 0)).toFixed(2))%></td>
+                                                
+                                                
+                                                    <td><%=el.totalDiscount%></td>
+                                                
 
                                                 <td>
-                                                    <%= el.totalAmount %>
+                                                    <%= Number(el.coupon).toFixed(2) %>
                                                 </td>
                                                     
                                                         <td>
@@ -218,6 +213,83 @@
                                             <% }) %>
                                     </tbody>
                                 </table>
+                                <hr>
+                                <div id="summary">
+                                    <h5>Summary</h5>
+                                    <hr>
+                                    <div style="display: flex; flex-direction: column;">
+                                       <div>
+                                         <table class="table table-hover" style="width: 30%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Total Orders:
+                                                    </th>
+                                                    <th class="text-end">
+                                                        <span id="totalOrders"></span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                       </div>
+                                        <div style="margin-top: -25px;">
+                                            <table class="table table-hover" style="width: 30%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Total Sales Amount:
+                                                        </th>
+                                                        <th class="text-end">
+                                                            ₹<span id="totalSales"></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div style="margin-top: -25px;">
+                                            <table class="table table-hover " style="width: 30%;" >
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Total Discount:
+                                                        </th>
+                                                        <th class="text-end">
+                                                            ₹<span id="totalDiscount" ></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div style="margin-top: -25px;">
+                                            <table class="table table-hover" style="width: 30%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Total Coupon Discount: 
+                                                        </th>
+                                                        <th class="text-end">
+                                                            ₹<span id="totalCoupon"></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div style="margin-top: -25px;">
+                                            <table class="table table-hover" style="width: 30%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-end text-dark" style="background-color: #9ba2a1;">
+                                                           Total Paid:
+                                                        </th>
+                                                        <th class="text-end text-dark" style="background-color: #9ba2a1;">
+                                                            ₹<span id="totalPaid"></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div> <!-- table-responsive.// -->
                         </div> <!-- col end// -->
                         <!-- <aside class="col-lg-3">
@@ -301,32 +373,62 @@
         }
 
         function pdf() {
-            const table = document.getElementById("pdf")
+            const element = document.getElementById('pdf'); // The table
+        const summary = document.getElementById('summary');
 
-            console.log(table)
-            html2pdf().from(table).save();
+        // Create a temporary container to export both
+        const exportContent = document.createElement("div");
+        exportContent.appendChild(element.cloneNode(true));
+        exportContent.appendChild(summary.cloneNode(true));
+
+        html2pdf().from(exportContent).set({
+            margin: 0.5,
+            filename: 'sales_report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        }).save();
         }
 
         function excel() {
             /* Retrieve table data */
+const wb = XLSX.utils.book_new();
+        const ws_data = [];
+        const rows = document.querySelectorAll('#pdf tbody tr');
 
-            var table = document.getElementById('pdf');
-            var tableData = [];
-            var rows = table.rows;
-            for (var i = 0; i < rows.length; i++) {
-                var rowData = [];
-                var cells = rows[i].cells;
-                for (var j = 0; j < cells.length; j++) {
-                    rowData.push(cells[j].innerText);
-                }
-                tableData.push(rowData);
-            }
+        // Add header
+        const headers = ["Order ID", "Name", "Email", "Date", "Total Amount", "Discount", "Coupon", "Paid", "Method"];
+        ws_data.push(headers);
 
-            /* Convert table data to Excel file */
-            var worksheet = XLSX.utils.aoa_to_sheet(tableData);
-            var workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-            var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // Data rows
+        rows.forEach(row => {
+            const rowData = Array.from(row.cells).map(cell => cell.innerText);
+            ws_data.push(rowData);
+        });
+
+        // Summary Calculations
+        let totalOrders = rows.length, totalSales = 0, totalDiscount = 0, totalCoupon = 0, totalPaid = 0;
+
+        rows.forEach(row => {
+            totalSales += parseFloat(row.cells[4].innerText) || 0;
+            totalDiscount += parseFloat(row.cells[5].innerText) || 0;
+            totalCoupon += parseFloat(row.cells[6].innerText) || 0;
+            totalPaid += parseFloat(row.cells[7].innerText) || 0;
+        });
+
+        // Empty row then summary rows
+        ws_data.push([]);
+        ws_data.push(["Summary"]);
+        ws_data.push(["Total Orders", totalOrders]);
+        ws_data.push(["Total Sales", totalSales.toFixed(2)]);
+        ws_data.push(["Total Discount", totalDiscount.toFixed(2)]);
+        ws_data.push(["Total Coupon Discount", totalCoupon.toFixed(2)]);
+        ws_data.push(["Total Paid", totalPaid.toFixed(2)]);
+
+        // Create worksheet and export
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "Sales Report");
+        XLSX.writeFile(wb, "sales_report.xlsx");
 
             /* Save the Excel file */
             saveAsExcelFile(excelBuffer, 'table_data.xlsx');
@@ -343,6 +445,31 @@
                 window.URL.revokeObjectURL(url);
             }, 100);
         }
+        function calculateSummary() {
+        const rows = document.querySelectorAll('#pdf tbody tr');
+        let totalOrders = 0, totalSales = 0, totalDiscount = 0, totalCoupon = 0, totalPaid = 0;
+
+        rows.forEach(row => {
+            totalOrders++;
+            const sales = parseFloat(row.cells[4].innerText) || 0;
+            const discount = parseFloat(row.cells[5].innerText) || 0;
+            const coupon = parseFloat(row.cells[6].innerText) || 0;
+            const paid = parseFloat(row.cells[7].innerText) || 0;
+
+            totalSales += sales;
+            totalDiscount += discount;
+            totalCoupon += coupon;
+            totalPaid += paid;
+        });
+
+        document.getElementById('totalOrders').innerText = totalOrders;
+        document.getElementById('totalSales').innerText = totalSales.toFixed(2);
+        document.getElementById('totalDiscount').innerText = totalDiscount.toFixed(2);
+        document.getElementById('totalCoupon').innerText = totalCoupon.toFixed(2);
+        document.getElementById('totalPaid').innerText = totalPaid.toFixed(2);
+    }
+
+    window.onload = calculateSummary;
 
     </script>
 

@@ -184,12 +184,14 @@
                                     <span class="price-label">Discount on MRP</span>
                                     <span class="price-value text-success">₹<%=discount %></span>
                                 </div>
-                                <div class="price-row">
+                                <% if (discountAmount>10) { %>
+                                 <div class="price-row">
                                     <span class="price-label">Coupon Applied
                                         <!-- <a href="#" class="know-more">Know More</a> -->
                                     </span>
-                                    <span class="price-value text-success"> ₹<%=discountAmount.toFixed(2) %></span>
+                                    <span class="price-value text-success"> ₹<%=discountAmount%></span>
                                 </div>
+                                <% } %>
                                 <% if (appliedOffer>10) { %>
                                  <!-- <div class="price-row">
                                     <span class="price-label">Special Offer</span>

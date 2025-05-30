@@ -53,13 +53,14 @@ const signup =async (req,res)=>{
 
         req.session.otp = otp;
         req.session.email = email;
+        req.session.name = name;
 
         req.session.newUser={
             name,email,mobile,password:hashedPass,otherreferalcode,otp,otpExpr
         }
         const cloudName = process.env.CLOUDINARY_NAME
-        const templatePath = path.join(__dirname, '../views/users/reset-password.ejs');
-        const htmlContent = await ejs.renderFile(templatePath, { username , otp,cloudName});
+        const templatePath = path.join(__dirname, '../views/users/otpEmail.ejs');
+        const htmlContent = await ejs.renderFile(templatePath, { username:name , otp,cloudName});
 
         await transport.sendMail({
             from:process.env.MYGMAIL,
@@ -141,11 +142,15 @@ const resendOtp = async(req,res)=>{
         req.session.newUser.otp = newOtp;
         req.session.newUser.otpExpr = newOtpExpr
 
+        const cloudName = process.env.CLOUDINARY_NAME
+        const templatePath = path.join(__dirname, '../views/users/otpEmail.ejs');
+        const htmlContent = await ejs.renderFile(templatePath, { username:req.session.name , otp,cloudName});
+
         await transport.sendMail({
             from:process.env.MYGMAIL,
-            to:req.session.email,
-            subject:"You Otp for Signup",
-            text:`Yout new Otp is ${newOtp}. It is Valid for 1 minute`
+            to:email,
+            subject:"Resended OTP",
+            html:htmlContent
         })
         return res.redirect('/otp?message=OTP%20resent%20successfully')
     } catch (error) {
@@ -156,10 +161,11 @@ const resendOtp = async(req,res)=>{
 const getLogin = (req,res)=>{
     const error = req.query.error;
     const signupSuccess = req.query.SignupSuccess
+    const resetPass = req.query.resetPass
     if(req.session.user){
        return res.redirect('/')
     }
-    res.render('users/login',{error,signupSuccess})
+    res.render('users/login',{error,signupSuccess,resetPass})
 }
 
 const login =async (req,res)=>{
@@ -194,7 +200,7 @@ const home =async (req,res)=>{
     try{
         const products = await Product.find({isdeleted:false})
         const user = req.session.user
-        console.log(user,"home user")
+
         const trendingProd = await Product.find({isdeleted:false}).sort({updatedAt:-1})
         const newArrival = await Product.find({isdeleted:false}).sort({createdAt:-1})
         
@@ -215,7 +221,8 @@ const home =async (req,res)=>{
 
 const forgetPass = async(req,res)=>{
     const error = req.query.error
-    return res.render('users/forgetpass',{error})
+    const cloudName = process.env.CLOUDINARY_NAME
+    return res.render('users/forgetpass',{error,cloudName})
     
 }
 
@@ -239,10 +246,10 @@ const forgetpassword = async (req,res)=>{
         user.resetToken = token;
         user.resetTokenExpr = new Date()+3600000
         await user.save()
-
+        const cloudName = process.env.CLOUDINARY_NAME
         const resetLink = `http://localhost:5001/reset-pass/${token}`
-        const templatePath = path.join(__dirname, '../views/users/reset-password.ejs');
-        const htmlContent = await ejs.renderFile(templatePath, { user, resetLink });
+        const templatePath = path.join(__dirname, '../views/users/forgetEmail.ejs');
+        const htmlContent = await ejs.renderFile(templatePath, { user, resetLink ,cloudName});
 
         await transport.sendMail({
             to:user.email,
@@ -297,7 +304,7 @@ const resetPass =async (req,res)=>{
 
         await user.save();
 
-        return res.redirect('/login')
+        return res.redirect('/login?resetPass=Password Successfully Changed ')
 
     } catch (error) {
         console.log(error);
@@ -627,6 +634,7 @@ const verifyEmailOtp = async (req, res) => {
 
 const myCart = async (req, res) => {
     try {
+        
         const userId = req.session.user._id;
 
         const cart = await Cart.findOne({ userId }).populate({
@@ -636,8 +644,12 @@ const myCart = async (req, res) => {
                 model: 'Category'
             }
         });
+        if(cart.length<1){
+            req.session.user.discountAmount = null
+        }
+        
         const cloudName = process.env.CLOUDINARY_NAME;
-        const coupon = req.session.user.discountedTotal
+        const coupon = req.session.user.discountAmount
         const coupons = await Coupon.find({isActive:true})
         console.log(coupon,"coup")
 
@@ -677,7 +689,8 @@ const myCart = async (req, res) => {
                     categoryDiscount = (product.sizes[size].Mrp * matchingCategoryOffer.discount) / 100;
                 }
                 }
-
+                console.log(productOffer,"product offer")
+                console.log(categoryDiscount,"category offer")
                 appliedOffer = Math.max(productOffer, categoryDiscount);
 
                 let productDiscount = 0;
@@ -688,11 +701,17 @@ const myCart = async (req, res) => {
                 discount += productDiscount;
                 
                 cartTotal += ((MRP * quantity) - (productDiscount)) ;
+                console.log(cartTotal)
+                
+                
+            
             });
-            if(coupon){
-                cartTotal = coupon;
-            }
+            
 
+        }
+        if(coupon){
+                cartTotal = cartTotal - coupon;
+                console.log(coupon,"coupon")
         }
 
         res.render('users/cart', {  
@@ -809,8 +828,15 @@ const updateQuantity = async(req,res)=>{
         await cart.save();
     
         let cartTotal = 0;
+        const coupon = req.session.user.discountedTotal
+
         cart.products.forEach(p => {
-          cartTotal += p.quantity * p.price;
+            if(coupon){
+                cartTotal += p.quantity * p.coupon;
+            }else{
+                cartTotal += p.quantity * p.price;
+            }
+          
         });
         
         
@@ -1025,7 +1051,7 @@ const myWallet = async(req,res)=>{
         const limit = 5;
         const totalWallet = await Wallet.countDocuments({user:userId})
         console.log(totalWallet,"wallet count")
-        const totalPge = Math.ceil(totalWallet/limit)
+        const totalPage = Math.ceil(totalWallet/limit)
         const skip = (page-1)*limit;         
         const wallet = await Wallet.find({user:userId})
         .sort({createdAt:-1})
@@ -1039,7 +1065,7 @@ const myWallet = async(req,res)=>{
         wallet.forEach((element)=>{
             balance = element.balance
         })
-        res.render('users/wallet',{user:req.session.user,wallet,balance,cartCount,page,totalPge})
+        res.render('users/wallet',{user:req.session.user,wallet,balance,cartCount,page,totalPage})
     } catch (error) {
         console.log('Wallet side',error)
         return res.status(500).send("Internal Error")

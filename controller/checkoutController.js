@@ -52,7 +52,7 @@ const checkOut = async(req,res)=>{
         let products = [];
         let appliedOffer = 0
         const discountAmount = req.session.user.discountAmount
-        let coupon = req.session.user.discountedTotal
+        let coupon = req.session.user.discountAmount
         if (cart && cart.products.length > 0) {
             products = cart.products;
 
@@ -90,11 +90,11 @@ const checkOut = async(req,res)=>{
                 discount += productDiscount;
                 totalPrice += (MRP * quantity) - productDiscount;
             });
-            if(coupon){
-                totalPrice = coupon
-            }
+            
         }
-
+        if(coupon){
+                totalPrice = totalPrice - coupon
+        }
         
 
         res.render('users/checkOut',{user:req.session.user,address,cart,totalMRP,cloudName,totalPrice:totalPrice.toFixed(2),discount:discount.toFixed(2),appliedOffer,coupon,discountAmount: discountAmount ? discountAmount.toFixed(2) : '0.00'})
@@ -223,7 +223,7 @@ const paymentMethod =async (req,res)=>{
         const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME 
         const discountAmount = req.session.user.discountAmount
-        let coupon = req.session.user.discountedTotal
+        let coupon = req.session.user.discountAmount
         if (!cart || !cart.products?.length) {
             req.flash('error', 'Your cart is empty');
             return res.redirect('/cart');
@@ -298,11 +298,11 @@ const paymentMethod =async (req,res)=>{
                 totalPrice += (MRP * quantity) - productDiscount;
                 console.log(totalPrice,"final")
             });
-            if(coupon){
-                totalPrice = coupon
-            }
+            
         }
-        
+        if(coupon){
+                totalPrice = totalPrice - coupon
+        }
         res.render('users/paymentMethod',{user:req.session.user,address,cart,coupon,cloudName,totalPrice:totalPrice.toFixed(2),totalMRP,discount:discount.toFixed(2),appliedOffer,defaultAddressId,discountAmount: discountAmount ? discountAmount.toFixed(2) : 0, messages: {
                 error: req.flash('error'),
                 success: req.flash('success')

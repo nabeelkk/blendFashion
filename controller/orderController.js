@@ -205,43 +205,80 @@ const  orderdetails =async (req,res)=>{
     }
 }
 
-const cancelOrder =async (req,res)=>{
-    try {
-        const userId = req.session.user._id
-        const {productId, orderId, reason} = req.body
-        const order = await Order.findOne({ _id:orderId });
-        if (!order) return res.status(404).send("Order not found");
-        const product = order.products.find((p) => p._id.toString() === productId);
-        if (!product || product.status === 'Cancelled') {
-        return res.json({success:false,message:"Product already cancelled"});
-        }
-        
-        product.status = "Cancelled";
-        if (reason) product.cancelReason = reason;
-        let wallet = await Wallet.findOne({user:order.user})
-        if(!wallet){
-            wallet = new Wallet({user:order.user})
-        }
-                        
-        wallet.balance += product.price* product.quantity
-        wallet.transactions.push({
-          amount: product.price* product.quantity,
-          type: 'credit',
-          description: `Refund for return - Product ID ${product.productId}`
-        })
-        let pdt = await Product.findByIdAndUpdate({_id:product.productId});
-        pdt.sizes[product.size].quantity = pdt.sizes[product.size].quantity+product.quantity
-        await order.save();
-        await wallet.save()
-        await pdt.save();
+const cancelOrder = async (req, res) => {
+  try {
+    const userId = req.session.user._id;
+    const { productId, orderId, reason } = req.body;
 
-        res.json({ success: true, message: "Product cancelled successfully" });
-    } catch (error) {
-        console.log("order cancel side",error)
-        return res.status(500).send("Internal server error")
+    const order = await Order.findOne({ _id: orderId });
+    if (!order) return res.status(404).send("Order not found");
+
+    const product = order.products.find(
+      (p) => p._id.toString() === productId
+    );
+    console.log(product,"products")
+    if (!product || product.status === "Cancelled") {
+      return res.json({
+        success: false,
+        message: "Product already cancelled",
+      });
     }
 
-}
+    // Cancel product and add reason
+    product.status = "Cancelled";
+    if (reason) product.cancelReason = reason;
+
+    let wallet = await Wallet.findOne({ user: order.user });
+    if (!wallet) {
+      wallet = new Wallet({ user: order.user, balance: 0, transactions: [] });
+    }
+
+    // Refund only if payment method is Card
+    if (order.paymentMethod === "Card") {
+      const mrp = Number(product.price) || 0;
+      const discount = Number(product.discount) || 0;
+      const coupon = Number(product.coupon) || 0;
+      const quantity = Number(product.quantity) || 1;
+      console.log(mrp,    discount    ,    coupon   ,    quantity)
+      // New refund calculation
+      const refundAmount = (mrp * quantity) - (coupon/order.length);
+      console.log(refundAmount,"rfund amount")
+
+      if (!isNaN(refundAmount) && refundAmount > 0) {
+        wallet.balance = Number(wallet.balance || 0) + refundAmount;
+
+        wallet.transactions.push({
+          amount: refundAmount,
+          type: "credit",
+          date: new Date(),
+          description: `Refund for cancelled product: ${product.productName}`,
+        });
+      } else {
+        console.warn("Refund skipped due to invalid amount:", refundAmount);
+      }
+
+    }
+
+    // Update stock
+    const pdt = await Product.findById(product.productId);
+    if (pdt?.sizes?.[product.size]) {
+      pdt.sizes[product.size].quantity += product.quantity;
+      await pdt.save();
+    }
+
+    // Save all changes
+    await order.save();
+    await wallet.save();
+
+    return res.json({ success: true, message: "Product cancelled and refunded" });
+
+  } catch (error) {
+    console.log("order cancel side", error);
+    return res.status(500).send("Internal server error");
+  }
+};
+
+
 const bulkCancel = async (req, res) => {
     try {
         const { orderId, cancelReason } = req.body;
@@ -506,6 +543,7 @@ const handlePaymentSuccess = async (req, res) => {
     }
     const coupon = req.session.user.discountedTotal
     const couponDiscount = req.session.user.discountAmount
+    let MRP = 0
     let discount = 0;
     let orderedAmount =0
     for (const item of cart.products) {
@@ -519,7 +557,7 @@ const handlePaymentSuccess = async (req, res) => {
         return res.json({ success: false, message: `Sorry... ${size} quantity is out of stock` });
       }
 
-      const MRP = product.sizes[size].Mrp;
+      MRP = product.sizes[size].Mrp;
       const today = new Date();
       const productOffer = MRP - price;
       let categoryDiscount = 0;
@@ -569,6 +607,9 @@ const handlePaymentSuccess = async (req, res) => {
           price: item.price,
           quantity: item.quantity,
           size: item.size || 'N/A',
+          discount:discount.toFixed(2),
+          MRP:MRP,
+          coupon:couponDiscount?couponDiscount.toFixed(2):0,
           image: item.productId.images && item.productId.images[0]
             ? `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${item.productId.images[0]}`
             : '',

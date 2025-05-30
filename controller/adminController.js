@@ -158,7 +158,7 @@ const productDetails = async(req,res)=>{
         
         const categories = await Category.find({ isListed: true });
         const cloudName = process.env.CLOUDINARY_NAME
-
+        const product = await Product.findOne({_id:prodId}).populate('category')
         res.render('admin/productDetails',{product,cloudName,categories})
     } catch (error) {
         console.log('productDetails admin side',error)

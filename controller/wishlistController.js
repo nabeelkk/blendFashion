@@ -9,11 +9,12 @@ const wishList = async(req,res)=>{
     if(!user){
         return res.redirect('/login')
     }
+    
     const userId= req.session.user._id
     const cart = await Cart.find({userId:userId})
     let cartCount
     cart.forEach((elem)=>cartCount = elem.products.length)
-    let wishlist = await Wishlist.findOne({ userId }).populate('products.productId');
+    let wishlist = await Wishlist.findOne({ userId }).populate('products.productId')
     const cloudName = process.env.CLOUDINARY_NAME 
 
     res.render('users/wishlist',{user,wishlist,cloudName,cartCount})

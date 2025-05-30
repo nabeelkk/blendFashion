@@ -269,7 +269,7 @@
 
         function mobvalidate() {
             const mobval = mobileid.value.trim();
-            const mobpattern =   /^\d{10}$/
+            const mobpattern =   /^[6-9]\d{9}$/
             if (mobval === "") {
                 error4.style.display = "block";
                 error4.innerHTML = "Please enter a valid Mobile Number.";

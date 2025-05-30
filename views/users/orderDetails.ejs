@@ -171,7 +171,8 @@
                                     <div class="product-meta">Size: <%= prod.size %></div>
                                     <div class="product-meta">Quantity: <%= prod.quantity %></div>
                                 <div class="product-meta">Status: <span class="status-badge" ><%= prod.status %> </span></div>
-                                    <div class="product-price">₹ <%= orders.totalAmount %></div>
+                                    <div class="product-price">Price:   ₹<%= prod.MRP  %></div>
+                                    <div class="product-price">Total ₹<%= prod.MRP*prod.quantity  %></div>
                                 </div>
                                 <div class="text-end d-flex flex-column justify-content-end" >
                                     
@@ -275,7 +276,13 @@
                                 <h5 class="mb-3">Order Summary</h5>
                                 <div class="summary-row">
                                     <div class="summary-label">Item(s) Subtotal:</div>
-                                    <div class="summary-value">₹ <%= orders.totalAmount+orders.totalDiscount %></div>
+                                    <% if (orders.coupon>10) { %>
+                                     <div class="summary-value">₹ <%= orders.totalAmount+orders.totalDiscount+parseInt(couponDiscount) %></div>
+                                     <% } else { %>
+                                      <div class="summary-value">₹ <%= orders.totalAmount+orders.totalDiscount %></div>
+                                    <% } %>
+
+                                    
                                 </div>
                                 <div class="summary-row">
                                     <div class="summary-label">Shipping:</div>

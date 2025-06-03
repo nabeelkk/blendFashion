@@ -226,7 +226,7 @@
                                         <tr>
                                             <th>Product</th>
                                             <th>Coupon</th>
-                                            <th>Unit Price</th>
+                                            <!-- <th>Unit Price</th> -->
                                             <th>Discount</th>
                                             <th>Total</th>
                                             <th>Size</th>
@@ -250,10 +250,10 @@
                                                     <div class="info"> <%= element.productId.name %> </div>
                                                 </a>
                                             </td>
-                                            <td><%= couponDiscount %></td>
-                                            <td> <%= order.totalDiscount+order.totalAmount %> </td>
-                                            <td><%= order.totalDiscount %> </td>
-                                            <td> <%= order.totalAmount%></td>
+                                            <td><%= parseInt(couponDiscount) %></td>
+                                            <!-- <td> <%= parseInt(element.discount)+parseInt(element.price) %> </td> -->
+                                            <td><%= element.discount %> </td>
+                                            <td> <%= element.price%></td>
                                             <td><%= element.size %></td>
                                             <td> <%= element.quantity %> </td>
                                             <td><span
@@ -280,6 +280,10 @@
                                                     <dl class="dlist">
                                                         <dt>Shipping cost:</dt>
                                                         <dd>₹<b class="h5"></b> 0.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Total Discount:</dt>
+                                                        <dd>₹<b class="h5"></b><%= couponDiscount > 0 ?parseInt(couponDiscount) +parseInt(order.totalDiscount) :  order.totalDiscount %></dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Grand total:</dt>

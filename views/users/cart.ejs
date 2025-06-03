@@ -273,11 +273,14 @@
                 const data = await response.json()
                 if(data.success){
                     input.value = newQty
-                    window.location.reload()
+                    window.location.reload()    
                 }
                 if(data.message ){
                     let errmsg = document.getElementById('errmsg')
                     showToast(data.message ||'', 'error')
+                    setTimeout(()=>{
+                        window.location.reload() 
+                    },1500)
                 }else{
                     errmsg.innerText = ''
                 }

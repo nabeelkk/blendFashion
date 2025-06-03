@@ -63,10 +63,12 @@ router.post('/checkout/address/add',isAuthenticated,checkoutController.addChecko
 router.delete('/checkout/delete/:id',isAuthenticated,checkoutController.deleteCheckoutAddress)
 router.put('/checkout/edit/:id',isAuthenticated,checkoutController.editCheckoutAddress)
 router.get('/checkout/paymentmethod/:id',isAuthenticated,checkoutController.paymentMethod)
+
 router.post('/place-order',isAuthenticated,orderController.placeOrder)
 router.post('/create-razorpay-order',isAuthenticated,orderController.createRazorpayOrder)
-router.post('/payment-success',isAuthenticated, orderController.handlePaymentSuccess)
-router.get('/checkoutfailure',isAuthenticated, orderController.handleCheckoutFailure);
+router.post('/payment-success',isAuthenticated,orderController.handlePaymentSuccess)
+router.get('/checkoutfailure',isAuthenticated,orderController.handleCheckoutFailure);
+router.get('/retryPayment/:id',isAuthenticated,orderController.retryPayment)
 
 
 router.get('/address',isAuthenticated,userController.addresses)
@@ -84,7 +86,7 @@ router.get('/newarrival',userController.newArrival)
 router.get('/myOrder',isAuthenticated,orderController.myOrder)
 router.get('/orderplaced',isAuthenticated,orderController.orderPlaced)
 router.get('/orderdetails/:orderId',isAuthenticated,orderController.orderdetails)
-router.post('/myorder/cancel',  isAuthenticated,orderController.cancelOrder)
+router.post('/myorder/cancel',isAuthenticated,orderController.cancelOrder)
 router.post('/myorder/bulkCancel',isAuthenticated,orderController.bulkCancel)
 router.post('/order/return',isAuthenticated,orderController.returnProduct)
 router.get('/order/invoice/:id',isAuthenticated,orderController.invoice)

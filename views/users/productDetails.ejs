@@ -591,6 +591,7 @@
             let stockDisplay = document.getElementById('stock-display')
             let cartBtn = document.getElementById('add-to-cart')
             let itemLeft = document.getElementById('itemLeft')
+            console.log(quantity)
             if(quantity < 1){
                 cartBtn.disabled = true;  
                 cartBtn.classList.add('disabled')
@@ -600,7 +601,7 @@
                 cartBtn.disabled = false; 
                 cartBtn.classList.remove('disabled');
             }
-            if(quantity <5 && quantity>1){
+            if(quantity <5 && quantity>=1){
                 itemLeft.textContent = ` Hurry up only ${quantity} items are left`
             }else{
                 itemLeft.textContent = ''

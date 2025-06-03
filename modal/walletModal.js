@@ -16,9 +16,13 @@ const walletSchema = new mongoose.Schema({
         description: {
           type: String
         },
-        date: { type: Date, default: Date.now }
+        date: { type: Date, default: Date.now },
+        status :{
+          type:String,
+          default:'completed'
+        }
       }
     ]
-  });
+  },{timestamps:true});
   
   module.exports = mongoose.model('Wallet', walletSchema);

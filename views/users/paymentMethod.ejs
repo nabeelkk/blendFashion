@@ -137,7 +137,7 @@
                                 <a href="/checkout" class="btn back-btn">
                                     <i class="fas fa-arrow-left me-2"></i> Back to Delivery Address
                                 </a>
-                                <button onclick="placeOrder()" class="btn continue-btn">
+                                <button id="placebtn" onclick="placeOrder()" class="btn continue-btn">
                                     Place Order <i class="fas fa-arrow-right ms-2"></i>
                                 </button>
                             </div>
@@ -171,7 +171,7 @@
                                 <% }) %>
             
                             <!-- Price Details -->
-                             <input type="hidden" id="cart" value="<%= cart %>">
+                             <input type="hidden" id="cart" value="<%= JSON.stringify(cart)  %>">
                             <div class="price-details mt-4">
                                 <h5 class="mb-3">Price Details (<%= cart.products.length %>) Items</h5>
                                 
@@ -210,7 +210,7 @@
                                 
                                 <div class="price-row total-row">
                                     <span>Total Amount</span>
-                                    <span>₹ <%= totalPrice %></span>
+                                    <span >₹ <%= totalPrice %></span>
                                 </div>
                             </div>
                         </div>
@@ -261,6 +261,7 @@
             const defaultAddress = document.getElementById('default-address').value;
             console.log(defaultAddress)
             const totalAmount = document.getElementById('total-price').value
+            
         
             const cart =  JSON.stringify(document.getElementById('cart').value)
 
@@ -350,7 +351,16 @@
                 showToast('An error occurred. Please try again.', 'error');
             }
         });
-
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const totalAmount = document.getElementById('total-price').value
+            if (totalAmount > 5000) {
+                const orderBtn = document.getElementById('placebtn');
+                orderBtn.disabled = true;
+                orderBtn.classList.add('disabled'); 
+                // orderBtn.innerHTML = 'Order Limit Exceeded';
+            }
+        })
         function placeOrder() {
             let paymentMethodBtn = document.getElementById('codTerms');
             let defaultAddress = document.getElementById('default-address').value;

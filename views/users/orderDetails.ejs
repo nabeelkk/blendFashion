@@ -170,9 +170,13 @@
                                     <div class="product-meta">Name: <%= prod.productId.name %></div>
                                     <div class="product-meta">Size: <%= prod.size %></div>
                                     <div class="product-meta">Quantity: <%= prod.quantity %></div>
-                                <div class="product-meta">Status: <span class="status-badge" ><%= prod.status %> </span></div>
-                                    <div class="product-price">Price:   ₹<%= prod.MRP  %></div>
-                                    <div class="product-price">Total ₹<%= prod.MRP*prod.quantity  %></div>
+                                    <% if (orders.status == "Pending") { %>
+                                     <div class="product-meta">Status: <span class="status-badge" >Pending </span></div>
+                                     <% } else { %>
+                                      <div class="product-meta">Status: <span class="status-badge" ><%= prod.status %> </span></div>
+                                    <% } %>
+                                    <div class="product-price">Price:   ₹<%= prod.price  %></div>
+                                    <!-- <div class="product-price">Total ₹<%= prod.MRP*prod.quantity  %></div> -->
                                 </div>
                                 <div class="text-end d-flex flex-column justify-content-end" >
                                     
@@ -604,7 +608,7 @@
                 })
         }
             
-          async function retryPayment(retryOrderId) {
+        async function retryPayment(retryOrderId) {
             try {
                 const defaultAddress = document.getElementById('default-address').value;
                 const totalAmount = document.getElementById('total-price').value;
@@ -630,13 +634,17 @@
                     showToast(data.error, 'error');
                     return;
                 }
+                if (!data.key_id) {
+                    console.error("Missing Razorpay key_id from backend response", data);
+                    return;
+                }
 
                 const options = {
                     key: data.key_id,
                     amount: data.amount,
                     currency: data.currency,
                     order_id: data.order_id,
-                    name: 'Blend',
+                    name: data.user?.name||'Blend',
                     description: `Retry Payment for Order ${retryOrderId}`,
                     handler: async function (response) {
                         try {
@@ -657,20 +665,20 @@
                                 showToast(paymentData.error, 'error');
                             } else {
                                 showToast('Payment successful', 'success');
-                                setTimeout(() => { window.location.reload(); }, 2000);
+                                setTimeout(() => { window.location.reload() }, 1000);
                             }
                         } catch (error) {
                             console.error('Payment Success Error:', error);
                             showToast('Payment Success', 'success');
                             setTimeout(() => {
-                                window.location.location = '/checkoutsuccess'
+                                window.location.href = '/checkoutsuccess'
                             }, 2000);
                         }
                     },
                     prefill: {
-                        name: data.user.name,
-                        email: data.user.email,
-                        contact: data.user.contact
+                        name: data.user?.name,
+                        email: data.user?.email,
+                        contact: data.user?.contact
                     },
                     theme: {
                         color: '#343a40'

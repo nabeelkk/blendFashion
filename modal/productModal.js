@@ -106,7 +106,7 @@ const productSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    isListed:{
+    isListed:{      
         type:Boolean,
         default:true
     },

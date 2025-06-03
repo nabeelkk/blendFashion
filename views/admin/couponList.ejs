@@ -145,6 +145,7 @@
                                     <th scope="col">Discount</th>
                                     <th scope="col">Min Purchase</th>
                                     <th scope="col">Coupon Expirey</th>
+                                    <th scope="col">Expire Status</th>
                                     <th scope="col">Status</th>
                                     <th scope="col" class="text-end"> Action </th>
                                 </tr>
@@ -157,10 +158,23 @@
                                     <td><%= el.discount %>%</td>
                                     <td>₹<%= el.minPurchase %></td>
                                     <td><%= el.expiryDate.toISOString().split('T')[0]  %></td>
+                                    <% 
+                                        const expiryDate = new Date(el.expiryDate);
+                                        const currentDate = new Date();
+                                        const timeDiff = expiryDate - currentDate;
+                                        const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                                    %>
+                                   <% if (daysLeft <= 0) { %>
+                                        <td><span class="badge rounded-pill alert-danger">Expired</span></td>
+                                        <% } else { %>
+                                        <td><span class="badge rounded-pill alert-success"><%= daysLeft %> Days left</span></td>
+                                        <% } %>
+                                    
                                     <% if(el.isActive == true){%>
-                                    <td>Active</td>
+                                    <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                    
                                     <%}else{%>
-                                        <td>InActive</td>
+                                        <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
                                         <%}%>
                                     <td class="text-end">
                                         <a href="/admin/editCoupon?id=<%= el._id %>" class="btn btn-md rounded font-sm">Edit</a>

@@ -634,7 +634,9 @@ const verifyEmailOtp = async (req, res) => {
 
 const myCart = async (req, res) => {
     try {
-        
+        if(!req.session.user){
+            return res.redirect('/login')
+        }
         const userId = req.session.user._id;
 
         const cart = await Cart.findOne({ userId }).populate({
@@ -741,7 +743,7 @@ const addCart = async(req,res)=>{
         if (!req.session.user) return res.status(401).json({success:false, message: 'Unauthorized' })
         const userId = req.session.user._id;
         const {id,size,price} = req.body
-        console.log(size,"this is the size ")
+        console.log(size,"this is the size ",id,     price)
         if(!size){
             return res.json({sizemessage:"Please select a size"})
         }
@@ -820,6 +822,9 @@ const updateQuantity = async(req,res)=>{
         else if(size==='medium') stock = productData.sizes.medium.quantity
         else if(size === 'large') stock = productData.sizes.large.quantity
           
+        if(quantity > stock){
+            return res.status(400).json({success:false,message:`Only ${quantity} item is available for this size`})
+        }
 
         if(quantity > stock || quantity > 5){
             return res.status(400).json({success:false,message:'Cart limit exceed for this size',quantity:quantity})
@@ -1062,9 +1067,9 @@ const myWallet = async(req,res)=>{
         let cartCount
         cart.forEach((elem)=>cartCount = elem.products.length)
         let balance
-        wallet.forEach((element)=>{
-            balance = element.balance
-        })
+        if(wallet.length > 0) {
+            balance = wallet[0].balance; 
+        }
         res.render('users/wallet',{user:req.session.user,wallet,balance,cartCount,page,totalPage})
     } catch (error) {
         console.log('Wallet side',error)

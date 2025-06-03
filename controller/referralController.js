@@ -27,7 +27,7 @@ const createReferral = async (userId) => {
 const handleReferralSignup = async (req, res) => {
   try {
     const { referralCode, referralToken } = req.body;
-    const { userId } = req.session; // Assuming userId is set after signup
+    const { userId } = req.session; 
 
     let referrer = null;
     if (referralCode) {
@@ -37,21 +37,17 @@ const handleReferralSignup = async (req, res) => {
     }
 
     if (referrer) {
-      // Update referred user
       await User.findByIdAndUpdate(userId, { referredBy: referrer.userId._id });
 
-      // Add to referredUsers
       referrer.referredUsers.push(userId);
-
-      // Create a coupon for the referrer
       const coupon = new Coupon({
         code: `REF${Date.now()}`,
-        discount: 10, // Example: 10% discount
+        discount: 10, 
         discountType: 'percentage',
         maxDiscount: 500,
         minPurchase: 1000,
         startDate: new Date(),
-        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), 
         usageLimit: 1,
         applicableTo: 'all',
       });

@@ -479,8 +479,10 @@
            
        }
        function addToCart(id) {
-            let priceValue = document.querySelector('.current-price').textContent
+            let priceValue = document.querySelector('.current-price').value
+        
             let price = parseInt(priceValue)
+            console.og(price,'jnjnjnj')
             fetch(`/cart/add`,{
                 method: 'post',
                 headers:{

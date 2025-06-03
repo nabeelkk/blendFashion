@@ -47,7 +47,7 @@ const generateSalesReport = async (req, res) => {
       totalSales += order.totalAmount;
       totalDiscount += order.totalDiscount || 0;
       if (order.appliedCoupon) {
-        couponDeduction += order.totalDiscount || 0; // Assuming coupon discount is part of totalDiscount
+        couponDeduction += order.totalDiscount || 0; 
       }
     });
 

@@ -15,14 +15,13 @@ async function checkOrderOwnership(req, res, next) {
       }
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
-    // Check if the order belongs to the authenticated user
     if (order.user.toString() !== req.session.user.id) {
       if (req.accepts('html')) {
         return res.redirect('/myOrder?error=You do not have permission to view this order');
       }
       return res.status(403).json({ success: false, message: 'Forbidden: You do not own this order' });
     }
-    req.order = order; // Pass the order to the next handler
+    req.order = order; 
     next();
   } catch (error) {
     console.error(error);

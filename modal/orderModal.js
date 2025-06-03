@@ -25,6 +25,8 @@ const orderSchema = new mongoose.Schema({
   totalAmount: Number,
   totalDiscount:Number,
   paymentMethod: String,
+  paymentId: String,
+  razorPayId:String,
   paymentStatus:{
     type:String,
     default:"false"

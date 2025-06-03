@@ -103,6 +103,7 @@ const checkOut = async(req,res)=>{
         res.status(500).send("Internal error")
     }
 }
+
 const checkOutSuccess = async(req,res)=>{
     try {
         const cart = await Cart.findOne({userId:req.session.user._id})

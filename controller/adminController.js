@@ -766,17 +766,39 @@ const verifyReturn = async (req, res) => {
       await order.save();
   
       const userId = order.user;
-      const refundAmount = product.price * product.quantity;
       let wallet = await Wallet.findOne({ user: userId });
   
       if (!wallet) wallet = new Wallet({ user: userId });
-  
-      wallet.balance += refundAmount;
-      wallet.transactions.push({
-        amount: refundAmount,
-        type: 'credit',
-        description: `Refund for return - Product ID ${productId}`
-      });
+
+      if (order.paymentMethod === "Card") {
+      
+      const mrp = Number(product.price) || 0;
+      const discount = Number(product.discount) || 0;
+      const coupon = Number(product.coupon) || 0;
+      const quantity = Number(product.quantity) || 1;
+      console.log(mrp,    discount    ,    coupon   ,    quantity)
+      let refundAmount = 0;
+
+      refundAmount = (mrp * quantity) - coupon;
+      if(coupon){
+        refundAmount = (mrp * quantity) - (coupon/order.length);
+      }
+      console.log(refundAmount,"rfund amount")
+
+      if (!isNaN(refundAmount) && refundAmount > 0) {
+        wallet.balance = Number(wallet.balance || 0) + refundAmount;
+
+        wallet.transactions.push({
+          amount: refundAmount,
+          type: "credit",
+          date: new Date(),
+          description: `Refund for Returned product: ${product.productName}`,
+        });
+      } else {
+        console.warn("Refund skipped due to invalid amount:", refundAmount);
+      }
+
+    }
   
       await wallet.save();
     }

@@ -4,7 +4,8 @@ const User = require('../modal/userModal')
 const displayCoupon = async (req, res) => {
     try {
         const coupon = await Coupon.find({})
-        res.render('admin/couponList', { coupon })
+
+        res.render('admin/couponList', { coupon})
     } catch (error) {
         console.log(error.message);
     }
@@ -25,18 +26,12 @@ const displayAddCoupon = async (req, res) => {
 const addCoupon = async (req, res) => {
     try {
         const { name, discount, expirydate, minpurchase } = req.body
-        const validName = /^[A-Za-z][A-Za-z\s]*$/;
-        if(validName.test(name)){
-            return res.redirect('/admin/addCoupon?nameError=Please%20enter%20valid%20name')
+        if(!name||!discount||!expirydate||!minpurchase){
+            return res.json({success:false,message:"All field are required"})
         }
-        if(!name || !discount || !expirydate || !minpurchase){
-            return res.redirect('/admin/addCoupon?error=This%20Field%20is%20required')
-        }
-        if(discount>99 || discount<1){
-            return res.redirect('/admin/addCoupon?discounterror=Discount%20must%20be%20less%20than%2099%20and%20must%20be%20positive%20number')
-        }
-        if(minpurchase<500){
-            return res.redirect('/admin/addCoupon?minPurchaseerror=Minimum purchase must be greater than 500')
+        const existCouponName = await Coupon.findOne({name})
+        if(existCouponName){
+            return res.json({success:false,message:"Name already exist"})
         }
         const coupon = new Coupon({
             name: name,
@@ -46,7 +41,7 @@ const addCoupon = async (req, res) => {
             couponcode: undefined
         })
         await coupon.save();
-        res.redirect("/admin/couponList")
+        return res.json({success:true,message:"Coupon successfully added"})
     } catch (error) {
         console.log(error.message);
     }
@@ -61,17 +56,22 @@ const getEditCoupon = async (req, res) => {
         const minPurchaseerror = req.query.minPurchaseerror
         const nameError = req.query.nameError
 
-        const coupon = await Coupon.findById({ _id: couponID})
+        const coupon = await Coupon.findById(couponID)
+        console.log(coupon,"ccccc")
         res.render('admin/editCoupon', { coupon,error,discounterror,minPurchaseerror,nameError  })
     } catch (error) {
-        console.log(error.message);
+        console.log("get coupon edit side",error);
     }
 }
 
 const postEditCoupon = async (req, res) => {
     try {
         const couponID = req.session.cid
+        console.log(couponID,"id")
         const { name, discount, expirydate, minpurchase } = req.body
+        if(!name|| !discount || !expirydate || !minpurchase){
+            return res.json({success:false,message:"All field are required"})
+        }
         const coupon = await Coupon.findByIdAndUpdate({ _id: couponID },
             {
                 $set: {
@@ -81,9 +81,9 @@ const postEditCoupon = async (req, res) => {
                     expiryDate: expirydate
                 }
             })
-        res.redirect('/admin/couponList')
+        return res.json({success:true,message:"Coupon successfully edited"})
     } catch (error) {
-        console.log(error.message);
+        console.log("coupon edit side",error);
     }
 }
 
@@ -93,10 +93,11 @@ const blockCoupon = async (req, res) => {
         const coupon = await Coupon.findById({ _id: couponID })
         if (coupon.isActive == true) {
             await Coupon.findOneAndUpdate({ _id: couponID }, { $set: { isActive: false } })
+            return res.json({success:true,message:"Coupon Blocked"})
         } else {
             await Coupon.findOneAndUpdate({ _id: couponID }, { $set: { isActive: true } })
+            return res.json({success:true,message:"Coupon Unblocked"})
         }
-        res.redirect('/admin/couponList')
     } catch (error) {
         console.log(error.message);
     }
@@ -178,6 +179,19 @@ const removeCoupon = async (req, res) => {
   }
 };
 
+const deleteCoupon = async (req,res)=>{
+    try {
+        const couponId = req.params.id
+        if(!couponId){
+            return res.json({success:false,message:"Coupon not found"})
+        }
+        await Coupon.findByIdAndDelete({_id:couponId})
+        return res.json({success:true,message:"Coupon deleted succesfully"})
+    } catch (error) {
+        console.log('coupon delete side',error)
+    }
+}
+
 module.exports = {
     displayCoupon,
     displayAddCoupon,
@@ -186,5 +200,6 @@ module.exports = {
     postEditCoupon,
     blockCoupon,
     applyCoupon,
-    removeCoupon
+    removeCoupon,
+    deleteCoupon
 }

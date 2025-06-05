@@ -2,7 +2,6 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
 
 <head>
     <meta charset="utf-8">
@@ -139,7 +138,7 @@
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form method="post" id="copform">
+                            <form id="copform">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label">Coupon Name</label>
                                     <input type="text" placeholder="Type here" name="name" class="form-control"
@@ -169,14 +168,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label class="form-label">Maximum Discount</label>
-                                            <input placeholder="Type here" name="maxdiscount" type="text"
-                                                id="maxdiscount" class="form-control">
-                                            <p><span id="error3" style="display: none; color: red;"></span></p>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -210,7 +201,7 @@
                                 <div style="align-items: center;">
                                     <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
                                 </div>
-                                </form>
+                            </form>
 
                         </div>
                     </div> <!-- card end// -->
@@ -230,126 +221,114 @@
                         All rights reserved
                     </div>
                 </div>
-            </div>=
+            </div>
         </footer>
     </main>
-    <script src="/public/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <!-- <script src="/public/adminassets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/adminassets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/adminassets/js/vendors/select2.min.js"></script>
     <script src="/public/adminassets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="/public/adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/public/adminassets/js/vendors/jquery.fullscreen.min.js"></script> -->
     <!-- Main Script -->
-    <script src="/public/adminassets/js/main.js" type="text/javascript"></script>
+    <!-- <script src="/public/adminassets/js/main.js" type="text/javascript"></script> -->
 
     <script>
        const cname = document.getElementById('couponname');
-const mindisc = document.getElementById('mindiscount');
-// const maxdisc = document.getElementById('maxdiscount');
-const purchase = document.getElementById('minpurchase');
-const expiry = document.getElementById('expiry');
-const copform = document.getElementById('copform');
+        const mindisc = document.getElementById('mindiscount');
+        const purchase = document.getElementById('minpurchase');
+        const expiry = document.getElementById('expiry');
+        const copform = document.getElementById('copform');
 
-const error1 = document.getElementById('error1');
-const error2 = document.getElementById('error2');
-// const error3 = document.getElementById('error3');
-const error4 = document.getElementById('error4');
-const error5 = document.getElementById('error5');
+        const error1 = document.getElementById('error1');
+        const error2 = document.getElementById('error2');
+        const error4 = document.getElementById('error4');
+        const error5 = document.getElementById('error5');
 
-function validateCouponName() {
-    const nameval = cname.value.trim();
-    const namePattern = /^[a-zA-Z][a-zA-Z]*$/;
-    if (nameval === "") {
-        showError(error1, "Please Enter a valid name.");
-    } else if (!namePattern.test(nameval)) {
-        showError(error1, "Invalid format for the Name. First letter should be capital.");
-    } else {
-        hideError(error1);
-    }
-}
+        function validateCouponName() {
+            const nameval = cname.value.trim();
+            
+            const namePattern = /^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$/;
+            if (nameval === "") {
+                showError(error1, "Please Enter a valid name.");
+            } else if (!namePattern.test(nameval)) {
+                showError(error1, "Invalid format for the Name. First letter should be capital.");
+            } else {
+                hideError(error1);
+            }
+        }
 
-function validateMinDiscount() {
-    const minDiscVal = parseFloat(mindisc.value.trim());
-    if (isNaN(minDiscVal) || minDiscVal < 0) {
-        showError(error2, "Please enter a valid minimum discount.");
-    } else {
-        hideError(error2);
-    }
-}
+        function validateMinDiscount() {
+            const minDiscVal = parseFloat(mindisc.value.trim());
+            if (isNaN(minDiscVal) || minDiscVal < 0 || minDiscVal>99) {
+                showError(error2, "Please enter a valid minimum discount.");
+            } else {
+                hideError(error2);
+            }
+        }
+        function validateMinPurchase() {
+            const minPurchaseVal = parseFloat(purchase.value.trim());
+            if (isNaN(minPurchaseVal) || minPurchaseVal < 0) {
+                showError(error4, "Please enter a valid minimum purchase amount.");
+            } else {
+                hideError(error4);
+            }
+        }
 
-// function validateMaxDiscount() {
-//     const maxDiscVal = parseFloat(maxdisc.value.trim());
-//     if (isNaN(maxDiscVal) || maxDiscVal < 0) {
-//         showError(error3, "Please enter a valid maximum discount.");
-//     } else {
-//         hideError(error3);
-//     }
-// }
+        function validateExpiryDate() {
+            const currentDate = new Date();
+            const selectedDate = new Date(expiry.value);
+            if (!expiry.value || selectedDate <= currentDate) {
+                showError(error5, "Please select a future expiry date.");
+            } else {
+                hideError(error5);
+            }
+        }
 
-function validateMaxGreaterMin() {
-    const minDiscount = parseFloat(mindisc.value.trim());
-    const maxDiscount = parseFloat(maxdisc.value.trim());
-    if (maxDiscount <= minDiscount) {
-        showError(error3, "Maximum discount should be greater than Minimum");
-    } else {
-        hideError(error3);
-    }
-}
+        function showError(errorElement, message) {
+            errorElement.style.display = "block";
+            errorElement.innerHTML = message;
+        }
 
-function validateMinPurchase() {
-    const minPurchaseVal = parseFloat(purchase.value.trim());
-    if (isNaN(minPurchaseVal) || minPurchaseVal < 0) {
-        showError(error4, "Please enter a valid minimum purchase amount.");
-    } else {
-        hideError(error4);
-    }
-}
+        function hideError(errorElement) {
+            errorElement.style.display = "none";
+            errorElement.innerHTML = "";
+        }
 
-function validateExpiryDate() {
-    const currentDate = new Date();
-    const selectedDate = new Date(expiry.value);
-    if (!expiry.value || selectedDate <= currentDate) {
-        showError(error5, "Please select a future expiry date.");
-    } else {
-        hideError(error5);
-    }
-}
+        cname.addEventListener('blur', validateCouponName);
+        mindisc.addEventListener('blur', validateMinDiscount);
+        purchase.addEventListener('blur', validateMinPurchase);
+        expiry.addEventListener('blur', validateExpiryDate);
 
-function showError(errorElement, message) {
-    errorElement.style.display = "block";
-    errorElement.innerHTML = message;
-}
-
-function hideError(errorElement) {
-    errorElement.style.display = "none";
-    errorElement.innerHTML = "";
-}
-
-cname.addEventListener('blur', validateCouponName);
-mindisc.addEventListener('blur', validateMinDiscount);
-// maxdisc.addEventListener('blur', validateMaxDiscount);
-maxdisc.addEventListener('blur', validateMaxGreaterMin);
-purchase.addEventListener('blur', validateMinPurchase);
-expiry.addEventListener('blur', validateExpiryDate);
-
-copform.addEventListener('submit', function (e) {
-    validateCouponName();
-    validateMinDiscount();
-    // validateMaxDiscount();
-    validateMaxGreaterMin();
-    validateMinPurchase();
-    validateExpiryDate();
-
-    if (error1.innerHTML || error2.innerHTML || error4.innerHTML || error5.innerHTML) {
-        e.preventDefault();
-    }
-});
-
-
+        copform.addEventListener('submit', function (e) {
+            e.preventDefault();
+            validateCouponName();
+            validateMinDiscount();
+            validateMinPurchase();
+            validateExpiryDate();
+            if (error1.innerHTML || error2.innerHTML || error4.innerHTML || error5.innerHTML) {
+                return
+            }
+            let name = cname.value
+            let discount = mindisc.value;
+            let expirydate = expiry.value;
+            let minpurchase = purchase.value;
+            console.log(name,'name')
+            fetch('/admin/addCoupons',{
+                    method:"POST",
+                    headers:{"Content-type":"application/json"},
+                    body:JSON.stringify({name,discount,expirydate,minpurchase})
+                }).then((response)=>response.json())
+                .then((data)=>{
+                    if(data.success){
+                        showToast(data.message||'','success')
+                        setTimeout(()=>{window.location.href = '/admin/couponList'},2000)
+                    }else{
+                        showToast(data.message||'','error')
+                    }
+                })
+                
+        })
+        
     </script>
 </body>
-
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
-
-</html
+</html>

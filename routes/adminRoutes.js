@@ -3,8 +3,6 @@ const adminController = require('../controller/adminController');
 const {authMiddleware,adminAuth} = require('../middlewares/authMiddleware');
 const offerController = require('../controller/offerController');
 const couponController = require('../controller/couponController');
-const referralController = require('../controller/referralController');
-
 
 const router = express.Router();
 
@@ -54,16 +52,12 @@ router.post('/order/verifyreturn',authMiddleware,adminAuth,adminController.verif
 
 router.get('/couponList',authMiddleware,adminAuth,couponController.displayCoupon)
 router.get('/addCoupon',authMiddleware,adminAuth,couponController.displayAddCoupon)
-router.post('/addCoupon',authMiddleware,adminAuth,couponController.addCoupon)
+router.post('/addCoupons',authMiddleware,adminAuth,couponController.addCoupon)
 router.get('/editCoupon',authMiddleware,adminAuth,couponController.getEditCoupon)
-router.post('/editCoupon',authMiddleware,adminAuth,couponController.postEditCoupon)
-router.get('/blockCoupon',authMiddleware,adminAuth,couponController.blockCoupon)
+router.post('/editCoupons',authMiddleware,adminAuth,couponController.postEditCoupon)
+router.patch('/blockCoupon',authMiddleware,adminAuth,couponController.blockCoupon)
+router.delete('/deleteCoupon/:id',authMiddleware,adminAuth,couponController.deleteCoupon)
 router.post('/removecoupon',authMiddleware,adminAuth,couponController.removeCoupon)
-
-
-router.post('/referrals', referralController.handleReferralSignup);
-router.get('/referrals/link', referralController.getReferralLink);
-
 
 router.get('/salesReport',authMiddleware,adminAuth,adminController.getSalesReport)
 router.get('/salesDate',authMiddleware,adminAuth,adminController.customDate)

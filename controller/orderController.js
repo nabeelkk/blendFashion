@@ -74,7 +74,7 @@ const orderPlaced = async(req,res)=>{
 
 const placeOrder = async(req,res)=>{
     try {
-        const {defaultAddress} = req.body
+        const {defaultAddress,paymentMethod} = req.body
         const userId = req.session.user._id
         const user = await User.findById(userId)
         const selectedAddress = user.address.find((addr=>addr.id.toString()===defaultAddress))
@@ -89,6 +89,7 @@ const placeOrder = async(req,res)=>{
         let discount = 0
         for (const item of cart.products) {
             const product = item.productId;
+            console.log(product.name,"pdt name")
             const category = product.category
             const size = item.size
             const price = item.price
@@ -104,8 +105,6 @@ const placeOrder = async(req,res)=>{
                 const productOffer = MRP - price
                 let categoryDiscount =0
                 
-                
-
                 if(category){
                     const matchingCategoryOffer = categoryOffer.find(offer =>
                         offer.category._id.toString() === category._id.toString() &&
@@ -147,20 +146,50 @@ const placeOrder = async(req,res)=>{
             product.sizes[size].quantity -= item.quantity;
             await product.save();
           }
-      
-          const newOrder = new Order({
-            user: userId,
-            orderId,
-            products: orderedProducts,
-            totalAmount:orderedAmount,
-            totalDiscount:discount.toFixed(2),
-            coupon:couponDiscount?.toFixed(2),
-            paymentMethod: "Cash on Delivery",
-            status: "Placed",
-            address: selectedAddress
-          });
-          await newOrder.save();
-      
+          if(paymentMethod == 'Wallet'){
+
+            const wallet = await Wallet.findOne({user:userId})
+            console.log(wallet,"wallet")
+            if(wallet.balance<orderedAmount){
+              return res.json({success:false,message:"Insufficient balance in wallet"})
+            }
+
+            const newOrder = new Order({
+              user: userId,
+              orderId,
+              products: orderedProducts,
+              totalAmount:orderedAmount,
+              totalDiscount:discount.toFixed(2),
+              coupon:couponDiscount?.toFixed(2),
+              paymentMethod: paymentMethod,
+              status: "Placed",
+              address: selectedAddress
+            });
+            
+             wallet.balance -= orderedAmount
+             wallet.transactions.push({
+              amount: orderedAmount,
+              type: "debit",
+              date: new Date(),
+              description: `Wallet Payment for Order ${orderId}`,
+            });
+            await newOrder.save();
+            await wallet.save()
+
+          }else{
+            const newOrder = new Order({
+              user: userId,
+              orderId,
+              products: orderedProducts,
+              totalAmount:orderedAmount,
+              totalDiscount:discount.toFixed(2),
+              coupon:couponDiscount?.toFixed(2),
+              paymentMethod: paymentMethod,
+              status: "Placed",
+              address: selectedAddress
+            });
+            await newOrder.save();
+          }
           await Cart.findOneAndUpdate({ userId }, { products: [] });
 
         return res.json({success:true,message:"success"})

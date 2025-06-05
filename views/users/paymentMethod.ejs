@@ -109,6 +109,29 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Pay with Wallet -->
+                            <div class="payment-method-card" id="walletPayment">
+                                <div class="payment-method-header" onclick="togglePaymentMethodWallet('walletPayment')">
+                                    <div class="d-flex align-items-center">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-wallet fa-lg"></i>
+                                        </div>
+                                        <h5 class="payment-method-title">Pay with Wallet</h5>
+                                    </div>
+                                </div>
+                                <div class="payment-method-body">
+                                    <p>Use your available wallet balance to complete the purchase instantly.</p>
+                                    <div class="mb-3">
+                                        <button id="wallet-pay-button" class="btn btn-success">Pay with Wallet</button>
+                                    </div>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Wallet balance will be deducted only if payment is successful.
+                                    </div>
+                                </div>
+                            </div>
+
                             
                             <!-- Cash on Delivery -->
                             <div class="payment-method-card" id="codPayment">
@@ -361,6 +384,38 @@
                 // orderBtn.innerHTML = 'Order Limit Exceeded';
             }
         })
+
+        function togglePaymentMethodWallet(id) {
+            const allMethods = document.querySelectorAll('.payment-method-card');
+            allMethods.forEach(method => {
+                const body = method.querySelector('.payment-method-body');
+                if (method.id === id) {
+                    body.style.display = body.style.display === 'none' || body.style.display === '' ? 'block' : 'none';
+                } else {
+                    body.style.display = 'none';
+                }
+                
+            });
+            document.getElementById('wallet-pay-button').addEventListener('click',()=>{
+
+                let defaultAddress = document.getElementById('default-address').value;
+                fetch('/place-order',{
+                    method:"POST",
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ defaultAddress, paymentMethod: 'Wallet' })
+                }).then(response => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showToast(data.message || '', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/checkoutsuccess';
+                        }, 1000);
+                    } else {
+                        showToast(data.message || '', 'error');
+                    }
+                });
+            })
+        }
         function placeOrder() {
             let paymentMethodBtn = document.getElementById('codTerms');
             let defaultAddress = document.getElementById('default-address').value;
@@ -371,7 +426,7 @@
                 fetch(`/place-order`, {
                     method: 'POST',
                     headers: { "Content-type": "application/json" },
-                    body: JSON.stringify({ defaultAddress, paymentMethod: 'COD' })
+                    body: JSON.stringify({ defaultAddress, paymentMethod: 'Cash on Delivery' })
                 }).then(response => response.json())
                 .then((data) => {
                     if (data.success) {

@@ -792,7 +792,7 @@ const verifyReturn = async (req, res) => {
           amount: refundAmount,
           type: "credit",
           date: new Date(),
-          description: `Refund for Returned product: ${product.productName}`,
+          description: `Refund for Returned product: ${product.name}`,
         });
       } else {
         console.warn("Refund skipped due to invalid amount:", refundAmount);

@@ -691,8 +691,6 @@ const myCart = async (req, res) => {
                     categoryDiscount = (product.sizes[size].Mrp * matchingCategoryOffer.discount) / 100;
                 }
                 }
-                console.log(productOffer,"product offer")
-                console.log(categoryDiscount,"category offer")
                 appliedOffer = Math.max(productOffer, categoryDiscount);
 
                 let productDiscount = 0;
@@ -704,12 +702,7 @@ const myCart = async (req, res) => {
                 
                 cartTotal += ((MRP * quantity) - (productDiscount)) ;
                 console.log(cartTotal)
-                
-                
-            
             });
-            
-
         }
         if(coupon){
                 cartTotal = cartTotal - coupon;
@@ -1029,17 +1022,20 @@ const productDetails = async(req,res)=>{
             return res.redirect('/login')
         }
         const productId = req.params.id; 
-        console.log(productId,"pdtId")
+  
+        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME
-        const products = await Product.find({isdeleted:false}) 
-        const product = await Product.findById(productId);
+        const products = await Product.find({isdeleted:false}).populate('category')
+        const product = await Product.findById(productId).populate('category');
+        console.log(product,"dfddfdd")
         const cart = await Cart.findOne({userId:req.session.user._id})
         const recentlyViewed = await Product.find({isdeleted:false}).sort({updatedAt:1})
-    
+        const offer = categoryOffer.find((off)=>off.category._id.toString()===product.category._id.toString()) || 0
+        console.log(offer,"disx")
         if (!product) {
             return res.render('users/error'); 
         }
-        res.render('users/productDetails', { product ,products,cloudName,user:req.session.user,cart,recentlyViewed});
+        res.render('users/productDetails', { product ,products,cloudName,user:req.session.user,cart,recentlyViewed,offer});
     } catch (error) {
         console.log('Product Details Error:', error);
         res.redirect('/error');

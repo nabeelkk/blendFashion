@@ -261,7 +261,7 @@
                             <i class="fas fa-trash-alt me-2"></i> Clear Wishlist
                         </button>
                     </div>
-                    <% if (!wishlist) { %>
+                    <% if (!wishlist || wishlist.products.length<1) { %>
                      <div class="empty-wishlist">
                         <div class="empty-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#4169e1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">

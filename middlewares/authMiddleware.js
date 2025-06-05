@@ -9,7 +9,7 @@ const authenticateJwt = (req,res,next)=>{
 
     jwt.verify(token,process.env.JWT_SECRET,(err,admin)=>{
         if(err){
-            return res.redirect('/admin/login?error=Inavalid%20Token')
+            return res.redirect('/admin/login?error=Token%20Expired')
         }
         req.admin = admin;
         next();

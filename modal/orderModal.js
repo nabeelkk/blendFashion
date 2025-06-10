@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema({
     default:"false"
   },
   razorPayId:{type: String},
-  coupon:String,
+  coupon:Number,
   paymentIntentId: String,
   status:{
     type:String,  

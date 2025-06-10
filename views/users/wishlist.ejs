@@ -317,9 +317,9 @@
                                             <h2 class="mb-2" style="color: red;" id="stock-display"></h2>
                                             <div class="size-options d-flex">
                                                 <span class="current-price fs-3 fw-bold" style="display: none;" ><%= element.productId.sizes.small.Mrp %></span>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%=Math.round((element.sizes?.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes?.small.Mrp%>">S</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%=Math.round((element.sizes?.medium.Mrp - (element.sizes?.medium?.Mrp * element.sizes?.medium?.amount) / 100)) || element.sizes?.medium.Mrp%>">M</button>
-                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%=Math.round((element.sizes?.large.Mrp - (element.sizes?.large?.Mrp * element.sizes?.large?.amount) / 100)) || element.sizes?.large.Mrp%>">L</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="small" data-price="<%=Math.round((element.productId.sizes?.small.Mrp - (element.productId.sizes?.small?.Mrp * element.productId.sizes?.small?.amount) / 100)) || element.productId.sizes?.small.Mrp%>">S</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="medium" data-price="<%=Math.round((element.productId.sizes?.medium.Mrp - (element.productId.sizes?.medium?.Mrp * element.productId.sizes?.medium?.amount) / 100)) || element.productId.sizes?.medium.Mrp%>">M</button>
+                                                <button class="btn btn-outline-dark  me-2" onclick="changePrice(this,'<%= element.productId._id%>')" data-size="large" data-price="<%=Math.round((element.productId.sizes?.large.Mrp - (element.productId.sizes?.large?.Mrp * element.productId.sizes?.large?.amount) / 100)) || element.productId.sizes?.large.Mrp%>">L</button>
                                             
                                             </div>
                                             <button type="submit" id="add-to-cart" onclick="addToCart(`<%= element.productId._id.toString()%>`)" class="btn btn-dark flex-grow-1 mt-2" >
@@ -413,7 +413,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="js/script.js"></script>
+    <!-- <script src="js/script.js"></script> -->
     <script>
         const modal = document.getElementById('sizeModal');
 
@@ -429,14 +429,16 @@
             modal.style.display = 'none';
         }
         let size = document.getElementById('sizee').value
+        let price = 0
         function changePrice(button,id){
             document.querySelectorAll('.size-options button').forEach(btn=>btn.classList.remove('active'));
             button.classList.add('active')
-            const price = button.getAttribute('data-price');
-            console.log(price)
+            price = button.getAttribute('data-price');
+            
             size = button.getAttribute('data-size')
+            console.log(size,"size")
             document.querySelector('.current-price').textContent = `${price}`
-
+            console.log(price,"price")
             fetch('/checkQuantity',{
                 method : 'post',
                 headers:{
@@ -457,32 +459,9 @@
             })
         
         }
-        function updateQuantity(size,quantity){
-           
-           let stockDisplay = document.getElementById('stock-display')
-           let cartBtn = document.getElementById('add-to-cart')
-           let itemLeft = document.getElementById('itemLeft')
-           if(quantity < 1){
-               cartBtn.disabled = true;  
-               cartBtn.classList.add('disabled')
-               stockDisplay.textContent = 'Out of Stock'
-           }else{
-               stockDisplay.textContent = ''
-               cartBtn.disabled = false; 
-               cartBtn.classList.remove('disabled');
-           }
-           if(quantity <5 && quantity>1){
-               itemLeft.textContent = ` Hurry up only ${quantity} items are left`
-           }else{
-               itemLeft.textContent = ''
-           }
-           
-       }
-       function addToCart(id) {
-            let priceValue = document.querySelector('.current-price').value
+        function addToCart(id) {
         
-            let price = parseInt(priceValue)
-            console.og(price,'jnjnjnj')
+            console.log(price,"price")
             fetch(`/cart/add`,{
                 method: 'post',
                 headers:{
@@ -508,6 +487,28 @@
                 
             })
         }
+        function updateQuantity(size,quantity){
+           
+           let stockDisplay = document.getElementById('stock-display')
+           let cartBtn = document.getElementById('add-to-cart')
+           let itemLeft = document.getElementById('itemLeft')
+           if(quantity < 1){
+               cartBtn.disabled = true;  
+               cartBtn.classList.add('disabled')
+               stockDisplay.textContent = 'Out of Stock'
+           }else{
+               stockDisplay.textContent = ''
+               cartBtn.disabled = false; 
+               cartBtn.classList.remove('disabled');
+           }
+           if(quantity <5 && quantity>1){
+               itemLeft.textContent = ` Hurry up only ${quantity} items are left`
+           }else{
+               itemLeft.textContent = ''
+           }
+           
+       }
+       
         
         
         // Remove item from wishlist

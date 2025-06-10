@@ -61,9 +61,218 @@ const adminLogout=(req,res)=>{
     })
 }
 
-const getDashboard = async  (req,res)=>{
-    res.render('admin/dashboard',{admin:req.admin})
+const getDashboard = async (req, res) => {
+    try {
+        const { period = 'monthly', year = new Date().getFullYear() } = req.query;
+        
+        const currentDate = new Date();
+        const currentYear = parseInt(year);
+        
+        const totalUsers = await User.countDocuments({ isBlocked: false });
+        const totalProducts = await Product.countDocuments({ isdeleted: false });
+        const totalOrders = await Order.countDocuments();
+        const totalCategories = await Category.countDocuments({ isListed: true });
+        
+        const deliveredOrders = await Order.find({}).populate('products.productId');
+        let totalRevenue = 0;
+        
+        deliveredOrders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.status === 'Delivered') {
+                    totalRevenue += product.price * product.quantity;
+                }
+            });
+        });
+
+        let chartData = [];
+        let labels = [];
+        
+        if (period === 'yearly') {
+            for (let i = 4; i >= 0; i--) {
+                const year = currentYear - i;
+                const startDate = new Date(year, 0, 1);
+                const endDate = new Date(year, 11, 31, 23, 59, 59);
+                
+                const yearOrders = await Order.find({
+                    createdAt: { $gte: startDate, $lte: endDate }
+                });
+                
+                let yearRevenue = 0;
+                yearOrders.forEach(order => {
+                    order.products.forEach(product => {
+                        if (product.status === 'Delivered') {
+                            yearRevenue += product.price * product.quantity;
+                        }
+                    });
+                });
+                
+                labels.push(year.toString());
+                chartData.push(yearRevenue);
+            }
+        } else if (period === 'monthly') {
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentYear, currentDate.getMonth() - i, 1);
+                const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+                const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+                
+                const monthOrders = await Order.find({
+                    createdAt: { $gte: startDate, $lte: endDate }
+                });
+                
+                let monthRevenue = 0;
+                monthOrders.forEach(order => {
+                    order.products.forEach(product => {
+                        if (product.status === 'Delivered') {
+                            monthRevenue += product.price * product.quantity;
+                        }
+                    });
+                });
+                
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }));
+                chartData.push(monthRevenue);
+            }
+        } else if (period === 'weekly') {
+            for (let i = 7; i >= 0; i--) {
+                const startDate = new Date(currentDate);
+                startDate.setDate(currentDate.getDate() - (i * 7));
+                startDate.setHours(0, 0, 0, 0);
+                
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+                endDate.setHours(23, 59, 59, 999);
+                
+                const weekOrders = await Order.find({
+                    createdAt: { $gte: startDate, $lte: endDate }
+                });
+                
+                let weekRevenue = 0;
+                weekOrders.forEach(order => {
+                    order.products.forEach(product => {
+                        if (product.status === 'Delivered') {
+                            weekRevenue += product.price * product.quantity;
+                        }
+                    });
+                });
+                
+                labels.push(`Week ${i + 1}`);
+                chartData.push(weekRevenue);
+            }
+        }
+
+        const productSales = {};
+        deliveredOrders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.status === 'Delivered') {
+                    const productId = product.productId._id.toString();
+                    if (!productSales[productId]) {
+                        productSales[productId] = {
+                            product: product.productId,
+                            totalQuantity: 0,
+                            totalRevenue: 0
+                        };
+                    }
+                    productSales[productId].totalQuantity += product.quantity;
+                    productSales[productId].totalRevenue += product.price * product.quantity;
+                }
+            });
+        });
+
+        const bestSellingProducts = Object.values(productSales)
+            .sort((a, b) => b.totalQuantity - a.totalQuantity)
+            .slice(0, 5);
+
+        const categorySales = {};
+        deliveredOrders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.status === 'Delivered' && product.productId.category) {
+                    const categoryId = product.productId.category._id.toString();
+                    if (!categorySales[categoryId]) {
+                        categorySales[categoryId] = {
+                            category: product.productId.category,
+                            totalQuantity: 0,
+                            totalRevenue: 0
+                        };
+                    }
+                    categorySales[categoryId].totalQuantity += product.quantity;
+                    categorySales[categoryId].totalRevenue += product.price * product.quantity;
+                }
+            });
+        });
+
+        const bestSellingCategories = Object.values(categorySales)
+            .sort((a, b) => b.totalQuantity - a.totalQuantity)
+            .slice(0, 5);
+        const brandSales = {};
+        deliveredOrders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.status === 'Delivered' && product.productId.brand) {
+                    const brandId = product.productId.brand._id.toString();
+                    if (!brandSales[brandId]) {
+                        brandSales[brandId] = {
+                            brand: product.productId.brand,
+                            totalQuantity: 0,
+                            totalRevenue: 0
+                        };
+                    }
+                    brandSales[brandId].totalQuantity += product.quantity;
+                    brandSales[brandId].totalRevenue += product.price * product.quantity;
+                }
+            });
+        });
+
+        const bestSellingBrands = Object.values(brandSales)
+            .sort((a, b) => b.totalQuantity - a.totalQuantity)
+            .slice(0, 5);
+
+        const recentOrders = await Order.find({})
+            .populate('user', 'name email')
+            .populate('products.productId', 'name')
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        const ledgerData = [];
+        recentOrders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.status === 'Delivered') {
+                    ledgerData.push({
+                        date: order.createdAt,
+                        orderId: order.orderId,
+                        customer: order.user.name,
+                        productName: product.name || product.productId.name,
+                        quantity: product.quantity,
+                        price: product.MRP * product.quantity,
+                        discount:product.discount,
+                        coupon:product.coupon,
+                        total: product.totalAmount,
+                        status: product.status
+                    });
+                }
+            });
+        });
+
+        res.render('admin/dashboard', {
+            admin: req.admin,
+            totalUsers,
+            totalProducts,
+            totalOrders,
+            totalCategories,
+            totalRevenue: totalRevenue.toFixed(2),
+            chartData: JSON.stringify(chartData),
+            chartLabels: JSON.stringify(labels),
+            period,
+            year: currentYear,
+            bestSellingProducts,
+            bestSellingCategories,
+            bestSellingBrands,
+            ledgerData,
+            cloudName: process.env.CLOUDINARY_NAME
+        });
+    } catch (error) {
+        console.log("get dashboard error", error);
+        res.status(500).send("Internal Server Error");
+    }
 }
+
 
 const getUser = async (req,res)=>{
     try {

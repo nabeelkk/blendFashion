@@ -140,7 +140,7 @@ const placeOrder = async(req,res)=>{
               MRP: itemTotalMrp,
               totalAmount:orderedAmount,
               discount: discount.toFixed(2),
-              coupon:couponDiscount?couponDiscount.toFixed(2):'0.00'
+              coupon:couponDiscount?couponDiscount.toFixed(2):0
             });
       
             product.sizes[size].quantity -= item.quantity;
@@ -615,7 +615,9 @@ const handlePaymentSuccess = async (req, res) => {
       }
       discount += productDiscount;
       orderedAmount += ((itemMRP * item.quantity) - (productDiscount));
-      
+       if (coupon) {
+        orderedAmount = coupon;
+      }
       productsWithMRP.push({
         productId: item.productId._id,
         name: item.productId.name,
@@ -623,6 +625,7 @@ const handlePaymentSuccess = async (req, res) => {
         quantity: item.quantity,
         size: item.size || 'N/A',
         discount: productDiscount.toFixed(2),
+        totalAmount:orderedAmount,
         MRP: itemMRP, 
         status: "Placed",
         coupon: couponDiscount ? couponDiscount.toFixed(2) : 0,
@@ -632,9 +635,7 @@ const handlePaymentSuccess = async (req, res) => {
       });
     }
     
-    if (coupon) {
-      orderedAmount = coupon;
-    }
+   
 
     let order;
     if (retryOrderId) {
@@ -653,7 +654,7 @@ const handlePaymentSuccess = async (req, res) => {
         user: user._id,
         paymentMethod: 'Card',
         products: productsWithMRP,
-        totalAmount: parseFloat(razorpayOrder.notes.totalPrice),
+        totalAmount: orderedAmount,
         paymentStatus: 'Completed',
         paymentId: razorpay_payment_id,
         razorPayId: razorpay_order_id,
@@ -661,7 +662,7 @@ const handlePaymentSuccess = async (req, res) => {
         address,
         status: 'Completed',
         totalDiscount: discount.toFixed(2),
-        coupon: couponDiscount ? couponDiscount.toFixed(2) : '0.00'
+        coupon: couponDiscount ? couponDiscount.toFixed(2) : 0
       });
     }
 
@@ -754,6 +755,9 @@ const handleCheckoutFailure = async (req, res) => {
       }
       discount += productDiscount;
       orderedAmount += ((itemMRP * item.quantity) - (productDiscount));
+      if(coupon){
+      orderedAmount = coupon
+      }
       
       productsWithMRP.push({
         productId: item.productId._id,
@@ -762,6 +766,7 @@ const handleCheckoutFailure = async (req, res) => {
         quantity: item.quantity,
         size: item.size || 'N/A',
         discount: productDiscount.toFixed(2),
+        totalAmount:orderedAmount,
         MRP: itemMRP, 
         status: "Pending",
         coupon: couponDiscount ? couponDiscount.toFixed(2) : 0,
@@ -771,15 +776,13 @@ const handleCheckoutFailure = async (req, res) => {
       });
     }
     
-    if(coupon){
-      orderedAmount = coupon
-    }
+    
 
     const order = new Order({
       user: user._id,
       paymentMethod: 'Card',
       products: productsWithMRP,
-      totalAmount: totalPrice,
+      totalAmount: orderedAmount,
       paymentStatus: 'Pending',
       orderId: '#ORD' + Date.now(),
       address: selectedAddress,

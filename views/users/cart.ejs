@@ -10,6 +10,157 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style1.css">
+    <style>
+        .empty-cart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            padding: 2rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .empty-cart-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            opacity: 0.6;
+        }
+
+        .empty-cart-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #6b7280;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .empty-cart-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-message {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 2.5rem;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .shop-products-btn {
+            background-color: #1f2937;
+            color: white;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shop-products-btn:hover {
+            background-color: #374151;
+            transform: translateY(-1px);
+        }
+
+        .shop-products-btn:active {
+            transform: translateY(0);
+        }
+
+        .continue-shopping-link {
+            margin-top: 1.5rem;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .continue-shopping-link:hover {
+            color: #1f2937;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .empty-cart-container {
+                padding: 1.5rem;
+                min-height: 50vh;
+            }
+
+            .empty-cart-icon {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 1.5rem;
+            }
+
+            .empty-cart-title {
+                font-size: 1.75rem;
+                margin-bottom: 0.875rem;
+            }
+
+            .empty-cart-message {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .shop-products-btn {
+                padding: 0.75rem 1.75rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .empty-cart-container {
+                padding: 1rem;
+            }
+
+            .empty-cart-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .empty-cart-title {
+                font-size: 1.5rem;
+            }
+
+            .empty-cart-message {
+                font-size: 0.95rem;
+            }
+
+            .shop-products-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* Animation */
+        .empty-cart-container {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
     
 </head>
 <body>
@@ -29,6 +180,32 @@
                         <% } %>
                                 
                         
+                    <% if (!cart || cart.products.length<1) { %>
+                        <div class="empty-cart-container">
+                            <div class="empty-cart-icon">
+                                <svg viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5a1 1 0 00.9 1.1h9.4a1 1 0 00.9-1.1L15 13M7 13v6a2 2 0 002 2h6a2 2 0 002-2v-6M9 19v2m6-2v2" />
+                                </svg>
+                            </div>
+                            
+                            <h2 class="empty-cart-title">Your Cart is Empty</h2>
+                            
+                            <p class="empty-cart-message">
+                                Looks like you haven't added any items to your cart yet. 
+                                Start shopping to fill it up with amazing products!
+                            </p>
+                            
+                            <a href="/products" class="shop-products-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.1 5a1 1 0 00.9 1.1h9.4a1 1 0 00.9-1.1L15 13M9 19v2m6-2v2"/>
+                                </svg>
+                                Shop Products
+                            </a>
+                        </div>
+                         
+                    <% } %>
+                    <% if (cart.products.length>0) { %>
+                     
                     
                     <div class="cart-items">
                         <div class="table-responsive">
@@ -86,16 +263,16 @@
                             </table>
                         </div>
                     </div>
+                <% } %>
                     
                     <div class="cart-actions d-flex justify-content-between mt-4">
                         <div class="continue-shopping">
-                            <a href="product" class="btn btn-outline-dark">
+                            <a href="/products" class="btn btn-outline-dark">
                                 <i class="fas fa-arrow-left me-2"></i> Continue Shopping
                             </a>
                         </div>
                     </div>
                 </div>
-                
                 <!-- Cart Summary -->
                 <div class="col-lg-4">
                     <div class="cart-summary p-4 bg-light">

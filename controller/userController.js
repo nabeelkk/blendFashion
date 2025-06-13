@@ -646,7 +646,7 @@ const myCart = async (req, res) => {
                 model: 'Category'
             }
         });
-        if(cart.length<1){
+        if(!cart){
             req.session.user.discountAmount = null;
             res.render('users/cart', {cart: null, user: req.session.user, cloudName: process.env.CLOUDINARY_NAME, totalMRP: 0, cartTotal: 0, discount: 0, cartCount: 0, appliedOffer: 0, coupon: null, coupons: [], discountAmount: '0.00' });
         }

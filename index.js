@@ -71,6 +71,5 @@ app.set('layout','layouts/main')
 app.set('views', path.join(__dirname, 'views'));
 
 app.listen(port,()=>{
-    console.log(`server running on http://localhost:${port}`)
-})
+    console.log(`server running on http://localhost:${port}`) })
   

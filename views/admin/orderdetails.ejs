@@ -150,7 +150,7 @@
                                         <option>Delivered</option>
                                     </select>
                                     
-                                    <button class="btn btn-primary" onclick="changestatus( '<%= prod.status %>')">Save</button> -->
+                                    <button class="btn btn-primary" onclick="changestatus( )">Save</button> -->
 
 
                             <!-- <select id="select" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
@@ -161,7 +161,7 @@
                                 <option>Delivered</option>
                             </select>
                             <button class="btn btn-primary"
-                                onclick="changestatus( '<%= order._id%>','<%= prod.status %>')">Save</button>
+                                onclick="changestatus( '<%= order._id%>')">Save</button>
                             <a class="btn btn-secondary print ms-2" href="#"><i
                                     class="icon material-icons md-print"></i></a>
                         </div>
@@ -237,7 +237,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <% order.products.forEach(element => { %>
+                                        <% order.products.forEach((element) => { %>
                                          
                                             <td>
                                                 <input type="hidden" id="Pid" value="id">
@@ -345,29 +345,11 @@
                                         <div class="modal-body">
                                             <input type="hidden" name="productId" id="productId" value="">
                                             <input type="hidden" name="pdtStatus" id="pdtStatus" value="">
-                                            <% if (prod.status == "Return Processing") { %>
-                                                <div class="mb-3">
-                                                    <label for="statusSelect" class="form-label">Select Status</label>
-                                                    <select class="form-select" id="statusSelect" name="status" required>
-                                                        <option value="Accept return">Accept return</option>
-                                                        <option value="Reject return">Reject return</option>
-    
-                                                    </select>
-                                                </div>
-                                                <% } else { %>
-                                                    <div class="mb-3">
-                                                        <label for="statusSelect" class="form-label">Select Status</label>
-                                                        <select class="form-select" id="statusSelect" name="status" required>
-                                                            <option value="">Select Status</option>
-                                                            <option value="Pending">Pending</option>
-                                                            <option value="Placed">Placed</option>
-                                                            <option value="Shipped">Shipped</option>
-                                                            <option value="Out for Delivery">Out for Delivery</option>
-                                                            <option value="Delivered">Delivered</option>
-                                                            <option value="Cancelled">Cancelled</option>
-                                                        </select>
-                                                    </div>
-                                            <% } %>
+                            
+                                             
+                                            <label for="statusSelect" class="form-label">Select Status</label>
+                                            <select class="form-select" id="statusSelect" name="status" required>
+                                            </select>
                                             
                                         </div>
                                         <div class="modal-footer">
@@ -484,8 +466,28 @@
             console.log(pdtStatus,'this is the pdt status')
             document.getElementById('pdtStatus').value = pdtStatus
             document.getElementById('productId').value = pdtId;
+            const statusSelect = document.getElementById('statusSelect');
+            console.log(pdtStatus)
+            let options = "";
+
+            if (pdtStatus === "Return Processing") {
+                options += `<option value="Accept return">Accept return</option>`;
+                options += `<option value="Reject return">Reject return</option>`;
+            } else {
+                const statuses = [
+                "Pending", "Placed", "Shipped", "Out for Delivery", "Delivered", "Cancelled"
+                ];
+
+                options += `<option value="">Select Status</option>`;
+                statuses.forEach(status => {
+                const selected = (status === pdtStatus) ? "selected" : "";
+                options += `<option value="${status}" ${selected}>${status}</option>`;
+                });
+            }
+            statusSelect.innerHTML = options;
             let myModal = new bootstrap.Modal(document.getElementById('orderStatusModal'));
             myModal.show();
+
         }
         function cancelledMsg(){
             showToast("Cancelled Item Can't Change",'warning')

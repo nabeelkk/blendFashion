@@ -874,9 +874,13 @@ const orderDetails = async(req,res)=>{
     const _id = req.params.id
     const order = await Order.findOne({_id}).populate('user').populate('products.productId');
     const couponDiscount = order.coupon
-    const prod = order.products.find((prod)=>prod.status)
+    let prod = []
+    order.products.find(element => {
+        prod.push(element.status)
+    });
+    console.log(prod,"status")
+    // console.log(order)
     const cloudName = process.env.CLOUDINARY_NAME
-    
    
     res.render('admin/orderdetails',{order,prod,cloudName,couponDiscount:Number(couponDiscount).toFixed(2)})
 }

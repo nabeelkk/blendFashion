@@ -647,7 +647,8 @@ const myCart = async (req, res) => {
             }
         });
         if(cart.length<1){
-            req.session.user.discountAmount = null
+            req.session.user.discountAmount = null;
+            res.render('users/cart', {cart: null, user: req.session.user, cloudName: process.env.CLOUDINARY_NAME, totalMRP: 0, cartTotal: 0, discount: 0, cartCount: 0, appliedOffer: 0, coupon: null, coupons: [], discountAmount: '0.00' });
         }
         
         const cloudName = process.env.CLOUDINARY_NAME;

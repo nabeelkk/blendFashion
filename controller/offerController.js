@@ -82,7 +82,6 @@ const updateCategoryOffer = async (req, res) => {
   try {
     const offerId = req.params.id;
     const { category, discount, startDate, endDate } = req.body;
-    console.log(req.body)
     if (!category || !discount || !startDate || !endDate) {
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
@@ -90,19 +89,15 @@ const updateCategoryOffer = async (req, res) => {
     if (isNaN(discount) || discount < 0 || discount > 100) {
       return res.status(400).json({ success: false, message: 'Discount must be between 0 and 100' });
     }
-console.log("hhhl")
     const start = new Date(startDate);
     const end = new Date(endDate);
     if (start >= end) {
       return res.status(400).json({ success: false, message: 'Start date must be before end date' });
     }
-console.log("hhhla")
     const selectedCategory = await Category.findOne({ name: category });
-    console.log(selectedCategory,'selected one')
     if (!selectedCategory) {
       return res.status(400).json({ success: false, message: 'Category not found' });
     }
-console.log("hhhlas")
     const existingOffer = await Offer.findOne({
       category: selectedCategory._id,
       isActive: true,
@@ -112,7 +107,6 @@ console.log("hhhlas")
     if (existingOffer) {
       return res.status(400).json({ success: false, message: 'Selected category already has an active offer' });
     }
-console.log("hhhlast")
     await Offer.findByIdAndUpdate(offerId, {
       $set: {
         category: selectedCategory._id,
@@ -122,7 +116,6 @@ console.log("hhhlast")
         updatedAt: new Date()
       }
     });
-console.log("hhhlast aanu")
     res.json({ success: true, message: 'Offer updated successfully' });
   } catch (error) {
     console.error('Error updating category offer:', error.message);
@@ -135,7 +128,6 @@ const blockCategoryOffer = async (req, res) => {
     try {
         const offerId = req.params.id;
         const offer = await Offer.findById(offerId);
-        console.log(offerId)
         if (!offer) {
             return res.status(404).json({ success: false, message: 'Offer not found' });
         }

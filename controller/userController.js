@@ -247,7 +247,7 @@ const forgetpassword = async (req,res)=>{
         user.resetTokenExpr = new Date()+3600000
         await user.save()
         const cloudName = process.env.CLOUDINARY_NAME
-        const resetLink = `http://blendfashion.nabeelkk.store/reset-pass/${token}`
+        const resetLink = `https://blendfashion.nabeelkk.store/reset-pass/${token}`
         const templatePath = path.join(__dirname, '../views/users/forgetEmail.ejs');
         const htmlContent = await ejs.renderFile(templatePath, { user, resetLink ,cloudName});
 
@@ -364,7 +364,6 @@ const products = async (req, res) => {
           .limit(limit)
           .populate('category')
       ]);
-      console.log(productList)
       const totalPage = Math.ceil(totalProduct / limit);
       const cloudName = process.env.CLOUDINARY_NAME;
   
@@ -646,15 +645,15 @@ const myCart = async (req, res) => {
                 model: 'Category'
             }
         });
-        if(!cart){
+        const newArrival = await Product.find({isdeleted:false}).sort({createdAt:-1})
+        if(cart?.products.length === 0){
             req.session.user.discountAmount = null;
-            res.render('users/cart', {cart: null, user: req.session.user, cloudName: process.env.CLOUDINARY_NAME, totalMRP: 0, cartTotal: 0, discount: 0, cartCount: 0, appliedOffer: 0, coupon: null, coupons: [], discountAmount: '0.00' });
+            res.render('users/cart', {cart, user: req.session.user,newArrival, cloudName: process.env.CLOUDINARY_NAME, totalMRP: 0, cartTotal: 0, discount: 0, cartCount: 0, appliedOffer: 0, coupon: null, coupons: [], discountAmount: '0.00' });
         }
         
         const cloudName = process.env.CLOUDINARY_NAME;
         const coupon = req.session.user.discountAmount
         const coupons = await Coupon.find({isActive:true})
-        console.log(coupon,"coup")
 
         const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
         const discountAmount = req.session.user.discountAmount
@@ -702,12 +701,10 @@ const myCart = async (req, res) => {
                 discount += productDiscount;
                 
                 cartTotal += ((MRP * quantity) - (productDiscount)) ;
-                console.log(cartTotal)
             });
         }
         if(coupon){
                 cartTotal = cartTotal - coupon;
-                console.log(coupon,"coupon")
         }
 
         res.render('users/cart', {  
@@ -721,6 +718,7 @@ const myCart = async (req, res) => {
             appliedOffer,
             coupon,
             coupons,    
+            newArrival,
             discountAmount: discountAmount ? discountAmount.toFixed(2) : '0.00'
         });
 
@@ -737,7 +735,6 @@ const addCart = async(req,res)=>{
         if (!req.session.user) return res.status(401).json({success:false, message: 'Unauthorized' })
         const userId = req.session.user._id;
         const {id,size,price} = req.body
-        console.log(size,"this is the size ",id,     price)
         if(!size){
             return res.json({sizemessage:"Please select a size"})
         }
@@ -1028,11 +1025,9 @@ const productDetails = async(req,res)=>{
         const cloudName = process.env.CLOUDINARY_NAME
         const products = await Product.find({isdeleted:false}).populate('category')
         const product = await Product.findById(productId).populate('category');
-        console.log(product,"dfddfdd")
         const cart = await Cart.findOne({userId:req.session.user._id})
         const recentlyViewed = await Product.find({isdeleted:false}).sort({updatedAt:1})
         const offer = categoryOffer.find((off)=>off.category._id.toString()===product.category._id.toString()) || 0
-        console.log(offer,"disx")
         if (!product) {
             return res.render('users/error'); 
         }
@@ -1052,7 +1047,6 @@ const myWallet = async(req,res)=>{
         const page = parseInt(req.query.page)||1;
         const limit = 5;
         const totalWallet = await Wallet.countDocuments({user:userId})
-        console.log(totalWallet,"wallet count")
         const totalPage = Math.ceil(totalWallet/limit)
         const skip = (page-1)*limit;         
         const wallet = await Wallet.find({user:userId})

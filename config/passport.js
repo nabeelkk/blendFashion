@@ -5,7 +5,7 @@ const User = require('../modal/userModal');
 passport.use(new googleStrategy({
     clientID:process.env.GOOGLE_CLIENTID,
     clientSecret:process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL:"http://blendfashion.nabeelkk.store/user/google/callback"
+    callbackURL:"https://blendfashion.nabeelkk.store/user/google/callback"
 },
 
     async (accessToken,refreshToken,profile,done)=>{

@@ -288,16 +288,13 @@ const paymentMethod =async (req,res)=>{
                 }
 
                 appliedOffer = Math.max(productOffer, categoryDiscount);
-                console.log(appliedOffer,"offer")
                 let productDiscount = 0;
                 if (appliedOffer > 0) {
                     const discountedPrice = MRP - appliedOffer;
                     productDiscount = (MRP - discountedPrice) * quantity;
                 }
                 discount += productDiscount;
-                console.log(discount,"checkout discount")
                 totalPrice += (MRP * quantity) - productDiscount;
-                console.log(totalPrice,"final")
             });
             
         }

@@ -57,7 +57,6 @@ const getEditCoupon = async (req, res) => {
         const nameError = req.query.nameError
 
         const coupon = await Coupon.findById(couponID)
-        console.log(coupon,"ccccc")
         res.render('admin/editCoupon', { coupon,error,discounterror,minPurchaseerror,nameError  })
     } catch (error) {
         console.log("get coupon edit side",error);
@@ -67,7 +66,6 @@ const getEditCoupon = async (req, res) => {
 const postEditCoupon = async (req, res) => {
     try {
         const couponID = req.session.cid
-        console.log(couponID,"id")
         const { name, discount, expirydate, minpurchase } = req.body
         if(!name|| !discount || !expirydate || !minpurchase){
             return res.json({success:false,message:"All field are required"})
@@ -107,11 +105,9 @@ const applyCoupon = async (req, res) => {
   try {
     const { couponCode, totalprice } = req.body;
     const userId = req.session.user._id;
-    console.log(couponCode,"from front")
     const user = await User.findById({_id:userId})
 
     const coupon = await Coupon.findOne({ couponcode: couponCode, isActive: true });
-    console.log(coupon,'ddddd')
     if (!coupon) {
       return res.json({ success: false, message: 'Invalid or inactive coupon code.' });
     }

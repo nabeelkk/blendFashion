@@ -28,9 +28,6 @@ const myOrder = async(req,res)=>{
         const order = await Order.find({user:req.session.user._id})
         
         let cartCount
-        cart.forEach((elem)=>console.log(cartCount = elem.products.length))
-
-
         const searchFilter = {
             user: userId,
             $or:[
@@ -89,7 +86,6 @@ const placeOrder = async(req,res)=>{
         let discount = 0
         for (const item of cart.products) {
             const product = item.productId;
-            console.log(product.name,"pdt name")
             const category = product.category
             const size = item.size
             const price = item.price
@@ -149,7 +145,6 @@ const placeOrder = async(req,res)=>{
           if(paymentMethod == 'Wallet'){
 
             const wallet = await Wallet.findOne({user:userId})
-            console.log(wallet,"wallet")
             if(wallet.balance<orderedAmount){
               return res.json({success:false,message:"Insufficient balance in wallet"})
             }
@@ -267,13 +262,11 @@ const cancelOrder = async (req, res) => {
       const discount = Number(product.discount) || 0;
       const coupon = Number(product.coupon) || 0;
       const quantity = Number(product.quantity) || 1;
-      console.log(mrp,    discount    ,    coupon   ,    quantity)
       let refundAmount = 0;
       refundAmount = mrp - (quantity * discount);
       if(coupon){
         refundAmount = mrp - (quantity * discount) - (coupon/order.products.length)
       }
-      console.log(refundAmount,"rfund amount")
 
       if (!isNaN(refundAmount) && refundAmount > 0) {
         wallet.balance = Number(wallet.balance || 0) + refundAmount;
@@ -678,7 +671,6 @@ const handlePaymentSuccess = async (req, res) => {
     await order.save();
     await Cart.findOneAndUpdate({ userId: user._id }, { $set: { products: [] } });
 
-    console.log('Successful order saved:', order.orderId);
     res.render('users/checkoutsuccess', { orderId: razorpay_order_id, user, order, address });
   } catch (error) {
     console.error('Payment Success Error:', error.message, error.stack);

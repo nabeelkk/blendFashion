@@ -32,7 +32,6 @@ const adminLogin = async(req,res)=>{
 
         if(!admin) return res.redirect('/admin/login?error=Admin%20not%20found');
         const hashed = await bcrypt.hash(password,10)
-        console.log(hashed)
         const isMatch = await bcrypt.compare(password,admin.password)
         if(!isMatch) return res.redirect('/admin/login?error=Invalid%20Credential');
         
@@ -352,7 +351,6 @@ const getProducts =async (req,res)=>{
              salePrice =prod.sizes.small?.amount?(prod.sizes.small?.Mrp * prod.sizes.small?.amount)/100:prod.sizes.small?.Mrp 
             
         }
-        console.log(product,"sssddss")
         res.render('admin/productList',{totalPage,search,page,product,cloudName,salePrice,offer,categories,category})
 
 
@@ -401,7 +399,7 @@ const addProducts = async (req, res) => {
             MRPXL,SalesPriceXL,StockXL
             
         } = req.body;
-        console.log(req.body)
+
 
         if (!name || !name.match(/^[A-Za-z][A-Za-z0-9\s&]{2,49}$/)) {
             return res.redirect(`/admin/editProduct/${req.params.id}?error=${encodeURIComponent('Product name must be 3-50 characters (letters, numbers, spaces only)')}`);
@@ -878,8 +876,6 @@ const orderDetails = async(req,res)=>{
     order.products.find(element => {
         prod.push(element.status)
     });
-    console.log(prod,"status")
-    // console.log(order)
     const cloudName = process.env.CLOUDINARY_NAME
    
     res.render('admin/orderdetails',{order,prod,cloudName,couponDiscount:Number(couponDiscount).toFixed(2)})
@@ -955,8 +951,7 @@ const updateOrderStatus = async (req, res) => {
                 return res.json({success: true}) 
             }
         }else{
-            console.log('Product not found in order')
-            return res.json({success: false})
+            return res.json({success: false, message: 'Product not found in order'})
         }
     } catch (error) {
         console.log("update status side",error)
@@ -989,14 +984,12 @@ const verifyReturn = async (req, res) => {
       const discount = Number(product.discount) || 0;
       const coupon = Number(product.coupon) || 0;
       const quantity = Number(product.quantity) || 1;
-      console.log(mrp,    discount    ,    coupon   ,    quantity)
       let refundAmount = 0;
 
       refundAmount = (mrp * quantity) - coupon;
       if(coupon){
         refundAmount = (mrp * quantity) - (coupon/order.length);
       }
-      console.log(refundAmount,"rfund amount")
 
       if (!isNaN(refundAmount) && refundAmount > 0) {
         wallet.balance = Number(wallet.balance || 0) + refundAmount;

@@ -89,7 +89,19 @@
         .continue-shopping-link:hover {
             color: #1f2937;
         }
-
+        .pillHigh{
+            border: 1px solid transparent;
+            border-radius: 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            text-align: center;
+            width: fit-content;
+            padding-left: 10px;
+            padding-right: 10px;
+            position: absolute;
+            top: 3px;
+            left: 14px;
+        }
         /* Responsive Design */
         @media (max-width: 768px) {
             .empty-cart-container {
@@ -362,66 +374,42 @@
         <div class="container">
             <h2 class="section-title text-center mb-5">You May Also Like</h2>
             <div class="row">
-                <!-- Product 1 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/uploads/1744008853154-970959823.jpg" alt="Navy Blue T-Shirt" class="img-fluid">
-                            <div class="product-overlay">
-                                <a href="productDetails" class="btn btn-sm btn-dark">Quick View</a>
+                <% newArrival.slice(0,4).forEach(element => { %>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="product-card">
+                            <a href="/productDetails/<%= element._id %>">
+                            <div class="product-image">
+                                <img src="https://res.cloudinary.com/<%= cloudName %>/image/upload/<%= element.images[0] %>" alt="Premium Cotton Shirt" class="img-fluid">
+                                <% if (element.sizes?.small?.amount) { %>
+                                 <div class="product-badge bg-danger text-white pillHigh"><%= element.sizes.small.amount %>% Offer</div>
+                                <% } %>
+                            </div>
+                            </a>
+                            <div class="product-info pt-3">
+                                <a href="products">
+                                    <h5 class="product-title"><%= element.name %></h5>
+                                </a>
+                                <p class="product-brand text-muted "><%= element.brand%></p>
+                                <div class="rating-container mt-0">
+                                    <div class="star-rating" id="starRating">
+                                        <span class="star" data-value="1">&#9733;</span>
+                                        <span class="star" data-value="2">&#9733;</span>
+                                        <span class="star" data-value="3">&#9733;</span>
+                                        <span class="star" data-value="4">&#9733;</span>
+                                        <span class="star" data-value="5">&#9733;</span>
+                                    </div>
+                                    <input type="hidden" name="rating" id="ratingValue" value="0">
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="product-price mb-0">₹<%= Math.round((element.sizes.small.Mrp - (element.sizes?.small?.Mrp * element.sizes?.small?.amount) / 100)) || element.sizes.small.Mrp %>.00 <% if (element.sizes?.small?.amount) { %>
+                                     <span class="text-decoration-line-through text-muted fs-6">₹<%= element.sizes.small.Mrp %>.00</span>
+                                    <% } %></p>
+                                    <a href="login" class="product-wishlist wishlist-icon" data-id="<%= element._id %>" onclick="toggleWishlist(this, event,'<%=element._id%>')"><i class="far fa-heart"></i></a>
+                                </div>
                             </div>
                         </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Navy Blue T-Shirt</h5>
-                            <p class="product-price">$59.00</p>
-                        </div>
                     </div>
-                </div>
-                <!-- Product 2 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/uploads/1744008853153-911909079.jpg" alt="Slim Fit Chino Pants" class="img-fluid">
-                            <div class="product-overlay">
-                                <a href="productDetails" class="btn btn-sm btn-dark">Quick View</a>
-                            </div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Slim Fit Chino Pants</h5>
-                            <p class="product-price">$79.00</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 3 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/uploads/1744008623886-30759333.jpg" alt="Wool Blend Coat" class="img-fluid">
-                            <div class="product-overlay">
-                                <a href="productDetails" class="btn btn-sm btn-dark">Quick View</a>
-                            </div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Wool Blend Coat</h5>
-                            <p class="product-price">$249.00</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 4 -->
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="/uploads/1744009008287-868456191.jpg" alt="Slim Fit Denim Jeans" class="img-fluid">
-                            <div class="product-overlay">
-                                <a href="productDetails" class="btn btn-sm btn-dark">Quick View</a>
-                            </div>
-                        </div>
-                        <div class="product-info pt-3">
-                            <h5 class="product-title">Slim Fit Denim Jeans</h5>
-                            <p class="product-price">$89.00</p>
-                        </div>
-                    </div>
-                </div>
+                    <% }) %>
             </div>
         </div>
     </section>

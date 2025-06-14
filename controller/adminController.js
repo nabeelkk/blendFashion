@@ -236,7 +236,7 @@ const getDashboard = async (req, res) => {
                     ledgerData.push({
                         date: order.createdAt,
                         orderId: order.orderId,
-                        customer: order.user.name,
+                        customer: order.user?.name,
                         productName: product.name || product.productId.name,
                         quantity: product.quantity,
                         price: product.MRP * product.quantity,

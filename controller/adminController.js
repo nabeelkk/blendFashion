@@ -511,7 +511,8 @@ const addProducts = async (req, res) => {
             category,
             brand,
             sizes,
-            images
+            images,
+            isdeleted: false,
         });
 
         await newProduct.save();

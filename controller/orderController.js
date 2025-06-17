@@ -667,7 +667,8 @@ const handlePaymentSuccess = async (req, res) => {
     }
     req.session.defaultAddressId = null;
     req.session.user.discountAmount = null;
-    req.session.user.discountAmount = null;
+    req.session.user.discountTotal = null;
+
     await order.save();
     await Cart.findOneAndUpdate({ userId: user._id }, { $set: { products: [] } });
 

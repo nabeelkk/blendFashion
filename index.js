@@ -13,8 +13,6 @@ const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const path = require('path')
 const fs = require('fs')
-const multer = require('multer');
-const Razorpay = require('razorpay')
 
 
 

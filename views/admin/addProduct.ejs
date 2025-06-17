@@ -528,9 +528,15 @@
 
         // Form Validation
         form.addEventListener('submit', (e) => {
+            
             if (validateForm()) {
                 form.submit();
             }
+            else {
+                e.preventDefault(); // Prevent form submission if validation fails
+            }
+            e.preventDefault(); // Prevent default form submission
+            clearErrors(); // Clear previous errors
         });
         
         function validateForm() {
@@ -540,7 +546,7 @@
             // Product Name
             const pdtName = document.getElementById('pdtname').value.trim();
             const nameRegex = /^[a-zA-Z0-9\s]{3,50}$/;
-            if (!pdtName || !nameRegex.test(pdtName)) {
+            if (!pdtName || !nameRegex.test(pdtName) || pdtName == " ") {
                 showError('error-name', 'Product name is required and must be 3-50 characters (letters, numbers, spaces only).');
                 isValid = false;
             }
@@ -553,11 +559,11 @@
             }
 
             // Brand
-            const brand = document.getElementById('brand').value;
-            if (!brand) {
-                showError('error-brand', 'Please select a brand.');
-                isValid = false;
-            }
+            // const brand = document.getElementById('brand').value;
+            // if (!brand) {
+            //     showError('error-brand', 'Please select a brand.');
+            //     isValid = false;
+            // }
 
             // Description
             const description = document.getElementById('pdtdes').value.trim();
@@ -638,6 +644,13 @@
             const errorElement = document.getElementById(id);
             errorElement.textContent = message;
             errorElement.style.display = 'block';
+        }
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.text-danger');
+            errorElements.forEach(el => {
+                el.innerText = '';
+                el.style.display = 'none';
+            });
         }
 
         

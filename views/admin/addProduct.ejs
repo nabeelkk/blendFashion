@@ -159,13 +159,15 @@
     </div>
     <% } %>
         <section class="content-main">
-            
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
                         <h2 class="content-title">Add New Product</h2>
                     </div>
                 </div>
+                <% if (sizeError) { %>
+                        <p style="color: red;"><%= sizeError %></p>
+                    <% } %>
                 <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-header">
@@ -338,11 +340,10 @@
                         </div>
                     </div>
                     <% if (imageError) { %>
-                        <p class="error"><%= imageError %></p>
+                        <p style="color: red;"><%= imageError %></p>
                     <% } %>
-                    <% if (sizeError) { %>
-                        <p class="error"><%= sizeError %></p>
-                    <% } %>
+                    
+                    
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </div>

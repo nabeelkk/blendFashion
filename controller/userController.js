@@ -654,8 +654,8 @@ const myCart = async (req, res) => {
         const cloudName = process.env.CLOUDINARY_NAME;
         const coupon = req.session.user.discountAmount
         const coupons = await Coupon.find({isActive:true})
-
-        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const today = new Date();
+        const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
         const discountAmount = req.session.user.discountAmount
         let cartTotal = 0;
         let discount = 0;
@@ -1021,7 +1021,9 @@ const productDetails = async(req,res)=>{
         }
         const productId = req.params.id; 
   
-        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const today = new Date();
+        const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$gt:today}}).populate('category')
+        console.log(categoryOffer,"category offer")
         const cloudName = process.env.CLOUDINARY_NAME
         const products = await Product.find({isdeleted:false}).populate('category')
         const product = await Product.findById(productId).populate('category');

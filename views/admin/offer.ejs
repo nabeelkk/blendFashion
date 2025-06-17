@@ -256,6 +256,9 @@
         .then((data)=>{
             if(data.success){
                 showToast(data.message||"","success")
+                setTimeout(()=>{
+                    window.location.href = '/admin/categoryOffer'
+                },2000)
             }else{
                 showToast(data.message||"","error")
             }

@@ -13,37 +13,36 @@ const offerSchema = new mongoose.Schema({
     required: function () {
       return this.type === 'category';
     }
-  },  
-   discount: {
-            type: Number,
-            
-            min: 0,
-            max: 100, 
-        },
-        startDate: {
-            type: Date,
-            
-            validate: {
-            validator: function (v) {
-                return v < this.endDate; 
-            },
-            message: 'Start date must be before end date'
-            }
-        },
+  },
+  discount: {
+    type: Number,
+    min: 0,
+    max: 100,
+  },
+  startDate: {
+    type: Date,
 
-        endDate: {
-            type: Date,
-            required: true,
-        },
+    validate: {
+      validator: function (v) {
+        return v < this.endDate;
+      },
+      message: 'Start date must be before end date'
+    }
+  },
 
-        isActive: {
-            type: Boolean,
-            default: true,
-        },
-        isDeleted:{
-            type:Boolean,
-            default:false
-        }  
+  endDate: {
+    type: Date,
+    required: true,
+  },
+
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Offer', offerSchema);

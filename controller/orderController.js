@@ -76,7 +76,8 @@ const placeOrder = async(req,res)=>{
         const user = await User.findById(userId)
         const selectedAddress = user.address.find((addr=>addr.id.toString()===defaultAddress))
         const cart = await Cart.findOne({userId}).populate('products.productId')
-        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const today = new Date();
+        const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
         if (!cart || cart.products.length === 0) return res.redirect('/cart');
         const coupen = req.session.user.discountedTotal
         const couponDiscount = req.session.user.discountAmount
@@ -380,7 +381,8 @@ const createRazorpayOrder = async (req, res) => {
     const { defaultAddress, totalAmount, retryOrderId } = req.body;
 
     const cart = await Cart.findOne({ userId: req.session.user._id }).populate("products.productId");
-    const categoryOffer = await Offer.find({ type: 'category', isActive: true }).populate('category');
+    const today = new Date();
+    const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
 
     if (!defaultAddress || !totalAmount || !cart || !cart.products) {
       return res.status(400).json({ error: "Missing or invalid required fields" });
@@ -528,7 +530,8 @@ const createRazorpayOrder = async (req, res) => {
 const handlePaymentSuccess = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, retryOrderId } = req.body;
-    const categoryOffer = await Offer.find({ type: 'category', isActive: true }).populate('category');
+    const today = new Date();
+    const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       console.error('Missing Razorpay payment details:', { razorpay_order_id, razorpay_payment_id, razorpay_signature });
@@ -688,7 +691,8 @@ const handleCheckoutFailure = async (req, res) => {
     const defaultAddressId = req.session.defaultAddressId;
     const cart = await Cart.findOne({ userId: req.session.user._id }).populate('products.productId');
     const user = await User.findById(req.session.user._id);
-    const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+    const today = new Date();
+    const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
     let selectedAddress = null;
 
     if (Array.isArray(user.address)) {

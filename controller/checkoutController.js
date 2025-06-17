@@ -20,7 +20,8 @@ const checkOut = async(req,res)=>{
                         model: 'Category'
                     }
                 })
-        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const today = new Date();
+        const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME 
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty');
@@ -221,7 +222,8 @@ const paymentMethod =async (req,res)=>{
                         model: 'Category'
                     }
                 })
-        const categoryOffer = await Offer.find({type:'category',isActive:true}).populate('category')
+        const today = new Date();
+        const categoryOffer = await Offer.find({type:'category',isActive:true,endDate:{$lt:today}}).populate('category')
         const cloudName = process.env.CLOUDINARY_NAME 
         const discountAmount = req.session.user.discountAmount
         let coupon = req.session.user.discountAmount

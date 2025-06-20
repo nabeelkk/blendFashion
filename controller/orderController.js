@@ -264,9 +264,9 @@ const cancelOrder = async (req, res) => {
       const coupon = Number(product.coupon) || 0;
       const quantity = Number(product.quantity) || 1;
       let refundAmount = 0;
-      refundAmount = mrp - (quantity * discount);
+      refundAmount = Math.abs(mrp - (quantity * discount));
       if(coupon){
-        refundAmount = mrp - (quantity * discount) - (coupon/order.products.length)
+        refundAmount = Math.abs(mrp - (quantity * discount) - (coupon/order.products.length))
       }
 
       if (!isNaN(refundAmount) && refundAmount > 0) {

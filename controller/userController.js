@@ -247,7 +247,7 @@ const forgetpassword = async (req,res)=>{
         user.resetTokenExpr = new Date()+3600000
         await user.save()
         const cloudName = process.env.CLOUDINARY_NAME
-        const resetLink = `https://blendfashion.nabeelkk.store/reset-pass/${token}`
+        const resetLink = `http://localhost:5001/reset-pass/${token}`
         const templatePath = path.join(__dirname, '../views/users/forgetEmail.ejs');
         const htmlContent = await ejs.renderFile(templatePath, { user, resetLink ,cloudName});
 
